@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.example.jack.myapp.bean.ArticalBean;
 import com.example.jack.myapp.http.ApiService;
 import com.example.jack.myapp.mvp.LoginContract;
@@ -114,5 +115,6 @@ public class MainActivity extends XActivity implements LoginContract.View {
 
     @Override
     public void showArticleDatas(ArticalBean articalBean) {
+        LogUtils.a(AppConstant.TAG,"数据返回成功");
     }
 }

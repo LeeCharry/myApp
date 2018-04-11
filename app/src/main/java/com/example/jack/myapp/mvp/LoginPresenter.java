@@ -3,12 +3,13 @@ package com.example.jack.myapp.mvp;
 import android.content.Context;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.bean.ArticalBean;
-import com.example.jack.myapp.http.XXApi;
 import com.example.tulib.util.base.BasePresenter;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
-import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
 /**
  * Created by lcy on 2018/4/8.
  */
@@ -44,16 +45,64 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model,LoginContr
 //                });
     }
     public void getArticalDatas(){
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://www.wanandroid.com/")
+//                .client(okHttpClient)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+//                .build();
+//        ApiService apiService = retrofit.create(ApiService.class);
+//        Observable<ArticalBean> observable = apiService.getArticals();
+//        observable.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArticalBean>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        LogUtils.a("lcy","加载完成");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                            LogUtils.a("lcy",e.getMessage().toString());
+//                    }
+//
+//                    @Override
+//                    public void onNext(ArticalBean articalBean) {
+//                        LogUtils.a("lcy",gson.toJson(articalBean).toString());
+//                    }
+//                });
+
         mMoudle.getArticalDatas()
-                .retryWhen(new RetryWithDelay(3,2))
-                .compose(XXApi.<ArticalBean>getApiTransformer())
-                .compose(XXApi.<ArticalBean>getScheduler())
-                .compose(bindToLifecycle(mRootview))
-                .subscribe(new ErrorHandleSubscriber<ArticalBean>(mErrorHandler) {
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ArticalBean>() {
+                    @Override
+                    public void onCompleted() {
+                        LogUtils.a(AppConstant.TAG,"数据列表加载完成");
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.a(AppConstant.TAG,e.getMessage().toString());
+                    }
                     @Override
                     public void onNext(ArticalBean articalBean) {
-                        LogUtils.a("lcy",gson.toJson(articalBean).toString());
+                        if (null != articalBean) {
+                            mRootview.showArticleDatas(articalBean);
+                        }
                     }
                 });
+
+//        mMoudle.getArticalDatas()
+//                .retryWhen(new RetryWithDelay(3,2))
+//                .compose(XXApi.<ArticalBean>getApiTransformer())
+//                .compose(XXApi.<ArticalBean>getScheduler())
+//                .compose(bindToLifecycle(mRootview))
+//                .subscribe(new ErrorHandleSubscriber<ArticalBean>(mErrorHandler) {
+//                    @Override
+//                    public void onNext(ArticalBean articalBean) {
+//                        LogUtils.a("lcy",gson.toJson(articalBean).toString());
+//                    }
+//                });
     }
 }

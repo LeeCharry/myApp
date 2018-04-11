@@ -29,5 +29,4 @@ public interface ApiService {
                                  @Field("password") String password);
 @GET("article/list/0/json/")
 Observable<ArticalBean> getArticals();
-
 }
