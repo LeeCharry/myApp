@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyApp.iml" filepath="$PROJECT_DIR$/MyApp.iml" />
+      <module fileurl="file://D:\Open_Projects\myApp\MyApp.iml" filepath="D:\Open_Projects\myApp\MyApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Open_Projects\myApp\app\app.iml" filepath="D:\Open_Projects\myApp\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/myApp.iml" filepath="$PROJECT_DIR$/myApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxerrorhandler/rxerrorhandler.iml" filepath="$PROJECT_DIR$/rxerrorhandler/rxerrorhandler.iml" />
+      <module fileurl="file://D:\Open_Projects\myApp\rxerrorhandler\rxerrorhandler.iml" filepath="D:\Open_Projects\myApp\rxerrorhandler\rxerrorhandler.iml" />
       <module fileurl="file://$PROJECT_DIR$/tulib/tulib.iml" filepath="$PROJECT_DIR$/tulib/tulib.iml" />
+      <module fileurl="file://D:\Open_Projects\myApp\tulib\tulib.iml" filepath="D:\Open_Projects\myApp\tulib\tulib.iml" />
     </modules>
   </component>
 </project>
