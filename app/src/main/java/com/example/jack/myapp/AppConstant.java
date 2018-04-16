@@ -6,4 +6,5 @@ package com.example.jack.myapp;
 
 public class AppConstant {
     public static final String TAG = "lcy";
+    public static final String SP_FILE_NAME = "myAppSp";
 }

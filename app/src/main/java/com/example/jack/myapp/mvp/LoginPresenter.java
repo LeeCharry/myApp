@@ -3,9 +3,20 @@ package com.example.jack.myapp.mvp;
 import android.content.Context;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.bean.ArticalBean;
+import com.example.jack.myapp.http.ApiService;
+import com.example.jack.myapp.http.XXApi;
 import com.example.tulib.util.base.BasePresenter;
+
+import me.jessyan.rxerrorhandler.handler.ErrorHandleSubscriber;
+import me.jessyan.rxerrorhandler.handler.RetryWithDelay;
+import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -61,7 +72,6 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model,LoginContr
 //                    public void onCompleted() {
 //                        LogUtils.a("lcy","加载完成");
 //                    }
-//
 //                    @Override
 //                    public void onError(Throwable e) {
 //                            LogUtils.a("lcy",e.getMessage().toString());
@@ -73,36 +83,60 @@ public class LoginPresenter extends BasePresenter<LoginContract.Model,LoginContr
 //                    }
 //                });
 
+//        Observable<ArticalBean> observable = mMoudle.getArticalDatas();
+//        observable
+//                .subscribeOn(Schedulers.io())
+//                .subscribeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArticalBean>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        LogUtils.a(AppConstant.TAG,"数据列表加载完成");
+//                    }
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtils.a(AppConstant.TAG,e.getMessage().toString());
+//                    }
+//                    @Override
+//                    public void onNext(ArticalBean articalBean) {
+//                        if (null != articalBean) {
+//                            mRootview.showArticleDatas(articalBean);
+//                        }
+//                    }
+//                });
+//        mMoudle.getArticalDatas()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<ArticalBean>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        LogUtils.a(AppConstant.TAG,"数据列表加载完成");
+//                    }
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtils.a(AppConstant.TAG,e.getMessage().toString());
+//                    }
+//                    @Override
+//                    public void onNext(ArticalBean articalBean) {
+//                        if (null != articalBean) {
+//                            mRootview.showArticleDatas(articalBean);
+//                        }
+//                    }
+//                });
+
+
         mMoudle.getArticalDatas()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<ArticalBean>() {
-                    @Override
-                    public void onCompleted() {
-                        LogUtils.a(AppConstant.TAG,"数据列表加载完成");
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtils.a(AppConstant.TAG,e.getMessage().toString());
-                    }
+                .retryWhen(new RetryWithDelay(3,2))
+                .compose(XXApi.<ArticalBean>getApiTransformer())
+                .compose(XXApi.<ArticalBean>getScheduler())
+                .compose(bindToLifecycle(mRootview))
+                .subscribe(new ErrorHandleSubscriber<ArticalBean>(mErrorHandler) {
                     @Override
                     public void onNext(ArticalBean articalBean) {
-                        if (null != articalBean) {
+                        LogUtils.a("lcy",gson.toJson(articalBean).toString());
+                        if (null != articalBean){
                             mRootview.showArticleDatas(articalBean);
                         }
                     }
                 });
-
-//        mMoudle.getArticalDatas()
-//                .retryWhen(new RetryWithDelay(3,2))
-//                .compose(XXApi.<ArticalBean>getApiTransformer())
-//                .compose(XXApi.<ArticalBean>getScheduler())
-//                .compose(bindToLifecycle(mRootview))
-//                .subscribe(new ErrorHandleSubscriber<ArticalBean>(mErrorHandler) {
-//                    @Override
-//                    public void onNext(ArticalBean articalBean) {
-//                        LogUtils.a("lcy",gson.toJson(articalBean).toString());
-//                    }
-//                });
     }
 }

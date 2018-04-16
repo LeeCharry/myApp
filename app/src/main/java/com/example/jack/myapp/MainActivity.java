@@ -1,9 +1,6 @@
 package com.example.jack.myapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import com.blankj.utilcode.util.LogUtils;
 import com.example.jack.myapp.bean.ArticalBean;
 import com.example.jack.myapp.http.ApiService;
@@ -23,7 +20,6 @@ public class MainActivity extends XActivity implements LoginContract.View {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 ////        getArticalDatas();
-
 
 //        OkHttpClient okHttpClient = new OkHttpClient.Builder()
 //                .addInterceptor(new HttpLoggingInterceptor())

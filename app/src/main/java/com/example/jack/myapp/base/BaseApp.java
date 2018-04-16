@@ -41,7 +41,6 @@ public class BaseApp extends Application {
             public String configBaseUrl() {
                 return Api.getURL();
             }
-
             @Override
             public Interceptor[] configInterceptors() {
                 return new Interceptor[0];
@@ -54,25 +53,27 @@ public class BaseApp extends Application {
 
             @Override
             public CookieJar configCookie() {
-              return   new CookieJar(){
-
-                    @Override
-                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-                        for (Cookie cookie : cookies) {
-                            Log.d("BaseApplication", "cookie " + cookie.toString());
-                        }
-                    }
-
-                    @Override
-                    public List<Cookie> loadForRequest(HttpUrl url) {
-                        return null;
-                    }
-                };
+                return  null;
+//              return   new CookieJar(){
+//
+//                    @Override
+//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+//                        for (Cookie cookie : cookies) {
+//                            Log.d("BaseApplication", "cookie " + cookie.toString());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public List<Cookie> loadForRequest(HttpUrl url) {
+//                        return null;
+//                    }
+//                };
             }
 
             @Override
             public RequestHandler configHandler() {
-                return requestHandler;
+//                return requestHandler;
+                return null;
             }
 
             @Override
@@ -101,7 +102,6 @@ public class BaseApp extends Application {
             }
         });
     }
-
     private RequestHandler requestHandler = new RequestHandler() {
         @Override
         public Request onBeforeRequest(Request request, Interceptor.Chain chain) {
