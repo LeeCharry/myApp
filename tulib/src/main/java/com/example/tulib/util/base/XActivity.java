@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 
-import butterknife.ButterKnife;
 
 /**
  * Created by lcy on 2018/4/8.
@@ -19,7 +18,7 @@ public abstract class XActivity extends RxAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         gson = new Gson();
-        ButterKnife.bind(this);
+//        ButterKnife.bind(this);
         initView();
     }
     protected abstract void initView();

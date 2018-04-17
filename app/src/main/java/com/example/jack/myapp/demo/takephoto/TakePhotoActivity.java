@@ -1,7 +1,10 @@
 package com.example.jack.myapp.demo.takephoto;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.jack.myapp.R;
+import com.example.jack.myapp.bean.ArticalBean;
 import com.flyco.dialog.entity.DialogMenuItem;
 import com.flyco.dialog.listener.OnBtnClickL;
 import com.flyco.dialog.listener.OnOperItemClickL;
@@ -37,9 +42,10 @@ import com.luck.picture.lib.entity.LocalMedia;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+//@Route(path = "/takephoto/TakePhotoActivity")
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int PICK_PICTURE = 3;
     private ImageView ivAvatar;
@@ -61,6 +67,18 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.btn2).setOnClickListener(this);
         findViewById(R.id.btn3).setOnClickListener(this);
         findViewById(R.id.btn4).setOnClickListener(this);
+        findViewById(R.id.btn5).setOnClickListener(this);
+
+//        PackageManager packageManager = this.getPackageManager();
+//        String packageName = this.getPackageName();
+//        try {
+//            PackageInfo packageInfo = packageManager.getPackageInfo(packageName, 0);
+//            int versionCode = packageInfo.versionCode;
+//            String versionName = packageInfo.versionName;
+//            LogUtils.a("lcy",versionCode+"  "+versionName);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -81,10 +99,32 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
             case R.id.btn4:
                 pictureSelect();
                 break;
+            case R.id.btn5:
+                intent2Main();
+                break;
             default:
                 break;
         }
     }
+
+    private void intent2Main() {
+        ArticalBean articalBean = new ArticalBean();
+        ArticalBean.DataBean dataBean = new ArticalBean.DataBean();
+        dataBean.setCurPage(0);
+        dataBean.setOffset(120);
+        dataBean.setPageCount(1090);
+        dataBean.setSize(200);
+        dataBean.setOver(true);
+        articalBean.setErrorCode(-1);
+        articalBean.setData(dataBean);
+        articalBean.setErrorMsg("错误信息");
+
+        ARouter.getInstance().build("/myapp/MainActivity")
+                .withString("string","str")
+                .withSerializable("articalBean",articalBean)
+                .navigation();
+    }
+
     /**
      * 调用pictureSelector控件
      */
@@ -310,6 +350,7 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
                     String compressPath = localMedia.get(0).getCompressPath();
                     Bitmap bitmap = BitmapFactory.decodeFile(compressPath);
                     ivAvatar.setImageBitmap(bitmap);
+
                 }
                 break;
             default:

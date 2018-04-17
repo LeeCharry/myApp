@@ -9,6 +9,11 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ moduleName : project.getName() ]
+            }
+        }
     }
     buildTypes {
         release {
@@ -23,5 +28,6 @@ dependencies {
     testCompile rootProject.ext.dependencies["junit"]
     compile rootProject.ext.dependencies["appcompat-v7"]
     compile rootProject.ext.dependencies["rxjava"]
+
 
 }

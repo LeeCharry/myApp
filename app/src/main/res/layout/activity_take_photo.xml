@@ -38,4 +38,10 @@
         android:layout_height="wrap_content"
         android:text="调用pictureSelector"
         android:id="@+id/btn4" />
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ARouter页面跳转"
+        android:id="@+id/btn5" />
 </LinearLayout>

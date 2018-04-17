@@ -1,7 +1,10 @@
 package com.example.jack.myapp;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.NetworkUtils;
 import com.example.jack.myapp.bean.ArticalBean;
 import com.example.jack.myapp.http.ApiService;
 import com.example.jack.myapp.mvp.LoginContract;
@@ -12,8 +15,12 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
+//@Route(path = "/myapp/MainActivity")
 public class MainActivity extends XActivity implements LoginContract.View {
+//    @Autowired
+//    private String string = "";
+//    @Autowired
+//    private ArticalBean articalBean;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +61,15 @@ public class MainActivity extends XActivity implements LoginContract.View {
     private void getData() {
         LoginPresenter loginPresenter = new LoginPresenter(MainActivity.this, MainActivity.this);
         loginPresenter.getArticalDatas();
+
+        //从takePhoto界面传过来的数据
+//        LogUtils.a("lcy",string);
+//        if (null != articalBean) {
+//            LogUtils.a("lcy",gson.toJson(articalBean).toString());
+//
+//        }
+
+
     }
 
     /**

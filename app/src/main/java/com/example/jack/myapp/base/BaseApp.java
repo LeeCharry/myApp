@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
+import com.example.jack.myapp.BuildConfig;
 import com.example.jack.myapp.http.Api;
 import com.example.jack.myapp.http.XXApi;
 import com.example.tulib.util.http.NetError;
@@ -13,12 +14,8 @@ import com.example.tulib.util.http.RequestHandler;
 import com.example.tulib.util.utils.DataHelper;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import okhttp3.Cookie;
 import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,6 +32,13 @@ public class BaseApp extends Application {
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
+
+        //路由初始化
+//        if (BuildConfig.DEBUG) {
+//            ARouter.openDebug();
+//            ARouter.openLog();
+//        }
+        ARouter.init(this);
 
         XXApi.registerProvider(new NetProvider() {
             @Override
