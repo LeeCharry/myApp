@@ -78,7 +78,6 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
                 break;
         }
     }
-
     private void showNormalDialog() {
         final NormalDialog normalDialog = new NormalDialog(this);
         normalDialog.style(NormalDialog.STYLE_ONE)
