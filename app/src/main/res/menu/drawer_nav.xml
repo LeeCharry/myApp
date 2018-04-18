@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:title="我喜欢的"
+    android:id="@+id/item_like"
+    android:icon="@mipmap/ic_collection"/>
+    <item
+        android:title="关于我们"
+        android:id="@+id/item_about_us"
+        android:icon="@mipmap/ic_setting"/>
+</menu>

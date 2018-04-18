@@ -119,10 +119,10 @@ public class TakePhotoActivity extends AppCompatActivity implements View.OnClick
         articalBean.setData(dataBean);
         articalBean.setErrorMsg("错误信息");
 
-        ARouter.getInstance().build("/myapp/MainActivity")
-                .withString("string","str")
-                .withSerializable("articalBean",articalBean)
-                .navigation();
+//        ARouter.getInstance().build("/myapp/MainActivity")
+//                .withString("string","str")
+//                .withSerializable("articalBean",articalBean)
+//                .navigation();
     }
 
     /**

@@ -38,7 +38,7 @@ public class BaseApp extends Application {
 //            ARouter.openDebug();
 //            ARouter.openLog();
 //        }
-        ARouter.init(this);
+//        ARouter.init(this);
 
         XXApi.registerProvider(new NetProvider() {
             @Override

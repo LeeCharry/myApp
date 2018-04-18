@@ -26,7 +26,6 @@ public class BasePresenter<M,V extends BaseView> implements presenter,ResponseEr
         this.mRootview = mRootview;
         onStart();
     }
-
     public BasePresenter(M mMoudle, V mRootview, Context context) {
         this.mMoudle = mMoudle;
         this.mRootview = mRootview;
