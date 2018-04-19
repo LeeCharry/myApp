@@ -58,6 +58,8 @@
             android:label="@string/title_activity_main3"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".wanandroid.activity.LoginActivity" />
+        <activity
+            android:name=".wanandroid.activity.Main2Activity"
+            android:label="@string/title_activity_main2"></activity>
     </application>
-
 </manifest>

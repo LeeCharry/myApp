@@ -2,18 +2,25 @@ package com.example.jack.myapp.wanandroid.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.example.jack.myapp.R;
 import com.example.jack.myapp.bean.Artical;
 import com.example.jack.myapp.bean.BannerBean;
 import com.example.jack.myapp.mvp.contract.HomeContract;
 import com.example.jack.myapp.mvp.presenter.HomePresenter;
 import com.example.jack.myapp.wanandroid.adapter.ArticalAdapter;
+import com.example.tulib.util.utils.DeviceUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoader;
@@ -25,23 +32,42 @@ import java.util.List;
  * Created by lcy on 2018/4/18.
  */
 
-public class HomeFragment extends BaseFragment implements HomeContract.View{
+public class HomeFragment extends BaseFragment implements HomeContract.View,SwipeRefreshLayout.OnRefreshListener{
     private Banner banner;
     private RecyclerView recyclerview;
     private HomePresenter mPresenter;
     private List<BannerBean> bannerBeanList = new ArrayList<>();
     private List<Artical.DatasBean> articalList = new ArrayList<>();
 
-    private ArticalAdapter articalAdapter;
+    private ArticalAdapter adapter;
+    private SwipeRefreshLayout refreshLayout;
+    private int curPage = 0;
+    private int pageCount;
 
     @Override
     protected void initView(View mRootview) {
+        refreshLayout = (SwipeRefreshLayout) mRootview.findViewById(R.id.refresh_layout);
         banner = (Banner) mRootview.findViewById(R.id.banner);
         recyclerview = (RecyclerView)mRootview. findViewById(R.id.recyclerview);
 
         mPresenter = new HomePresenter(context, HomeFragment.this);
-        initBannerData();
+        mPresenter.getBanners();
         initArticalList();
+        //下拉加载
+        refreshLayout.setOnRefreshListener(this);
+        //上拉刷新
+        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                if (curPage >= pageCount){
+                    adapter.loadMoreEnd();
+                }else {
+                    curPage++;
+                    mPresenter.getArticalist(curPage);
+                }
+            }
+        },recyclerview);
+
     }
 
     private void initBanner() {
@@ -67,14 +93,20 @@ public class HomeFragment extends BaseFragment implements HomeContract.View{
     }
 
     private void initArticalList() {
-         articalAdapter = new ArticalAdapter(articalList);
+         adapter = new ArticalAdapter(articalList);
         recyclerview.setLayoutManager(new LinearLayoutManager(context));
-        recyclerview.setAdapter(articalAdapter);
-        mPresenter.getArticalist(0);
-    }
-
-    private void initBannerData() {
-        mPresenter.getBanners();
+        recyclerview.setAdapter(adapter);
+        //TODO:
+//        recyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
+//            @Override
+//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//                super.onDraw(c, parent, state);
+//                Paint paint = new Paint();
+//                paint.setColor(Color.parseColor("##000000"));
+////                c.drawLine(0,0, );
+//            }
+//        });
+        mPresenter.getArticalist(curPage);
     }
     @Override
     protected int getLayoutResId() {
@@ -100,26 +132,34 @@ public class HomeFragment extends BaseFragment implements HomeContract.View{
     public void launchActivity(Intent intent) {
 
     }
-
     @Override
     public void killMySelf() {
-
     }
-
     @Override
     public void getArticalist(Artical artical) {
+        refreshLayout.setRefreshing(false);
+        adapter.loadMoreComplete();
         articalList.clear();
+        curPage = artical.getCurPage();
+        pageCount = artical.getPageCount();
         articalList.addAll(artical.getDatas());
-        articalAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void getBanners(List<BannerBean> bannerBeans) {
+        refreshLayout.setRefreshing(false);
         if (bannerBeans.size() > 0) {
-//            this.bannerBeanList = bannerBeans;
             bannerBeanList.clear();
             bannerBeanList.addAll(bannerBeans);
             initBanner();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        curPage = 0;
+        mPresenter.getBanners();
+        mPresenter.getArticalist(curPage);
     }
 }

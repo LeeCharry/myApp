@@ -5,6 +5,9 @@ import com.example.jack.myapp.bean.Artical;
 import com.example.jack.myapp.bean.ArticalBean;
 import com.example.jack.myapp.bean.BannerBean;
 import com.example.jack.myapp.bean.BaseObject;
+import com.example.jack.myapp.bean.HotBean;
+import com.example.jack.myapp.bean.TreeBean;
+import com.example.jack.myapp.bean.UserBean;
 
 import java.util.List;
 
@@ -36,11 +39,61 @@ public interface ApiService {
     Observable<ArticalBean> getArticals();
 
 
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @return
+     */
+    @POST("user/login/")
+    Observable<BaseObject<UserBean>> login(@Query("username")String username,
+                                           @Query("password")String password);
+
+    /**
+     * 注册
+     * @param username
+     * @param password
+     * @param repassword
+     * @return
+     */
+    @POST("user/register/")
+    Observable<BaseObject<UserBean>> register(@Query("username")String username,
+                                     @Query("password")String password,
+                                     @Query("repassword")String repassword);
+
+    /**
+     * 首页文章列表
+     * @param page
+     * @return
+     */
     @GET("article/list/{page}/json/")
     Observable<BaseObject<Artical>> getArticalList(@Path("page") int page);
 
+    /**
+     * banner
+     * @return
+     */
     @GET("banner/json")
     Observable<BaseObject<List<BannerBean>>> getBanner();
 
+    /**
+     * 知识体系列表
+     * @return
+     */
+    @GET("tree/json")
+    Observable<BaseObject<List<TreeBean>>> getTree();
 
+    /**
+     * 搜索热词
+     * @return
+     */
+    @GET("hotkey/json")
+    Observable<BaseObject<List<HotBean>>> getHotKey();
+
+    /**
+     * 常用网站
+     * @return
+     */
+    @GET("friend/json")
+    Observable<BaseObject<List<HotBean>>> geFriends();
 }

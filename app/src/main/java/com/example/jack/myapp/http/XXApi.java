@@ -48,7 +48,6 @@ public class XXApi {
     private XXApi() {
 
     }
-
     public static XXApi getInstance() {
         if (instance == null) {
             synchronized (XXApi.class) {
@@ -99,6 +98,7 @@ public class XXApi {
             if (cookieJar != null) {
                 builder.cookieJar(cookieJar);
             }
+
             provider.configHttps(builder);
 
             RequestHandler handler = provider.configHandler();

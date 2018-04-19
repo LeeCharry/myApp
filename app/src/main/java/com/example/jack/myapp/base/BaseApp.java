@@ -14,8 +14,13 @@ import com.example.tulib.util.http.RequestHandler;
 import com.example.tulib.util.utils.DataHelper;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import okhttp3.Cookie;
 import okhttp3.CookieJar;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,7 +32,7 @@ import okhttp3.Response;
 
 public class BaseApp extends Application {
     private static BaseApp instance;
-
+    final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,21 +62,24 @@ public class BaseApp extends Application {
 
             @Override
             public CookieJar configCookie() {
-                return  null;
-//              return   new CookieJar(){
-//
-//                    @Override
-//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
-//                        for (Cookie cookie : cookies) {
-//                            Log.d("BaseApplication", "cookie " + cookie.toString());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public List<Cookie> loadForRequest(HttpUrl url) {
-//                        return null;
-//                    }
-//                };
+//                return  null;
+
+                return   new CookieJar(){
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+                        for (Cookie cookie : cookies) {
+                            Log.d("BaseApplication", "cookie " + cookie.toString());
+                            LogUtils.a("lcy",cookie.toString());
+                        }
+                        cookieStore.put(url.host(),cookies);
+                    }
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        LogUtils.a("lcy",url.toString());
+                        List<Cookie> cookies = cookieStore.get(url);
+                        return cookies != null?cookies:new ArrayList<Cookie>();
+                    }
+                };
             }
 
             @Override
