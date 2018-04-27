@@ -28,4 +28,8 @@ public class ArticalAdapter extends BaseQuickAdapter<Artical.DatasBean,BaseViewH
         helper.setText(R.id.tv_chapter_name,item.getChapterName().toString());
 
     }
+
+    public void isNextLoad(boolean b) {
+
+    }
 }

@@ -4,12 +4,9 @@ import android.content.Context;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.example.jack.myapp.bean.Artical;
-import com.example.jack.myapp.bean.ArticalBean;
 import com.example.jack.myapp.bean.BannerBean;
 import com.example.jack.myapp.bean.BaseObject;
 import com.example.jack.myapp.http.XXApi;
-import com.example.jack.myapp.mvp.LoginContract;
-import com.example.jack.myapp.mvp.LoginModel;
 import com.example.jack.myapp.mvp.contract.HomeContract;
 import com.example.jack.myapp.mvp.model.HomeModel;
 import com.example.tulib.util.base.BasePresenter;
@@ -32,6 +29,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model,HomeContract
         super.handleResponseError(context, e);
     }
     public void getArticalist(int page){
+        LogUtils.a("lcy","4444");
         mMoudle.getArticalist(page)
                 .retryWhen(new RetryWithDelay(3,2))
                 .compose(XXApi.<BaseObject<Artical>>getApiTransformer())
@@ -46,10 +44,8 @@ public class HomePresenter extends BasePresenter<HomeContract.Model,HomeContract
                             }
                         }
                     }
-
                 });
     }
-
     public void getBanners(){
         mMoudle.getBanners()
                 .retryWhen(new RetryWithDelay(3,2))
@@ -65,7 +61,6 @@ public class HomePresenter extends BasePresenter<HomeContract.Model,HomeContract
                             }
                         }
                     }
-
                 });
     }
 }

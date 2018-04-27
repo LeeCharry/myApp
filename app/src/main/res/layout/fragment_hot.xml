@@ -1,21 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:zhy="http://schemas.android.com/tools"
     android:id="@+id/refresh_layout">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="热点"
-        android:gravity="center"
-        />
+
     <com.zhy.autolayout.AutoLinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        android:layout_height="match_parent">
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:text="大家都在搜"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="36px"
+            android:padding="15px"
+            />
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/fl1"
+            android:padding="25px"
+            zhy:max_select="-1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.zhy.view.flowlayout.TagFlowLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="常用网站"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="36px"
+            android:padding="15px"
+            />
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/fl2"
+            android:padding="25px"
+            zhy:max_select="-1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.zhy.view.flowlayout.TagFlowLayout>
     </com.zhy.autolayout.AutoLinearLayout>
+    <!--<com.zhy.autolayout.AutoLinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="vertical">-->
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recyclerview"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+    <!--</com.zhy.autolayout.AutoLinearLayout>-->
 </android.support.v4.widget.SwipeRefreshLayout>

@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.jack.myapp">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -60,6 +63,15 @@
         <activity android:name=".wanandroid.activity.LoginActivity" />
         <activity
             android:name=".wanandroid.activity.Main2Activity"
-            android:label="@string/title_activity_main2"></activity>
+            android:label="@string/title_activity_main2" />
+
+        <activity
+            android:name=".demo.locate.LocateActivity"
+            android:label="@string/title_activity_locate"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <service android:name=".widget.LocateService"/>
     </application>
+
 </manifest>

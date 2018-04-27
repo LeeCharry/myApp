@@ -2,9 +2,7 @@ package com.example.jack.myapp.wanandroid.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +19,7 @@ import com.example.jack.myapp.mvp.contract.HomeContract;
 import com.example.jack.myapp.mvp.presenter.HomePresenter;
 import com.example.jack.myapp.wanandroid.adapter.ArticalAdapter;
 import com.example.tulib.util.utils.DeviceUtil;
+import com.example.tulib.util.utils.HandlerTip;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.loader.ImageLoader;
@@ -41,8 +40,12 @@ public class HomeFragment extends BaseFragment implements HomeContract.View,Swip
 
     private ArticalAdapter adapter;
     private SwipeRefreshLayout refreshLayout;
-    private int curPage = 0;
-    private int pageCount;
+    private int page = 0;
+    private int pageCount = 0;
+    private int TOTAL_COUNTER = 0;
+    private int mCurrentCounter = 0;
+
+//     static Boolean isRefresh = true;
 
     @Override
     protected void initView(View mRootview) {
@@ -56,17 +59,44 @@ public class HomeFragment extends BaseFragment implements HomeContract.View,Swip
         //下拉加载
         refreshLayout.setOnRefreshListener(this);
         //上拉刷新
+
+//        adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+//            @Override
+//            public void onLoadMoreRequested() {
+//
+//                if (curPage <= pageCount){
+//                    refreshLayout.setEnabled(false);
+//                    if (mCurrentCounter >= TOTAL_COUNTER){
+//                        adapter.loadMoreEnd(true);
+//                    }else{
+//                        curPage++;
+//                        mPresenter.getArticalist(curPage);
+////                        adapter.loadMoreComplete();
+//                        refreshLayout.setEnabled(true);
+//                    }
+//                }
+//
+//
+//            }
+//        },recyclerview);
+
         adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
-                if (curPage >= pageCount){
-                    adapter.loadMoreEnd();
-                }else {
-                    curPage++;
-                    mPresenter.getArticalist(curPage);
-                }
+                recyclerview.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (page >= pageCount) {
+                            adapter.loadMoreEnd();
+                        }else{
+                            page++;
+                            mPresenter.getArticalist(page);
+//                            adapter.loadMoreComplete();
+                        }
+                    }
+                },2000);
             }
-        },recyclerview);
+        });
 
     }
 
@@ -96,17 +126,9 @@ public class HomeFragment extends BaseFragment implements HomeContract.View,Swip
          adapter = new ArticalAdapter(articalList);
         recyclerview.setLayoutManager(new LinearLayoutManager(context));
         recyclerview.setAdapter(adapter);
-        //TODO:
-//        recyclerview.addItemDecoration(new RecyclerView.ItemDecoration() {
-//            @Override
-//            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-//                super.onDraw(c, parent, state);
-//                Paint paint = new Paint();
-//                paint.setColor(Color.parseColor("##000000"));
-////                c.drawLine(0,0, );
-//            }
-//        });
-        mPresenter.getArticalist(curPage);
+        adapter.setEnableLoadMore(true);
+        mPresenter.getArticalist(page);
+        adapter.openLoadAnimation();
     }
     @Override
     protected int getLayoutResId() {
@@ -137,13 +159,18 @@ public class HomeFragment extends BaseFragment implements HomeContract.View,Swip
     }
     @Override
     public void getArticalist(Artical artical) {
-        refreshLayout.setRefreshing(false);
-        adapter.loadMoreComplete();
-        articalList.clear();
-        curPage = artical.getCurPage();
         pageCount = artical.getPageCount();
+        if (refreshLayout.isRefreshing()) {
+            //下拉刷新
+            articalList.clear();
+            refreshLayout.setRefreshing(false);
+        }else{
+            //上拉加载
+            adapter.loadMoreComplete();
+        }
         articalList.addAll(artical.getDatas());
         adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -158,8 +185,8 @@ public class HomeFragment extends BaseFragment implements HomeContract.View,Swip
 
     @Override
     public void onRefresh() {
-        curPage = 0;
+        page = 0;
         mPresenter.getBanners();
-        mPresenter.getArticalist(curPage);
+        mPresenter.getArticalist(page);
     }
 }

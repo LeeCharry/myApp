@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Window;
 
 import com.example.tulib.R;
+import com.example.tulib.util.utils.DeviceUtil;
 import com.example.tulib.util.widget.LoadingDailog;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -24,6 +25,8 @@ public abstract class XActivity extends RxAppCompatActivity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(getLayoutResId());
+        //设置沉浸式标题栏
+        DeviceUtil.setImmersiveStatus(XActivity.this);
         gson = new Gson();
         initLoadingDailog();
 //        ButterKnife.bind(this);
