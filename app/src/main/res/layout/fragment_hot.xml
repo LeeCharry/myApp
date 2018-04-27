@@ -5,45 +5,51 @@
     xmlns:zhy="http://schemas.android.com/tools"
     android:id="@+id/refresh_layout">
 
-    <com.zhy.autolayout.AutoLinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
+        <com.zhy.autolayout.AutoLinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="大家都在搜"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="36px"
-            android:padding="15px"
-            />
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/fl1"
-            android:padding="25px"
-            zhy:max_select="-1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="大家都在搜"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="36px"
+                android:padding="15px"
+                />
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:background="@color/colorBlack_00"
+                android:id="@+id/fl1"
+                android:padding="25px"
+                zhy:max_select="-1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        </com.zhy.view.flowlayout.TagFlowLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="常用网站"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="36px"
-            android:padding="15px"
-            />
-        <com.zhy.view.flowlayout.TagFlowLayout
-            android:id="@+id/fl2"
-            android:padding="25px"
-            zhy:max_select="-1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            </com.zhy.view.flowlayout.TagFlowLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="常用网站"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="36px"
+                android:padding="15px"
+                />
+            <com.zhy.view.flowlayout.TagFlowLayout
+                android:id="@+id/fl2"
+                android:padding="25px"
+                zhy:max_select="-1"
+                android:background="@color/colorBlack_00"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </com.zhy.view.flowlayout.TagFlowLayout>
+        </com.zhy.autolayout.AutoLinearLayout>
+    </ScrollView>
 
-        </com.zhy.view.flowlayout.TagFlowLayout>
-    </com.zhy.autolayout.AutoLinearLayout>
     <!--<com.zhy.autolayout.AutoLinearLayout-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent"-->

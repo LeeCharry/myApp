@@ -1,6 +1,7 @@
 package com.example.jack.myapp.wanandroid.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,29 +18,37 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by lcy on 2018/4/18.
  */
 
-public class HotFragment extends BaseFragment implements HotContract.View{
+public class HotFragment extends BaseFragment implements HotContract.View,SwipeRefreshLayout.OnRefreshListener{
     private SwipeRefreshLayout refreshLayout;
     private TagFlowLayout fl1;
     private TagFlowLayout fl2;
     private HotPresenter mPresenter;
     private List<HotBean> hotKeyList = new ArrayList<>();
     private List<HotBean> friendList = new ArrayList<>();
+
     @Override
     protected void initView(View mRootview) {
 
         refreshLayout = mRootview.findViewById(R.id.refresh_layout);
         fl1 = mRootview.findViewById(R.id.fl1);
         fl2 = mRootview.findViewById(R.id.fl2);
+        refreshLayout.setOnRefreshListener(this);
 
-        mPresenter = new HotPresenter(context,HotFragment.this);
+        mPresenter = new HotPresenter(context, HotFragment.this);
+        refreshData();
+    }
+
+    private void refreshData() {
         mPresenter.getHotKey();
         mPresenter.getFriends();
     }
+
     @Override
     protected int getLayoutResId() {
         return R.layout.fragment_hot;
@@ -72,26 +81,45 @@ public class HotFragment extends BaseFragment implements HotContract.View{
 
     @Override
     public void getHotKey(List<HotBean> hotBeanList) {
-            hotKeyList.clear();
-            hotKeyList.addAll(hotBeanList);
-            initFlowLayout(hotKeyList,fl1);
+        refreshLayout.setRefreshing(false);
+        hotKeyList.clear();
+        hotKeyList.addAll(hotBeanList);
+        initFlowLayout(hotKeyList, fl1);
     }
+
     private void initFlowLayout(List<HotBean> hotKeyList, final TagFlowLayout fl) {
         fl.setAdapter(new TagAdapter<HotBean>(hotKeyList) {
             @Override
             public View getView(FlowLayout parent, int position, HotBean hotBean) {
-                View view = LayoutInflater.from(context).inflate(R.layout.item_hot, fl,false);
+                View view = LayoutInflater.from(context).inflate(R.layout.item_hot, fl, false);
                 TextView tv = view.findViewById(R.id.tv_name);
+                setTextColor(tv);
                 tv.setText(hotBean.getName().toString());
                 return tv;
             }
         });
     }
 
+    /**
+     * 随机生成颜色
+     * @param tv
+     */
+    private void setTextColor(TextView tv) {
+        Random random = new Random();
+        int r = random.nextInt(256);
+        int g = random.nextInt(256);
+        int b = random.nextInt(256);
+        tv.setTextColor(Color.rgb(r,g,b));
+    }
     @Override
     public void getFriends(List<HotBean> hotBeanList) {
+        refreshLayout.setRefreshing(false);
         friendList.clear();
         friendList.addAll(hotBeanList);
-        initFlowLayout(friendList,fl2);
+        initFlowLayout(friendList, fl2);
+    }
+    @Override
+    public void onRefresh() {
+        refreshData();
     }
 }
