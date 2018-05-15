@@ -11,9 +11,6 @@ import com.example.jack.myapp.bean.UserBean;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -96,4 +93,46 @@ public interface ApiService {
      */
     @GET("friend/json")
     Observable<BaseObject<List<HotBean>>> geFriends();
+
+    /**
+     * 搜索
+     * @return
+     */
+    @POST("article/query/{page}/json")
+    Observable<BaseObject<Artical>> queryByKey(@Path("page")int page, @Query("k")String key);
+
+    /**
+     * 搜索站内文章
+     * http://www.wanandroid.com/lg/collect/1165/json
+     */
+    @POST("lg/collect/{id}/json")
+    Observable<BaseObject> collect(@Path("id")long id);
+
+    /**
+     * 知识体系下的文章
+     * http://www.wanandroid.com/article/list/0/json?cid=60
+     */
+    @GET("article/list/0/json")
+    Observable<BaseObject<Artical>> getArticalList(@Query("cid") long cid);
+
+    /**
+     * 收藏的文章
+     * http://www.wanandroid.com/lg/collect/list/0/json
+     */
+    @GET("lg/collect/list/{page}/json")
+    Observable<BaseObject<Artical>> getMarkedList(@Path("page") int page);
+
+    /**
+     * 删除收藏文章
+     *http://www.wanandroid.com/lg/uncollect/2805/json
+     */
+    @POST("lg/uncollect/{id}/json")
+    Observable<BaseObject> unCollectArtical(@Path("id") long id,@Query("originId") long originId);
+
+    /**
+     * 收藏
+     * http://www.wanandroid.com/lg/collect/1165/json
+     */
+    @POST("lg/collect/{id}/json")
+    Observable<BaseObject> collectArtical(@Path("id") long id);
 }

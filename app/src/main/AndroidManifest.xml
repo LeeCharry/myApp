@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -17,6 +18,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
     <application
         android:name=".base.BaseApp"
@@ -34,15 +36,29 @@
             android:name="design_height"
             android:value="1280" />
 
-        <activity android:name=".MainActivity" />
-        <activity android:name=".demo.recyclerview.recyclerviewDemo" />
-        <activity android:name=".demo.filedemo.FileDemoActivity" />
-        <activity android:name=".demo.download.DownloadActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.recyclerview.recyclerviewDemo"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".demo.filedemo.FileDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.download.DownloadActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".demo.download.DownLoadService" />
 
-        <activity android:name=".demo.date.DateGrideActivity" />
-        <activity android:name=".demo.takephoto.TakePhotoActivity" />
+        <activity
+            android:name=".demo.date.DateGrideActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".demo.takephoto.TakePhotoActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -59,27 +75,65 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".wanandroid.Main3Activity"
             android:label="@string/title_activity_main3"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".wanandroid.activity.LoginActivity" />
+        <activity
+            android:name=".wanandroid.activity.LoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wanandroid.activity.Main2Activity"
-            android:label="@string/title_activity_main2" />
+            android:label="@string/title_activity_main2"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".demo.locate.LocateActivity"
             android:label="@string/title_activity_locate"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service android:name=".widget.LocateService" />
+        <service
+            android:name=".widget.LocateService"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".demo.TestActivity"></activity>
-        <activity android:name=".wanandroid.activity.HotKeyListActivity"></activity>
+        <activity
+            android:name=".demo.TestActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".wanandroid.activity.HotKeyListActivity"
+            android:screenOrientation="portrait" />
+        <!--toolbar滑出屏幕外-->
+        <activity android:name=".demo.expandlistview.CoordinatorActivity">
+
+        </activity>
+        <!--文章详情页面-->
+        <activity
+            android:name=".wanandroid.activity.ArticalDetailActivity"
+            android:screenOrientation="portrait" />
+        <!--知识体系的文章列表-->
+        <activity
+            android:name=".wanandroid.activity.MutipleTypeActivity"
+            android:screenOrientation="portrait" />
+        <!--toolbar折叠-->
+        <activity android:name=".demo.expandlistview.CollapsingActivity"></activity>
+        <!--搜索-->
+        <activity
+            android:name=".wanandroid.activity.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateVisible" />
+        <!--我喜欢的-->
+        <activity
+            android:name=".wanandroid.activity.MarkedActivity"
+            android:screenOrientation="portrait" />
+        <!--关于我们-->
+        <activity
+            android:name=".wanandroid.activity.AboutUsActivity"
+            android:screenOrientation="portrait" />
     </application>
-
 </manifest>

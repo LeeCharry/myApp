@@ -102,6 +102,11 @@ public class TreeBean implements Serializable{
         private int visible;
         private List<?> children;
 
+        public ChildrenBean(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
         public int getCourseId() {
             return courseId;
         }

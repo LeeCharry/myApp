@@ -7,10 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.R;
 import com.example.jack.myapp.bean.TreeBean;
 import com.example.jack.myapp.mvp.contract.TreeContract;
 import com.example.jack.myapp.mvp.presenter.TreePresenter;
+import com.example.jack.myapp.wanandroid.activity.MutipleTypeActivity;
 import com.example.jack.myapp.wanandroid.adapter.TreeAdapter;
 
 import java.util.ArrayList;
@@ -42,6 +45,14 @@ public class KnowLedgeSysFragment extends BaseFragment implements TreeContract.V
          adapter = new TreeAdapter(mTreeList);
          recyclerview.setLayoutManager(new LinearLayoutManager(context));
         recyclerview.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(context, MutipleTypeActivity.class);
+                intent.putExtra(AppConstant.SERIALIZABLEBEAN,mTreeList.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -62,6 +73,7 @@ public class KnowLedgeSysFragment extends BaseFragment implements TreeContract.V
     @Override
     public void showMessage(String msg) {
         ToastUtils.showShort(msg);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

@@ -95,7 +95,7 @@ public class CrashHandler implements UncaughtExceptionHandler {
     private boolean handleException(Throwable ex) {
         if (ex == null)
             return false;
-
+        Log.e(TAG, "handleException: ",ex );
         try {
             // ʹ��Toast����ʾ�쳣��Ϣ
             new Thread() {

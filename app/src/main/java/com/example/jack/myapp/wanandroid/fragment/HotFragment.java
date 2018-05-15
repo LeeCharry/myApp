@@ -8,10 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ToastUtils;
+import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.R;
+import com.example.jack.myapp.bean.Artical;
 import com.example.jack.myapp.bean.HotBean;
 import com.example.jack.myapp.mvp.contract.HotContract;
 import com.example.jack.myapp.mvp.presenter.HotPresenter;
+import com.example.jack.myapp.wanandroid.activity.ArticalDetailActivity;
+import com.example.jack.myapp.wanandroid.activity.HotKeyListActivity;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -42,6 +47,38 @@ public class HotFragment extends BaseFragment implements HotContract.View,SwipeR
 
         mPresenter = new HotPresenter(context, HotFragment.this);
         refreshData();
+
+        setOnItemClickListener(fl1);
+        setOnItemClickListener(fl2);
+    }
+
+    private void setOnItemClickListener(final TagFlowLayout fl) {
+        fl.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, FlowLayout parent) {
+                if (parent.equals(fl1)) {
+                    intnt2HotListActivity(hotKeyList.get(position).getName());
+
+                }else{
+                    //跳转到文章详情页面
+                    if (position >= 0) {
+                        HotBean hotBean = friendList.get(position);
+                        Intent intent = new Intent(context, ArticalDetailActivity.class);
+                        intent.putExtra(AppConstant.ID,(long)hotBean.getId());
+                        intent.putExtra(AppConstant.LINK,hotBean.getLink().toString());
+                        intent.putExtra(AppConstant.TITLE,hotBean.getName().toString());
+                        startActivity(intent);
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    private void intnt2HotListActivity(String name) {
+        Intent intent = new Intent(context, HotKeyListActivity.class);
+        intent.putExtra(AppConstant.HOT_KEY,name);
+        startActivity(intent);
     }
 
     private void refreshData() {
@@ -66,7 +103,8 @@ public class HotFragment extends BaseFragment implements HotContract.View,SwipeR
 
     @Override
     public void showMessage(String msg) {
-
+        ToastUtils.showShort(msg);
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

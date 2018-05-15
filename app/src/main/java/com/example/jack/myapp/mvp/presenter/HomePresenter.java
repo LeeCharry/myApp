@@ -29,7 +29,7 @@ public class HomePresenter extends BasePresenter<HomeContract.Model,HomeContract
         super.handleResponseError(context, e);
     }
     public void getArticalist(int page){
-        LogUtils.a("lcy","4444");
+//        LogUtils.a("lcy","4444");
         mMoudle.getArticalist(page)
                 .retryWhen(new RetryWithDelay(3,2))
                 .compose(XXApi.<BaseObject<Artical>>getApiTransformer())

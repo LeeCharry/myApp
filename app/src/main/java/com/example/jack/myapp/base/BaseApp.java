@@ -1,21 +1,18 @@
 package com.example.jack.myapp.base;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Application;
-import android.app.ApplicationErrorReport;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
-import com.example.jack.myapp.BuildConfig;
+import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.http.Api;
 import com.example.jack.myapp.http.XXApi;
 import com.example.jack.myapp.widget.CrashHandler;
@@ -23,6 +20,7 @@ import com.example.tulib.util.http.NetError;
 import com.example.tulib.util.http.NetProvider;
 import com.example.tulib.util.http.RequestHandler;
 import com.example.tulib.util.utils.DataHelper;
+import com.example.tulib.util.cookie.PersistentCookieStore;
 
 import java.io.File;
 
@@ -44,7 +42,7 @@ import okhttp3.Response;
 public class BaseApp extends Application {
     private static BaseApp instance;
     final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
-
+    private PersistentCookieStore persistentCookieStore;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,6 +59,8 @@ public class BaseApp extends Application {
 //
 //        x.Ext.init(this);
 //        x.Ext.setDebug(BuildConfig.DEBUG); // 是否输出debug日志, 开启debug会影响性能.
+        persistentCookieStore = new PersistentCookieStore(this);
+
 //};
 
         XXApi.registerProvider(new NetProvider() {
@@ -78,32 +78,39 @@ public class BaseApp extends Application {
             public void configHttps(OkHttpClient.Builder builder) {
 
             }
-
             @Override
             public CookieJar configCookie() {
-                return  null;
-//                return new CookieJar() {
-//                    @Override
-//                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+//                return  null;
+                return new CookieJar() {
+                    @Override
+                    public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
 //                        for (Cookie cookie : cookies) {
 //                            Log.d("BaseApplication", "cookie " + cookie.toString());
 //                            LogUtils.a("lcy", cookie.toString());
 //                        }
 //                        cookieStore.put(url.host(), cookies);
-//                    }
-//                    @Override
-//                    public List<Cookie> loadForRequest(HttpUrl url) {
+                        for (Cookie cookie:cookies) {
+                            persistentCookieStore.add(url,cookie);
+                        }
+                    }
+
+                    @Override
+                    public List<Cookie> loadForRequest(HttpUrl url) {
 //                        LogUtils.a("lcy", url.toString());
 //                        List<Cookie> cookies = cookieStore.get(url);
 //                        return cookies != null ? cookies : new ArrayList<Cookie>();
-//                    }
-//                };
+                        List<Cookie> cookies = persistentCookieStore.get(url);
+                        for (int i = 0; i < cookies.size(); i++) {
+//                            Log.d(this.get, "loadForRequest: "+cookies.get(i).toString());
+                        }
+                       return persistentCookieStore.get(url);
+                    }
+                };
             }
 
             @Override
             public RequestHandler configHandler() {
-//                return requestHandler;
-                return null;
+                return requestHandler;
             }
 
             @Override
@@ -167,13 +174,14 @@ public class BaseApp extends Application {
     private RequestHandler requestHandler = new RequestHandler() {
         @Override
         public Request onBeforeRequest(Request request, Interceptor.Chain chain) {
+
             return request;
         }
         @Override
         public Response onAfterRequest(Response response, String result, Interceptor.Chain chain) {
             int code = response.code();
-            LogUtils.a("lcy",code);
-            return null;
+//            LogUtils.a("lcy",code);
+            return response;
         }
     };
 

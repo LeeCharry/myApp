@@ -7,7 +7,6 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [ moduleName : project.getName() ]
@@ -49,7 +48,7 @@ dependencies {
     compile rootProject.ext.dependencies["rxcache-jolyglot-gson"]
     compile rootProject.ext.dependencies["banner"]
     compile rootProject.ext.dependencies["timber"]
-
+    compile rootProject.ext.dependencies["agentweb"]
 
     compile rootProject.ext.dependencies["rxlifecycle"]
     compile rootProject.ext.dependencies["rxlifecycle-android"]
