@@ -5,12 +5,17 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
+
     <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
@@ -18,7 +23,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".base.BaseApp"
@@ -41,9 +46,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".demo.recyclerview.recyclerviewDemo"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".demo.filedemo.FileDemoActivity"
             android:screenOrientation="portrait" />
@@ -72,12 +75,7 @@
 
         <activity
             android:name=".wanandroid.WanActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wanandroid.Main3Activity"
             android:label="@string/title_activity_main3"
@@ -102,38 +100,59 @@
 
         <activity
             android:name=".demo.TestActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wanandroid.activity.HotKeyListActivity"
             android:screenOrientation="portrait" />
-        <!--toolbar滑出屏幕外-->
-        <activity android:name=".demo.expandlistview.CoordinatorActivity">
-
-        </activity>
-        <!--文章详情页面-->
+        <!-- toolbar滑出屏幕外 -->
+        <activity android:name=".demo.expandlistview.CoordinatorActivity" />
+        <!-- 文章详情页面 -->
         <activity
             android:name=".wanandroid.activity.ArticalDetailActivity"
             android:screenOrientation="portrait" />
-        <!--知识体系的文章列表-->
+        <!-- 知识体系的文章列表 -->
         <activity
             android:name=".wanandroid.activity.MutipleTypeActivity"
             android:screenOrientation="portrait" />
-        <!--toolbar折叠-->
-        <activity android:name=".demo.expandlistview.CollapsingActivity"></activity>
-        <!--搜索-->
+        <!-- toolbar折叠 -->
+        <activity android:name=".demo.expandlistview.CollapsingActivity" />
+        <!-- 搜索 -->
         <activity
             android:name=".wanandroid.activity.SearchActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateVisible" />
-        <!--我喜欢的-->
+        <!-- 我喜欢的 -->
         <activity
             android:name=".wanandroid.activity.MarkedActivity"
             android:screenOrientation="portrait" />
-        <!--关于我们-->
+        <!-- 关于我们 -->
         <activity
             android:name=".wanandroid.activity.AboutUsActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".demo.sqlcipher.SqliteActivity" />
+        <activity android:name=".demo.observer.TestObserverActivity" />
+        <activity android:name=".demo.signature.SignatureActivity" />
+        <activity android:name=".demo.scan_takephot_demo.ScanAndTakePhotoActivity" />
+
+        <!-- 扫描 -->
+        <activity
+            android:name=".google.zxing.activity.CaptureActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity android:name=".demo.expandlistview.MedicalReportActivity" />
+        <activity android:name=".demo.baiduMap.BaiduMapActivity" />
+        <activity android:name=".demo.MRecorder.MRecorderActivity"></activity>
+        <activity android:name=".demo.BreakPointrResume.HttpActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demo.RvItemDecoration.RvItemDecorationActivity">
+        </activity>
+        <activity android:name=".demo.BreakPointrResume.DownloadTest">
+        </activity>
+        <service android:name=".demo.download.DownLoadService"/>
+        <service android:name=".demo.BreakPointrResume.HttpService"/>
     </application>
+
 </manifest>

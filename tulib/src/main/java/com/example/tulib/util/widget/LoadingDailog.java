@@ -26,7 +26,6 @@ public class LoadingDailog extends Dialog {
         private boolean isCancelable=false;
         private boolean isCancelOutside=false;
 
-
         public Builder(Context context) {
             this.context = context;
         }
@@ -51,7 +50,6 @@ public class LoadingDailog extends Dialog {
             this.isShowMessage=isShowMessage;
             return this;
         }
-
         /**
          * 设置是否可以按返回键取消
          * @param isCancelable

@@ -16,7 +16,6 @@ import rx.Observable;
  */
 
 public class ArticalListModel extends BaseModel implements ArticalListContract.Model {
-
     @Override
     public Observable<BaseObject<Artical>> getArticalist(long cid) {
         return apiService.getArticalList(cid);

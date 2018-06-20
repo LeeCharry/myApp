@@ -3,7 +3,6 @@ package com.example.tulib.util.base;
 import android.content.Context;
 import com.google.gson.Gson;
 import com.trello.rxlifecycle.LifecycleTransformer;
-
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErroListener;
 import rx.Subscription;

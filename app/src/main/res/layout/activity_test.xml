@@ -6,8 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.jack.myapp.demo.TestActivity">
-<AutoCompleteTextView
-    android:layout_width="50dp"
-    android:layout_height="wrap_content"
-    android:id="@+id/actv"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BottomSheetDialog"
+        android:onClick="onClick"
+        android:id="@+id/btn_bottom_sheet"/>
 </LinearLayout>

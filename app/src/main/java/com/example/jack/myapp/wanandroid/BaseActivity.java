@@ -13,6 +13,7 @@ import com.example.tulib.util.base.XActivity;
 public abstract class BaseActivity extends XActivity {
 //    protected   Toolbar toolbar;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

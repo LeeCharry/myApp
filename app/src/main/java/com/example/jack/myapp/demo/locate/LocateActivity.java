@@ -42,6 +42,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+/**
+ * 定位
+ */
 public class LocateActivity extends AppCompatActivity {
 
     /**

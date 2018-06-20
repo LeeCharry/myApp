@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by lcy on 2018/4/10.
+ * recyclerview 左滑删除，长按拖动动画
  */
 
 public class recyclerviewDemo extends AppCompatActivity {

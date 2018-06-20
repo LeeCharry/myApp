@@ -46,6 +46,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 //@Route(path = "/takephoto/TakePhotoActivity")
+
+/**
+ * 拍照
+ */
 public class TakePhotoActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int PICK_PICTURE = 3;
     private ImageView ivAvatar;

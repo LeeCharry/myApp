@@ -12,9 +12,14 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.example.jack.myapp.R;
 import com.example.tulib.util.kit.Kits;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * App检测更新
+ */
 public class DownloadActivity extends AppCompatActivity {
     //  https://raw.githubusercontent.com/wangzailfm/WanAndroidClient/master/app/release/app-release.apk
     private DownloadHelper.OnDownloadListener onDownloadListener;
@@ -47,6 +52,9 @@ public class DownloadActivity extends AppCompatActivity {
         //版本更新提示
         new UpdateManager(DownloadActivity.this)
                 .showDialog();
+
+        //观察者模式
+        EventBus.getDefault().register(this);
     }
     private void initView() {
         progressbar = (ProgressBar) findViewById(R.id.progressbar);

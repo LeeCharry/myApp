@@ -7,12 +7,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
-import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.http.Api;
 import com.example.jack.myapp.http.XXApi;
 import com.example.jack.myapp.widget.CrashHandler;
@@ -23,7 +20,6 @@ import com.example.tulib.util.utils.DataHelper;
 import com.example.tulib.util.cookie.PersistentCookieStore;
 
 import java.io.File;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +29,14 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.ByteString;
+import okio.Source;
+import okio.Timeout;
 
 /**
  * Created by lcy on 2018/4/8.
@@ -170,17 +173,17 @@ public class BaseApp extends Application {
         }
         }
     }
-
     private RequestHandler requestHandler = new RequestHandler() {
         @Override
         public Request onBeforeRequest(Request request, Interceptor.Chain chain) {
-
+            RequestBody body = request.body();
             return request;
         }
         @Override
         public Response onAfterRequest(Response response, String result, Interceptor.Chain chain) {
             int code = response.code();
 //            LogUtils.a("lcy",code);
+            ResponseBody body = response.body();
             return response;
         }
     };

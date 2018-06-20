@@ -5,6 +5,7 @@ import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -38,8 +39,6 @@ import com.example.jack.myapp.wanandroid.fragment.KnowLedgeSysFragment;
 import com.example.jack.myapp.widget.MD5Util;
 import com.trello.rxlifecycle.components.RxFragment;
 
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -68,6 +67,7 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
     private ImageView ivSearch;
     String md5;
     String path = Environment.getExternalStorageDirectory() + File.separator + "tencent" + File.separator + "2018-05-15.";
+
     @Override
     protected void initView() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -83,35 +83,54 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
         initFragments();
         setActionBarIcon();
 
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+
+        /**
+         * 动态申请权限（读取SD卡文件）
+         */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                //申请WRITE_EXTERNAL_STORAGE权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+
+            } else {
+                try {
+                    String fileMD5String = MD5Util.getFileMD5String(new File(path));
+                    LogUtils.a(AppConstant.TAG, fileMD5String);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 //            //申请WRITE_EXTERNAL_STORAGE权限
 //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
 //                    WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
 //
-//        }else{
+//        } else {
 //            md5 = getMd5(path);
 //
 //            try {
 //                String fileMD5String = MD5Util.getFileMD5String(new File(path));
-//                LogUtils.a(AppConstant.TAG,fileMD5String);
+//                LogUtils.a(AppConstant.TAG, fileMD5String);
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
 //
 //            String md5Three = getMD5Three(path);
-//            LogUtils.a(AppConstant.TAG,md5Three);
+//            LogUtils.a(AppConstant.TAG, md5Three);
 //
 //            String fileMD5 = MD5Util.getFileMD5(path);
-//            LogUtils.a(AppConstant.TAG,fileMD5);
+//            LogUtils.a(AppConstant.TAG, fileMD5);
 //
 //            String md5Hex = null;
 //            try {
 //                md5Hex = DigestUtils.md5Hex(new FileInputStream(new File(path)));
-//                LogUtils.a(AppConstant.TAG,md5Hex);
+//                LogUtils.a(AppConstant.TAG, md5Hex);
 //            } catch (IOException e) {
 //                e.printStackTrace();
 //            }
-//            Log.e("我已有权限","已有权限");
+//            Log.e("我已有权限", "已有权限");
 //        }
     }
 
@@ -122,25 +141,9 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Camera permission has been granted, preview can be displayed
                 Log.e("text", "CAMERA permission has now been granted. Showing preview.");
-                md5 = getMd5(path);
                 try {
                     String fileMD5String = MD5Util.getFileMD5String(new File(path));
-                    LogUtils.a(AppConstant.TAG,fileMD5String);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                String md5Three = getMD5Three(path);
-                LogUtils.a(AppConstant.TAG,md5Three);
-
-                String fileMD5 = MD5Util.getFileMD5(path);
-                LogUtils.a(AppConstant.TAG,fileMD5);
-
-                String md5Hex = null;
-                try {
-                     md5Hex = new String(Hex.encodeHex(DigestUtils.md5(new FileInputStream(new File(path)))));
-//                   md5Hex = DigestUtils.md5Hex(new FileInputStream(new File(path)));
-                    LogUtils.a(AppConstant.TAG,md5Hex);
+                    LogUtils.a(AppConstant.TAG, fileMD5String);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -149,7 +152,6 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
                 Log.e("text", "CAMERA permission was NOT granted.");
 
             }
-
         }
     }
 
@@ -167,7 +169,7 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
             BigInteger bigInt = new BigInteger(1, md.digest());
             String md5 = bigInt.toString(16);
 //            Log.d("lcy", "getMd5: "+s);
-            LogUtils.a(AppConstant.TAG,md5);
+            LogUtils.a(AppConstant.TAG, md5);
 
 //            byte[] bytes = EncodeUtils.base64Encode(md5);
 //            String str2 = EncodeUtils.base64Encode2String(md5.getBytes());
@@ -190,27 +192,26 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
     public static String getMD5Three(String path) {
 //        DigestUtils.md5Hex(new FileInputStream(path));
 
-               BigInteger bi = null;
-               try {
-                       byte[] buffer = new byte[8192];
-                       int len = 0;
-                       MessageDigest md = MessageDigest.getInstance("MD5");
-                       File f = new File(path);
-                       FileInputStream fis = new FileInputStream(f);
-                       while ((len = fis.read(buffer)) != -1) {
-                             md.update(buffer, 0, len);
-                         }
-                        fis.close();
-                        byte[] b = md.digest();
-                        bi = new BigInteger(1, b);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                return bi.toString(16);
+        BigInteger bi = null;
+        try {
+            byte[] buffer = new byte[8192];
+            int len = 0;
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            File f = new File(path);
+            FileInputStream fis = new FileInputStream(f);
+            while ((len = fis.read(buffer)) != -1) {
+                md.update(buffer, 0, len);
             }
-
+            fis.close();
+            byte[] b = md.digest();
+            bi = new BigInteger(1, b);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bi.toString(16);
+    }
 
 
 //    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -265,7 +266,7 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
         fragmentList.add(new HomeFragment());
         fragmentList.add(new KnowLedgeSysFragment());
         fragmentList.add(new HotFragment());
-       switchFragment(0);
+        switchFragment(0);
     }
 
     /**
@@ -333,9 +334,9 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
     @Override
     protected void onResume() {
         super.onResume();
-        if (UserManager.isLogin()){
+        if (UserManager.isLogin()) {
             if (null != UserManager.getUserBean()) {
-                tvUsername.setText( UserManager.getUserBean().getUsername());
+                tvUsername.setText(UserManager.getUserBean().getUsername());
                 tvLogin.setText("退出登录");
             }
         }
@@ -345,9 +346,9 @@ public class WanActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_login:
-                if (!UserManager.isLogin()){
+                if (!UserManager.isLogin()) {
                     startActivity(new Intent(WanActivity.this, LoginActivity.class));
-                }else{
+                } else {
                     logout();
                 }
                 break;

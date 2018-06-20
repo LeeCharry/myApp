@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?attr/selectableItemBackground"
+    tools:context="com.example.jack.myapp.demo.sqlcipher.SqliteActivity">
+
+    <LinearLayout
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加数据"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/btn_add"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查询数据"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/btn_query"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=".。。。。。。。。"
+            android:layout_margin="@dimen/dp_10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            android:id="@+id/tv_data"/>
+    </LinearLayout>
+
+</LinearLayout>

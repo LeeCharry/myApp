@@ -12,6 +12,9 @@ import com.example.tulib.util.kit.Kits;
 
 import java.io.File;
 
+/**
+ * 查看外存和内存区别
+ */
 public class FileDemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
