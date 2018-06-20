@@ -47,8 +47,6 @@ public class HttpActivity extends AppCompatActivity {
         initRv();
         downloadIntent = new Intent(HttpActivity.this,HttpService.class);
     }
-
-
     private void initRv() {
         list = new Gson().fromJson(AppJson, new TypeToken<List<AppBean>>() {
         }.getType());
@@ -66,20 +64,5 @@ public class HttpActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
-
-//    @MsgMode(MyMode.MAIN)
-//    private void onBack(Message msg) {
-//        switch (msg.what) {
-//            case UPDATE_PROGRESS:
-//                downLoadButton.setDownLoadProgress(msg.arg1);
-//                downLoadButton.setState(DownLoadButton.STATE_DOWNLOADING);
-//                break;
-//            case DOWNLOAD_COMPLETE:
-//                downLoadButton.setDownLoadProgress(msg.arg1);
-//                downLoadButton.setState(DownLoadButton.STATE_COMPLETE);
-//                break;
-//        }
-//    }
 }
