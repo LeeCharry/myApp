@@ -56,6 +56,7 @@ public class HttpActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new MyDecoration(HttpActivity.this, 15));
         adapter = new AppRvAdapter(list);
         recyclerView.setAdapter(adapter);
+
     }
 
     private void initView() {
