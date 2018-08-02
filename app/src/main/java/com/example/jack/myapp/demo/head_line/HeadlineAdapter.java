@@ -1,0 +1,40 @@
+package com.example.jack.myapp.demo.head_line;
+
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import java.util.List;
+
+/**
+ * Created by lcy on 2018/7/27.
+ */
+
+public class HeadlineAdapter extends FragmentPagerAdapter {
+    private List<Fragment> fragmentList;
+
+    public HeadlineAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+        super(fm);
+        this.fragmentList = fragmentList;
+    }
+    public HeadlineAdapter(FragmentManager fm) {
+        super(fm);
+    }
+    @Override
+    public Fragment getItem(int position) {
+        return fragmentList.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return fragmentList.size();
+    }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        HeadlineFragment headlineFragment = (HeadlineFragment) fragmentList.get(position);
+        return  headlineFragment.getTitle().toString();
+    }
+}

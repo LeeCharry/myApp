@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.jack.myapp.demo.customize.CustomizeActivity">
+<com.example.jack.myapp.demo.customize.GesturePwdView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/gesture_pwd"/>
+    <!--<Button-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:text="start"-->
+        <!--android:id="@+id/btn_start"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
+</LinearLayout>

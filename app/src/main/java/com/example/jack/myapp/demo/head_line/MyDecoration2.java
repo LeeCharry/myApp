@@ -1,4 +1,4 @@
-package com.example.jack.myapp.demo.RvItemDecoration;
+package com.example.jack.myapp.demo.head_line;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,29 +12,30 @@ import android.view.View;
  * Created by lcy on 2018/6/19.
  */
 
-public class MyDecoration extends RecyclerView.ItemDecoration {
+public class MyDecoration2 extends RecyclerView.ItemDecoration {
     Paint dividerPaint;
-    int dividerHeight = 3;
+    int spaceSize = 3;
 
-    public MyDecoration(Context context, int dividerHeight) {
+    public MyDecoration2(Context context, int spaceSize) {
         dividerPaint = new Paint();
-        dividerPaint.setColor(Color.rgb(192,180,186));
-        this.dividerHeight = dividerHeight;
+        dividerPaint.setColor(Color.WHITE);
+        this.spaceSize = spaceSize;
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDraw(c, parent, state);
         int childCount = parent.getChildCount();
-        int left = parent.getPaddingLeft();
-        int right = parent.getWidth() - parent.getPaddingRight();
+//        int left = parent.getPaddingLeft();
+//        int right = parent.getWidth() - parent.getPaddingRight();
 
         for (int i = 0; i < childCount - 1; i++) {
             View view = parent.getChildAt(i);
-            float top = view.getBottom();
-            float bottom = view.getBottom() + dividerHeight;
+            float top = view.getTop();
+
+            float bottom = view.getBottom() + spaceSize;
             //画了一个矩型
-            c.drawRect(left, top, right, bottom, dividerPaint);
+            c.drawRect(view.getRight(), top,view.getRight()+spaceSize, view.getBottom(), dividerPaint);
         }
     }
     @Override

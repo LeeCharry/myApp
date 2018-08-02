@@ -1,5 +1,4 @@
 package com.example.jack.myapp.demo.data;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,1015 +6,1023 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.jack.myapp.demo.data.Constants;
+import com.example.jack.myapp.demo.data.SharedPrefs;
+
 /**
- * ���ݿ⽨�� time 20120426
- * 
+ * 数据库建表
+ * time 20120426
  * @author chengyuan
- * 
+ *
  */
 
-public class MyDatabaseHelper extends SQLiteOpenHelper {
+public class MyDatabaseHelper extends SQLiteOpenHelper{
 
 	private static MyDatabaseHelper dbHelper = null;
-	// private static MyDatabaseHelper dbFriendHelper = null;
+//	private static MyDatabaseHelper dbFriendHelper = null;
 
 	SharedPrefs sp;
 
-	public MyDatabaseHelper(Context context, String name, int version) {
+	public MyDatabaseHelper(Context context, String name, int version){
 		super(context, name, null, version);
-		sp = new SharedPrefs(context);
+		sp=new SharedPrefs(context);
 	}
-		
-	// public static MyDatabaseHelper getInstance(Context context){
-	// if(dbHelper == null){
-	// dbHelper = new MyDatabaseHelper(context, Constants.dbName,
-	// Constants.dbVer);
-	// }
-	// return dbHelper;
-	// }
-		
-	// public static synchronized MyDatabaseHelper getFriendInstance(Context
-	// friendContext, String databaseName, int friendDBver){
-	// if(dbFriendHelper == null){
-	// dbFriendHelper = new MyDatabaseHelper(friendContext, databaseName,
-	// friendDBver);
-	// }
-	// return dbFriendHelper;
-	// }
-	//
+
+//	public static  MyDatabaseHelper getInstance(Context context){
+//		if(dbHelper == null){
+//			dbHelper = new MyDatabaseHelper(context, Constants.dbName, Constants.dbVer);
+//		}
+//		return dbHelper;
+//	}
+
+	//	public static synchronized MyDatabaseHelper getFriendInstance(Context friendContext, String databaseName, int friendDBver){
+//		if(dbFriendHelper == null){
+//			dbFriendHelper = new MyDatabaseHelper(friendContext, databaseName, friendDBver);
+//		}
+//		return dbFriendHelper;
+//	}
+//
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("onCreate()");
 
-		// �û���Ϣ
-		arg0.execSQL("create table if not exists user("
-				+ "newId varchar(10) primary key, " + // ����
-				"username varchar(10), " + // �û��� 0
-				"password varchar(15)," + // ����1
-				"user_type varchar(19) , " + // �û���ɫ2
-				"loginmodel varchar(20)," + // ��½ģʽ3
-				"identity varchar(10)," + // ��½ƾ֤4
-				"city varchar(15)," + // ҵ������5
-				"city_id varchar(19) , " + // ���д���6
-				"prov varchar(20)," + // ҵ��ʡ7
-				"prov_id varchar(10)," + // ʡ����8
-				"lastpwdchangetime varchar(15)," + // ��������޸�ʱ��9
-				"pwdovertime varchar(19) , " + // �������ʱ��10
-				"isdevicelocked varchar(20)," + // �豸�Ƿ�����11
+		//用户信息
+		arg0.execSQL("create table if not exists user(" +
+				"newId varchar(10) primary key, " +//主键
+				"username varchar(10), " +//用户名 0
+				"password varchar(15)," +//密码1
+				"user_type varchar(19) , " +//用户角色2
+				"loginmodel varchar(20)," +//登陆模式3
+				"identity varchar(10)," +//登陆凭证4
+				"city varchar(15)," +//业代城市5
+				"city_id varchar(19) , " +//城市代码6
+				"prov varchar(20)," +//业代省7
+				"prov_id varchar(10)," +//省代码8
+				"lastpwdchangetime varchar(15)," +//最后密码修改时间9
+				"pwdovertime varchar(19) , " +//密码过期时间10
+				"isdevicelocked varchar(20)," +//设备是否锁定11
 
-				"name varchar(10)," + // ��������12
-				"phone varchar(15)," + // �ֻ�����13
-				"canumber varchar(19), " + // CA����14
-				"bankIdentification varchar(20)," + // ���б�ʾ15
-				"area varchar(10)," + // ����16
-				"company varchar(19)," + // ������˾17
-				"institutionCode varchar(20)," + // ��������18
-				"institutionName varchar(10)" + // ��������19
+				"name varchar(10)," +//中文姓名12
+				"phone varchar(15)," +//手机号码13
+				"canumber varchar(19), " +//CA工号14
+				"bankIdentification varchar(20)," +//银行标示15
+				"area varchar(10)," +//地区16
+				"company varchar(19)," +//所属公司17
+				"institutionCode varchar(20)," +//机构代码18
+				"institutionName varchar(10)" +//机构名称19
 
 				")");
-		// ҵ�������ṹscbscbprojects_apply
-		arg0.execSQL("create table if not exists cfccc_apply("
-				+ "id varchar(10) primary key, " + // 0
+		//业务申请表结构scbscbprojects_apply
+		arg0.execSQL("create table if not exists cfccc_apply(" +
+				"id varchar(10) primary key, " +//0
 
-				"authNumber varchar(20), " + // ��Ȩ�� 1
-				"urn varchar(20), " + // urn 2
-				"orgCode varchar(10)," + // �л�����3
-				"productId varchar(10), " + // ��Ʒ���4
-				"staffId varchar(20), " + // Ա����5
-				"serialNumber varchar(15)," + // ��ˮ��6
-				"storeNumber varchar(10), " + // �̻����7
-				"storeName varchar(30)," + // �̻�����8
-				"barcode varchar(10)," + // ����9
-				"signatureDate varchar(100), " + // �����ǩ������10
-				"applyTime varchar(10)," + // ��������11
-				"purchaseCode varchar(10), " + // ������;12
-				"planNumber varchar(10)," + // ����ƻ�13
-				"calculedTerm varchar(10)," + // ����14
-				"desiredCreditLimit varchar(20), " + // �������15
-				"claPrincipal varchar(15)," + // ������16
-				"identitytype varchar(5)," + // ֤������17
-				"identityNumber varchar(18)," + // ֤������18
+				"authNumber varchar(20), " +//授权号 1
+				"urn varchar(20), " +//urn 2
+				"orgCode varchar(10)," +//行机构号3
+				"productId varchar(10), " +//产品编号4
+				"staffId varchar(20), " +//员工号5
+				"serialNumber varchar(15)," +//流水号6
+				"storeNumber varchar(10), " +//商户编号7
+				"storeName varchar(30)," +//商户名称8
+				"barcode varchar(10)," +//条码9
+				"signatureDate varchar(100), " +//申请表签字日期10
+				"applyTime varchar(10)," +//申请日期11
+				"purchaseCode varchar(10), " +//贷款用途12
+				"planNumber varchar(10)," +//还款计划13
+				"calculedTerm varchar(10)," +//期数14
+				"desiredCreditLimit varchar(20), " +//期望额度15
+				"claPrincipal varchar(15)," +//贷款金额16
+				"identitytype varchar(5)," +//证件类型17
+				"identityNumber varchar(18)," +//证件号码18
 
-				"groupLoanCode varchar(20), " + // �Ű쵥λ19
-				"payrollAgencyUnit varchar(20)," + // �������ʵ�λ20
-				"loanReductionInitial varchar(10), " + // CA�������(�ٷֱ�)21
-				"specialCustCode varchar(10), " + // ����ͻ���22
-				"nameCust varchar(5)," + // ������23
-				"surnameCust varchar(10), " + // ������24
-				"birthDateCust varchar(10)," + // ��������25
-				"title varchar(2)," + // �Ա�26
-				"maritalstatus varchar(5)," + // ����״��27
-				"educationLevel varchar(10)," + // �����̶�28
-				"houseStatus varchar(10)," + // סլ����29
-				"firstHomeRentHousehold varchar(10)," + // ס��֧��30
-				"phoneNumberZone varchar(10)," + // סլ�绰-zone 31
-				"phoneNumberMain varchar(10)," + // סլ�绰-main 32
-				"mobilePhone varchar(11)," + // �ֻ�33
-				"yearSalary varchar(10)," + // ˰��������34
-				"province varchar(10)," + // סլ��ַ/ʡ35
-				"city varchar(10)," + // ��36
-				"district varchar(20)," + // ��(��)37
+				"groupLoanCode varchar(20), " +//团办单位19
+				"payrollAgencyUnit varchar(20)," +//代发工资单位20
+				"loanReductionInitial varchar(10), " +//CA建议打折(百分比)21
+				"specialCustCode varchar(10), " +//特殊客户码22
+				"nameCust varchar(5)," +//中文姓23
+				"surnameCust varchar(10), " +//中文名24
+				"birthDateCust varchar(10)," +//出生日期25
+				"title varchar(2)," +//性别26
+				"maritalstatus varchar(5)," +//婚姻状况27
+				"educationLevel varchar(10)," +//教育程度28
+				"houseStatus varchar(10),"+//住宅性质29
+				"firstHomeRentHousehold varchar(10)," +//住房支出30
+				"phoneNumberZone varchar(10)," +//住宅电话-zone 31
+				"phoneNumberMain varchar(10)," +//住宅电话-main 32
+				"mobilePhone varchar(11)," +//手机33
+				"yearSalary varchar(10)," +//税后年收入34
+				"province varchar(10)," +//住宅地址/省35
+				"city varchar(10)," +//市36
+				"district varchar(20)," +//区(县)37
 
-				"address varchar(30), " + // ��ַ38
-				"zipCode varchar(6), " + // �ʱ�39
-				"email varchar(20)," + // �����ʼ�40
-				"spIdentitytype varchar(8), " + // ��ż֤������41
-				"spIdentityNumber varchar(18), " + // ��ż֤������42
 
-				"spName varchar(5)," + // ��ż������43
-				"spSurname varchar(10), " + // ��ż������44
-				"spMobilePhone varchar(15)," + // ��ż�绰����45
-				"spCompanyName varchar(20), " + // ��ż������λ46
-				"spYearSalary varchar(10)," + // ��ż˰��������47
-				"custCompanyIndustryMemo varchar(50), " + // ��ҵ��Ϣע��48
-				"custJobCode varchar(15)," + // ְλ49
-				"custCompanyName varchar(30), " + // ��λ����50
-				"custCompanyType varchar(20)," + // ��λ����51
-				"custCompanyTypeOther varchar(50), " + // ����(��ע��)52
+				"address varchar(30), " +//地址38
+				"zipCode varchar(6), " +//邮编39
+				"email varchar(20)," +// 电子邮件40
+				"spIdentitytype varchar(8), " +//配偶证件类型41
+				"spIdentityNumber varchar(18), " +//配偶证件号码42
 
-				"custJobDuty varchar(20), " + // ְ��53
-				"custJobDepartment varchar(20), " + // ��ְ����54
-				"custJobYears varchar(5), " + // �ֵ�λ��������55
-				"custJobProvince varchar(10), " + // ��λ��ַ/ʡ56
-				"custJobCity varchar(10), " + // ��57
-				"custJobDistrict varchar(15), " + // ��(��)58
-				"custJobAddress varchar(30), " + // ��ַ59
+				"spName varchar(5)," +//配偶中文姓43
+				"spSurname varchar(10), " +//配偶中文名44
+				"spMobilePhone varchar(15)," +//配偶电话号码45
+				"spCompanyName varchar(20), " +//配偶工作单位46
+				"spYearSalary varchar(10)," +//配偶税后年收入47
+				"custCompanyIndustryMemo varchar(50), " +//行业信息注明48
+				"custJobCode varchar(15)," +//职位49
+				"custCompanyName varchar(30), " +//单位名称50
+				"custCompanyType varchar(20)," +//单位性质51
+				"custCompanyTypeOther varchar(50), " +//其他(请注明)52
 
-				"custJobZipCode varchar(6), " + // �ʱ�60
-				"custJobPhoneNumZone varchar(10), " + // ��λ�绰-zone61
-				"custJobPhoneNumMain varchar(10), " + // ��λ�绰-main 62
-				"custJobPhoneNumExtension varchar(10), " + // ��λ�绰-ext63
-				"relCnLast varchar(5), " + // ������ϵ��,������64
-				"relCnFirst varchar(10), " + // ������ϵ��,������65
-				"relMobilePhone varchar(11), " + // �ֻ�66
-				"relTelephoneZone varchar(10), " + // �绰-zone67
+				"custJobDuty varchar(20), " +//职务53
+				"custJobDepartment varchar(20), " +//任职部门54
+				"custJobYears varchar(5), " +//现单位工作年限55
+				"custJobProvince varchar(10), " +//单位地址/省56
+				"custJobCity varchar(10), " +//市57
+				"custJobDistrict varchar(15), " +//区(县)58
+				"custJobAddress varchar(30), " +//地址59
 
-				"relTelephoneMain varchar(11), " + // �绰-main68
-				"relCompanyName varchar(30), " + // ��λ����69
-				"relRelationship varchar(11), " + // �������˹�ϵ70
-				"relRelationshipOther varchar(20), " + // ��������������ϵ(��ע��)71
-				"refCnLast varchar(5), " + // ������ϵ��,������72
-				"refCnFirst varchar(10), " + // ������ϵ��,������73
-				"refMobilePhone varchar(11), " + // �ֻ�74
-				"refTelephoneZone varchar(10), " + // �绰-zone75
-				"refTelephoneMain varchar(10), " + // �绰-main76
-				"refCompanyName varchar(30), " + // ��λ����77
-				"refRelationship varchar(10), " + // �������˹�ϵ78
-				"refRelationshipOther varchar(20), " + // ��������������ϵ(��ע��)79
-				"accountNumber varchar(20), " + // �Զ��ۿ��ǿ�����80
-				"trustPayFlag varchar(10), " + // �Ƿ�����֧��81
-				"trustAccountName varchar(10), " + // ����82
+				"custJobZipCode varchar(6), " +//邮编60
+				"custJobPhoneNumZone varchar(10), " +//单位电话-zone61
+				"custJobPhoneNumMain varchar(10), " +//单位电话-main 62
+				"custJobPhoneNumExtension varchar(10), " +//单位电话-ext63
+				"relCnLast varchar(5), " +//亲属联系人,中文姓64
+				"relCnFirst varchar(10), " +//亲属联系人,中文名65
+				"relMobilePhone varchar(11), " +//手机66
+				"relTelephoneZone varchar(10), " +//电话-zone67
 
-				"trustAccountNumber varchar(20), " + // ���˺�83
-				"trustAccountBranchName varchar(15), " + // ��������84
+				"relTelephoneMain varchar(11), " +//电话-main68
+				"relCompanyName varchar(30), " +//单位名称69
+				"relRelationship varchar(11), " +//与申请人关系70
+				"relRelationshipOther varchar(20), " +//与申请人其他关系(请注明)71
+				"refCnLast varchar(5), " +//其他联系人,中文姓72
+				"refCnFirst varchar(10), " +//其他联系人,中文名73
+				"refMobilePhone varchar(11), " +//手机74
+				"refTelephoneZone varchar(10), " +//电话-zone75
+				"refTelephoneMain varchar(10), " +//电话-main76
+				"refCompanyName varchar(30), " +//单位名称77
+				"refRelationship varchar(10), " +//与申请人关系78
+				"refRelationshipOther varchar(20), " +//与申请人其他关系(请注明)79
+				"accountNumber varchar(20), " +//自动扣款借记卡卡号80
+				"trustPayFlag varchar(10), " +//是否受托支付81
+				"trustAccountName varchar(10), " +//户名82
 
-				"isBonAcctFlag varchar(5), " + // �Ƿ������˺�85
-				"commendBank varchar(10), " + // �Ƽ�����86
-				"commendSubBank varchar(15), " + // �Ƽ�֧��87
-				"commendPersonCode varchar(20), " + // ѡ���Ƽ��˹���88
-				"cust1CustFutureField8 varchar(20), " + // ¼���Ƽ��˹���89
-				"commendStaffTel varchar(15), " + // �Ƽ�����ϵ�绰90
-				"inSource varchar(10), " + // ������Դ91
-				"acceptBranch varchar(10), " + // �������92
-				"acceptSubBranch varchar(10), " + // ����֧��93
-				"enteringPerson varchar(20), " + // ѡ�������˹���94
-				"cust2CustFutureField8 varchar(20), " + // ¼���Ƽ��˹���95
-				"enteringMobile varchar(15), " + // ��������ϵ�绰96
-				"acceptanceOpinions varchar(50), " + // �������97
+				"trustAccountNumber varchar(20), " +//存款户账号83
+				"trustAccountBranchName varchar(15), " +//开户银行84
 
-				"purchaseType varchar(20), " + // ��Ʒ���98
+				"isBonAcctFlag varchar(5), " +//是否我行账号85
+				"commendBank varchar(10), " +//推荐机构86
+				"commendSubBank varchar(15), " +//推荐支行87
+				"commendPersonCode varchar(20), " +//选择推荐人工号88
+				"cust1CustFutureField8 varchar(20), " +//录入推荐人工号89
+				"commendStaffTel varchar(15), " +//推荐人联系电话90
+				"inSource varchar(10), " +//进件来源91
+				"acceptBranch varchar(10), " +//受理机构92
+				"acceptSubBranch varchar(10), " +//受理支行93
+				"enteringPerson varchar(20), " +//选择受理人工号94
+				"cust2CustFutureField8 varchar(20), " +//录入推荐人工号95
+				"enteringMobile varchar(15), " +//受理人联系电话96
+				"acceptanceOpinions varchar(50), " +//受理意见97
 
-				"cashPrice varchar(10), " + // �ֽ��99
-				"initialShare varchar(10), " + // �׸���100
-				"custTeacherRank varchar(10), " + // ְλ������ʦ���� 101
+				"purchaseType varchar(20), " +//商品类别98
 
-				"isUploadPhoto varchar(5), " + // �ͻ������ۺ�Ӱ102
-				"hasIDCardCopy varchar(5), " + // ���֤��Ƭ103
-				"hasLoanUse varchar(5), " + // ������;֤��104
-				"hasBankPassbook varchar(5), " + // ����֤��105
-				"hasOtherProofOfSalary varchar(5), " + // ����֤��106
-				"hasIncomesUpdate  varchar(5), " + // ������������֤��107
-				"hasOther varchar(5), " + // ����108
-				"hasSpouseIDCardCopy varchar(5), " + // ��ż���֤��Ƭ109
-				"hasSpouseBankPassbook varchar(5), " + // ��ż���д��ۻ򿨺�110
-				"highQualityEnterprise varchar(5), " + // ������ҵ111
+				"cashPrice varchar(10), " +//现金价99
+				"initialShare varchar(10), " +//首付款100
+				"custTeacherRank varchar(10), " +// 职位——教师级别 101
 
-				"accFutureField33 varchar(5), " + // ����ר����112
-				"applyGYDKType varchar(5), " + // ��������113
-				"acceptUpOrDown varchar(5), " + // ��ר����δ����ͨ�����Ƿ�ͬ������빺��114
-				"isFarmLoanFlag varchar(5), " + // ũ��115
-				"isResident varchar(5), " + // �Ǿ���116
-				"salaryDate varchar(5), " + // ��н��117
-				"preferedComm varchar(5), " + // �˵��ʼĵ�ַ118
-				"cust2FutureField4 varchar(5), " + // �˵�/��Ƭ���ͷ�ʽ119
-				"provinceOther varchar(5), " + // �˵�/��Ƭ����������ַ/ʡ120
-				"cityOther varchar(5), " + // �˵�/��Ƭ����������ַ/��121
-				"districtOther varchar(5), " + // �˵�/��Ƭ����������ַ/��(��)122
+				"isUploadPhoto varchar(5), " +//客户和销售合影102
+				"hasIDCardCopy varchar(5), " +//身份证照片103
+				"hasLoanUse varchar(5), " +//贷款用途证明104
+				"hasBankPassbook varchar(5), " +//收入证明105
+				"hasOtherProofOfSalary varchar(5), " +//财力证明106
+				"hasIncomesUpdate  varchar(5), " +//更新收入或财力证明107
+				"hasOther varchar(5), " +//其他108
+				"hasSpouseIDCardCopy varchar(5), " +//配偶身份证照片109
+				"hasSpouseBankPassbook varchar(5), " +//配偶银行存折或卡号110
+				"highQualityEnterprise varchar(5), " +//优质企业111
 
-				"addressOther varchar(5), " + // �˵�/��Ƭ����������ַ123
-				"zipCodeOther varchar(5), " + // �˵�/��Ƭ�����ʱ�124
-				"custClass varchar(5), " + // 125
-				"hasIndSpousePbocAuth varchar(5), " + // 126
+				"accFutureField33 varchar(5), " +//期望专享额度112
+				"applyGYDKType varchar(5), " +//申请种类113
+				"acceptUpOrDown varchar(5), " +//如专享额度未审批通过，是否同意仅申请购易114
+				"isFarmLoanFlag varchar(5), " +//农户115
+				"isResident varchar(5), " +//非居民116
+				"salaryDate varchar(5), " +//发薪日117
+				"preferedComm varchar(5), " +//账单邮寄地址118
+				"cust2FutureField4 varchar(5), " +//账单/卡片寄送方式119
+				"provinceOther varchar(5), " +//账单/卡片寄送其他地址/省120
+				"cityOther varchar(5), " +//账单/卡片寄送其他地址/市121
+				"districtOther varchar(5), " +//账单/卡片寄送其他地址/区(县)122
 
-				"dynamicpassword varchar(10), " + // ��̬����127
-				"flipperActivity varchar(10), " + // �ݸ�������Ĺ���ģ����
-				"flipperLayoutnum varchar(2), " + // �ݸ��������Ӧ���ǵڼ��������ļ�
-				"filename varchar(20), " + // �ļ�������
-				"type varchar(20), " + // ҵ������
-				"applyfile_states varchar(2)," + // ���ı�ʾ 1Ϊ�ݸ��䡢2Ϊ������
-				"plonCustomerType varchar(6) ," + // �������� rp,�¿ͻ�
-													// �ͻ����͵��ж�NEW_PT��������;
-													// RP_PT��RP;
-													// NEW_BT�������벹¼��OLD_BT���Ͽͻ���¼;
-				"appAction varchar(5)," + "accessoryPhotoStage varchar(5)," + // ���븽������ı�־
-				"commendname varchar(10)," + "goods varchar(20)" + ")");
+				"addressOther varchar(5), " +//账单/卡片寄送其他地址123
+				"zipCodeOther varchar(5), " +//账单/卡片寄送邮编124
+				"custClass varchar(5), " +//125
+				"hasIndSpousePbocAuth varchar(5), " +//126
 
-		// ���
-		arg0.execSQL("create table if not exists cfccc_customervisit("
-				+ "id varchar(20) primary key, " + // ��Ȩ�� 0
-				"authNumber varchar(20), " + // ��Ȩ�� 01
-				"productCategory varchar(20), " + // ��Ʒ��� 1
-				"visitType varchar(1), " + // �������, ��λ�ã�C;�ҷ�:H 2
-				"custName varchar(15)," + // �ͻ�����3
-				"asCom varchar(1200), " + // ���Ա��ע4
-				"latitudeAndLongitude varchar(20), " + // ��γ��5
-				"exemptHomeVisit varchar(7), " + // ��ҷ�ѡ��,��ҷ�:Y;��Ҫ�ҷ�:Nornull 6
-				"homeVisitFinished varchar(3)," + // �ҷ�˳�����:OK;�ҷÿͻ������:TBS;�ͻ���������Υ�����KO
-													// 7
-				"homeVisit3Rd varchar(2), " + // û�е�������������:OK;��ס�����ϲ�,�����뿴Ӱ��:TBS;�е�������������:KO
-												// 8
-				"homeVisitLoanPurpose varchar(3)," + // ������;�����:OK;������;���ɵ��޷���ȫȷ��:TBS;������;���:KO
-														// 9
-				"homeVisitApplySelf varchar(3)," + // ȷ���׷���ǩ:OK;δ�׷���ǩ:TBS;�����������:KO
-													// 10
-				"homeVisitRisk varchar(2), " + // δ���ַ�������:OK;����,�����ע:TBS;���ֿͻ��Ĳ���������Ƿ�߶���ծ�ȸ߷�������:KO
-												// 11
-				// "homeVisitStatus varchar(1),"
-				// +//����Ƿ�ͨ��,���δ�����ش��ɵ�:2;��÷��ֿͻ��жġ������ش��ɵ�:4 12
 
-				"exemptCompVisit varchar(6), " + // �ⵥλ��ѡ��,�ⵥλ��:Y;��Ҫ��λ��:Nornull
-													// 13
-				"compVisitFinished varchar(3)," + // ��λ��˳�����:OK;��λ��δ˳�����:TBS;���ֿͻ��Ĳ���������Ƿ�߶���ծ�ȸ߷�������:KO
-													// 14
-				"compVisitIncome varchar(3)," + // �����ʵһ��:OK;�����ʵ��һ��:TBS;����֤�����:KO
-												// 15
-				"compVisitIncomeAmount varchar(10), " + // �����ʵ��һ�»������޷���ʵ�ʺ�ʵ����������:TBS
-														// 16
-				"compVisitJob varchar(3)," + // ������Ϣ(��ҵ��ְ���)һ��:OK;������Ϣ(��ҵ��ְ���)��һ�£�TBS;������Ϣ���:KO
-												// 17
-				"compVisit3Rd varchar(2)," + // �칫�绰��ʵ:OK;�칫�绰�޷���ʵ����ʵ:TBS 18
-												// �汾���£���ʱ���
-				"compVisitLoanPurpose varchar(3)," + // ��˾��������:OK;����,�����ע:TBS;��˾δ��������:KO
-														// 19 �汾���£���ʱ���
-				// "compVisitApplySelf varchar(3), " +//ȷ���׷���ǩ:OK;δ�׷���ǩ:TBS 20
-				// �汾���£�����
-				// "compVisitRisk varchar(2),"
-				// +//δ���ֶĲ��������ȸ߷�������:OK;���ֶĲ��������ȸ߷�������:KO 21 �汾���£�����
-				"positionDate varchar(14), " + // 22
-				"memoVisit varchar(100)," + // �ύ���ܱ�ע
-
-				"nameCust varchar(8)," + // ��
-				"customervisitDate varchar(8)," + // �������
-				"customervisitPhone varchar(11)," + // �ֻ�����
-				"flipperActivity varchar(10), " + // �ݸ�������Ĺ���ģ����
-				"flipperLayoutnum varchar(2), " + // �ݸ��������Ӧ���ǵڼ��������ļ�
-				"filename varchar(20), " + // �ļ�������
-				"bollen varchar(8)," + //
-				"applyfile_states varchar(2)," + // ���ı�ʾ 1Ϊ�ݸ��䡢2Ϊ������
-				"futureField6 varchar(10)"+     //2018-06-12   �Ƿ�ֱ��ͨ����ʶ
+				"dynamicpassword varchar(10), " +//动态密码127
+				"flipperActivity varchar(10), " +//草稿箱出来的功能模块名
+				"flipperLayoutnum varchar(2), " +//草稿箱出来对应的是第几个布局文件
+				"filename varchar(20), " +//文件夹名字
+				"type varchar(20), " +//业务类型
+				"applyfile_states varchar(2)," +//件的标示 1为草稿箱、2为发件箱
+				"plonCustomerType varchar(6) ," +// 发件类型 rp,新客户 客户类型的判断NEW_PT：新申请; RP_PT：RP; NEW_BT：新申请补录；OLD_BT：老客户补录;
+				"appAction varchar(5)," +
+				"accessoryPhotoStage varchar(5)," +  //  进入附件拍摄的标志
+				"commendname varchar(10)," +
+				"goods varchar(20)"+
 				")");
 
-		// �������
-		arg0.execSQL("create table if not exists send("
-				+ "filename varchar(4) primary key, " + // �����ļ���0
-				"beginnum varchar(40)," + // ������ʼ����1
-				"totalnum varchar(19)" + // �ļ��ܶ���2
-				")");
-		// ************************************************************�����ļ����ݿ�****************************************//
+		//外访
+		arg0.execSQL("create table if not exists cfccc_customervisit(" +
+				"id varchar(20) primary key, " +//授权号 0
+				"authNumber varchar(20), " +//授权号 01
+				"productCategory varchar(20), " +//产品编号 1
+				"visitType varchar(1), " +//外访类型, 单位访：C;家访:H 2
+				"custName varchar(15)," +//客户姓名3
+				"asCom varchar(100), " +//外访员备注4
+				"latitudeAndLongitude varchar(20), " +//经纬度5
+				"exemptHomeVisit varchar(7), " +//免家访选项,免家访:Y;需要家访:Nornull 6
+				"homeVisitFinished varchar(3)," +//家访顺利完成:OK;家访客户不配合:TBS;客户经理严重违规情况KO 7
+				"homeVisit3Rd varchar(2), " +//没有第三方介入嫌疑:OK;居住环境较差,具体请看影像:TBS;有第三方介入嫌疑:KO 8
+				"homeVisitLoanPurpose varchar(3)," +//贷款用途无虚假:OK;贷款用途可疑但无法完全确认:TBS;贷款用途虚假:KO 9
+				"homeVisitApplySelf varchar(3)," +//确认亲访亲签:OK;未亲访亲签:TBS;进件材料虚假:KO 10
+				"homeVisitRisk varchar(2), " +//未发现风险特征:OK;其他,详见备注:TBS;发现客户赌博、吸毒、欠高额外债等高风险特征:KO 11
+//						"homeVisitStatus varchar(1)," +//外访是否通过,外访未发现重大疑点:2;外访发现客户有赌、毒等重大疑点:4 12
 
-		// �Ż���ϢFavorableMessage
-		arg0.execSQL("create table if not exists FavorableMessage("
-				+ "favorablecode varchar(2) , " + // �Ż���Ϣ���� 0
-				"favorablecontent varchar(30)," + // �Ż���Ϣ��ʾ 1
-				"updateTime varchar(14)," + // ����ʱ��2
-				"org varchar(5)," + //
-				"type varchar(5)" + ")");
-		// ������;
-		arg0.execSQL("create table if not exists PurchaseCode("
-				+ "purchasecode varchar(3) primary key, " + // ������;���� 0
-				"purchasecontent varchar(30)," + // ������;��ʾ1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ��ҵ��Ϣ
-		arg0.execSQL("create table if not exists CompanyMemo("
-				+ "companymemocode varchar(2) primary key, " + // ��ҵ��Ϣ���� 0
-				"companymemocontent varchar(30)," + // ��ҵ��Ϣ��ʾ1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ְλ
-		arg0.execSQL("create table if not exists JobMemo("
-				+ "jobmemocode varchar(50) primary key, " + // ְλ���� 0
-				"jobmemocontent varchar(30)," + // ְλ��ʾ1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ְλ-��ʦ����    
-		arg0.execSQL("create table if not exists JobTeacherLevel("
-				+ "jobteachercode varchar(2) primary key, " + // ��ʦ������� 0
-				"jobteachercontent varchar(30)," + // ��ʦ������ʾ1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ��λ����
-		arg0.execSQL("create table if not exists CompanyType("
-				+ "companytypecode varchar(2) primary key, " + // ��λ���ʴ��� 0
-				"companytypecontent varchar(30)," + // ��λ������ʾ1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ְ��
-		arg0.execSQL("create table if not exists JobLevel("
-				+ "joblevelcode varchar(2) primary key, " + // ְ�� 0
-				"joblevelcontent varchar(30)," + // ְ��1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// ����״��
-		arg0.execSQL("create table if not exists MaritalStatus("
-				+ "maritalstatuscode varchar(1) primary key, " + // ����״�� 0
-				"maritalstatuscontent varchar(10)," + // ����״��1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// �����̶�
-		arg0.execSQL("create table if not exists EducationLevel("
-				+ "educationlevelcode varchar(1) primary key, " + // �����̶� 0
-				"educationlevelcontent varchar(16)," + // �����̶�1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
-		// �ͻ�������
-		arg0.execSQL("create table if not exists SpecialCost("
-				+ "specialcostcode varchar(3) primary key, " + // �ͻ������� 0
-				"specialcostcontent varchar(30)," + // �ͻ�������1
-				"updateTime varchar(14)" + // ����ʱ��2
-				")");
+				"exemptCompVisit varchar(6), " +//免单位访选项,免单位访:Y;需要单位访:Nornull 13
+				"compVisitFinished varchar(3)," +//单位访顺利完成:OK;单位访未顺利完成:TBS;发现客户赌博、吸毒、欠高额外债等高风险特征:KO 14
+				"compVisitIncome varchar(3)," +//收入核实一致:OK;收入核实不一致:TBS;收入证明虚假:KO 15
+				"compVisitIncomeAmount varchar(10), " +//收入核实不一致或收入无法核实际核实到的月入金额:TBS 16
+				"compVisitJob varchar(3)," +//工作信息(行业、职务等)一致:OK;工作信息(行业、职务等)不一致：TBS;工作信息虚假:KO 17
+				"compVisit3Rd varchar(2)," +//办公电话真实:OK;办公电话无法核实或不真实:TBS 18 版本更新：临时变更
+				"compVisitLoanPurpose varchar(3)," +//公司正常运作:OK;其他,详见备注:TBS;公司未正常运作:KO 19	 版本更新：临时变更
+				//"compVisitApplySelf varchar(3), " +//确认亲访亲签:OK;未亲访亲签:TBS 20 版本更新：废弃
+				//"compVisitRisk varchar(2)," +//未发现赌博、吸毒等高风险特征:OK;发现赌博、吸毒等高风险特征:KO 21 版本更新：废弃
+				"positionDate varchar(14), "+//22
+				"memoVisit varchar(100)," + 	 //提交主管备注
 
-		// �Ƽ����������
-		arg0.execSQL("create table if not exists Banck("
-				+ "institutionCode varchar(4) primary key, " + // �������� 0
-				"institutionName varchar(40)," + // ��������1
-				"DB_ID varchar(19)," + // DB_ID2
-				"updateTime varchar(14)," + // ����ʱ��4
-				"area varchar(14)," + // ����
-				"acceptable varchar(5)," + // �Ƿ����Ϊ������
-				"reserver1 varchar(5)" + // Ԥ���ֶ�
-				")");
+				"nameCust varchar(8)," +//性
+				"customervisitDate varchar(8)," +//外访日期
+				"customervisitPhone varchar(11)," +//手机号码
+				"flipperActivity varchar(10), " +//草稿箱出来的功能模块名
+				"flipperLayoutnum varchar(2), " +//草稿箱出来对应的是第几个布局文件
+				"filename varchar(20), " +//文件夹名字
+				"bollen varchar(8)," +//
+				"applyfile_states varchar(2) " +//件的标示 1为草稿箱、2为发件箱
 
-		// �Ƽ�������֧��
-		arg0.execSQL("create table if not exists SubBank("
-				+ "branchCode varchar(4) primary key, " + // ֧�д��� 0
-				"branchName varchar(40)," + // ֧������1
-				"PAREND_DB_ID varchar(19)," + // PAREND_DB_IDͨ��֧���µ�PAREND_DB_ID�ֶ�ֵ���ڻ�����DB_ID�ֶ�ֵ,�����л�����֧�й�����2
-				"updateTime varchar(14)," + // ����ʱ��3
-				"area varchar(14)," + // ����
-				"inputable varchar(5)," + // �Ƿ����¼���Ƽ���������
-				"reserver1 varchar(5)" + // �Ƿ����Ϊ������
-				")");
-		// �Ƽ�����������
-		arg0.execSQL("create table if not exists Sale("
-				+ "saleCode varchar(10) primary key, " + // �Ƽ���/�����˴��� 0
-				"saleName varchar(40)," + // �Ƽ���/����������1
-				"areaNumbers varchar(20)," + // �������2
-				"nodeType varchar(2)," + // ��������3
-				"updateTime varchar(14)" + // ����ʱ��4
-				")");
-		// ************************************************************�����ļ����ݿ�****************************************//
-		// Activity�
-		arg0.execSQL("create table if not exists Activity("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"activityId varchar(20)," + // �����1
-				"activityName varchar(20)," + // �����1
-				"company varchar(18)," + // ������˾2
-				"cityCode varchar(3)," + // ���ڳ�������3
-				"role varchar(20)," + // ��ɫ4
-				"startTime varchar(10)," + // ��ʼ����5
-				"endTime varchar(10)," + // ��������6
-				"isTop varchar(1)," + // �Ƿ��ö�7
-				"filePath varchar(64)," + // �ļ�·��8
-				"filelength varchar(64)," + // �ļ�����10
-				"updateTime varchar(14)," + // ����ʱ��9
-				"isdownload varchar(14)" + // �Ƿ��Ѿ����� 0û������1�Ѿ�����
-				")");
-		// Contractֽ�ʺ�Լ���ò���
-		arg0.execSQL("create table if not exists Contract("
-				+ "isOpen varchar(2) primary key, " + // ֽ�ʺ�Լ���� 0
-				"updateTime varchar(14)" + // ����ʱ��1
-				")");
-		// DraftTime�ݸ���ʱ��
-		arg0.execSQL("create table if not exists DraftTime("
-				+ "draftTime varchar(4) primary key, " + // �ݸ��䱣��ʱ�� 0
-				"updateTime varchar(14)" + // ����ʱ��1
-				")");
-		// Merchant�̻�Ӫ��֧��
-		arg0.execSQL("create table if not exists Merchant("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"merchantId varchar(10), " + // ID1
-				"merchantInfor varchar(20)," + // �̻�֧����Ϣ1
-				"company varchar(18)," + // ������˾2
-				"cityCode varchar(3)," + // ���ڳ�������3
-				"role varchar(20)," + // ��ɫ4
-				"startTime varchar(10)," + // ��ʼ����5
-				"endTime varchar(10)," + // ��������6
-				"isTop varchar(1)," + // �Ƿ��ö�7
-				"filePath varchar(64)," + // �ļ�·��8
-				"filelength varchar(64)," + // �ļ�����10
-				"updateTime varchar(14)," + // ����ʱ��11
-				"isdownload varchar(14)" + // �Ƿ��Ѿ����� 0û������1�Ѿ�����
-				")");
-		// Notice����
-		arg0.execSQL("create table if not exists Notice("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"noticeId varchar(20)," + // ��������1
-				"noticeTitle varchar(20)," + // ��������1
-				"noticeContent varchar(20)," + // ��������2
-				"company varchar(18)," + // ��˾3
-				"cityCode varchar(3)," + // ���ڳ�������4
-				"role varchar(20)," + // ��ɫ5
-				"startTime varchar(10)," + // ��ʼ����6
-				"endTime varchar(10)," + // ��������7
-				"isTop varchar(1)," + // �Ƿ��ö�8
-				"updateTime varchar(14)" + // ����ʱ��9
-				")");
-		// Pic��������
-		arg0.execSQL("create table if not exists Pic(" + "id varchar(1), " + // �׶�0
-				"stage varchar(1), " + // �׶�0
-				"file_name varchar(20), " + // �ļ������ƣ����ڴ����Ƭ1
-				"big_info varchar(100), " + // ������Ϣ2
-				"small_info varchar(100)," + // С����Ϣ3
-				"updateTime varchar(14)" + // ����ʱ��4
-				")");
-		// PicSort�����������
-		arg0.execSQL("create table if not exists PicSort("
-				+ "bigName varchar(1), " + // �����������0
-				"fileName varchar(20), " + // �ļ�������1
-				"bigCode varchar(100), " + // ������2
-				"updateTime varchar(14)" + // ����ʱ��3
-				")");
-		// Product��Ʒ
-		arg0.execSQL("create table if not exists Product("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"productId varchar(20)," + // ��Ʒ����1
-				"productName varchar(20)," + // ��Ʒ����1
-				"product varchar(20)," + // ��Ӧ��Ʒ2
-				"company varchar(18)," + // ��˾3
-				"cityCode varchar(3)," + // ���ڳ�������4
-				"role varchar(20)," + // ��ɫ5
-				"startTime varchar(10)," + // ��ʼ����6
-				"endTime varchar(10)," + // ��������7
-				"isTop varchar(1)," + // �Ƿ��ö�8
-				"filePath varchar(64)," + // �ļ�·��9
-				"filelength varchar(64)," + // �ļ�����10
-				"updateTime varchar(14)," + // ����ʱ��11
-				"isdownload varchar(14)" + // �Ƿ��Ѿ����� 0û������1�Ѿ�����
-				")");
-		// StandardTalk��׼����
-		arg0.execSQL("create table if not exists StandardTalk("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"standardId varchar(20)," + // ��׼��������1
-				"standardNamer varchar(20)," + // ��׼��������1
-				"company varchar(18)," + // ������˾2
-				"cityCode varchar(3)," + // ���ڳ�������3
-				"role varchar(20)," + // ��ɫ4
-				"startTime varchar(10)," + // ��ʼ����5
-				"endTime varchar(10)," + // ��������6
-				"isTop varchar(1)," + // �Ƿ��ö�7
-				"filePath varchar(64)," + // �ļ�·��8
-				"filelength varchar(64)," + // �ļ�����10
-				"updateTime varchar(14)," + // ����ʱ��9
-				"isdownload varchar(14)" + // �Ƿ��Ѿ����� 0û������1�Ѿ�����
-				")");
-		// Training��ѵ
-		arg0.execSQL("create table if not exists Training("
-				+ "Id varchar(10) primary key, " + // ID 0
-				"trainingId varchar(10), " + // ID 0
-				"trainingNamer varchar(20)," + // �γ�����1
-				"company varchar(18)," + // ������˾2
-				"cityCode varchar(3)," + // ���ڳ�������3
-				"role varchar(20)," + // ��ɫ4
-				"startTime varchar(10)," + // ��ʼ����5
-				"endTime varchar(10)," + // ��������6
-				"seconds varchar(10)," + // �������7
-				"isTop varchar(1)," + // �Ƿ��ö�8
-				"filePath varchar(64)," + // �ļ�·��9
-				"filelength varchar(64)," + // �ļ�����10
-				"updateTime varchar(14)," + // ����ʱ��9
-				"isdownload varchar(2)," + // �Ƿ��Ѿ����� 0û������1�Ѿ�����
-				"isreply varchar(2)" + // �Ƿ��Ѿ��ظ� nullû�лظ� 1�Ѿ��ظ�
-				")");
-
-		// ʡ
-		arg0.execSQL("create table if not exists Province("
-				+ "province_id varchar(10) primary key," + // ʡ����
-				"province varchar(20)," + // ʡ����
-				"updateTime varchar(14)" + // ����ʱ��10
-				")");
-		// ��
-		arg0.execSQL("create table if not exists City("
-				+ "city_id varchar(20) primary key," + // �д���
-				"city varchar(20)," + // ������
-				"province_id varchar(20)," + // ʡ����
-				"updateTime varchar(14)" + // ����ʱ��10
-				")");
-		// ��
-		arg0.execSQL("create table if not exists District("
-				+ "area_id varchar(20) primary key," + // ������
-				"area varchar(20)," + // ������
-				"city_id varchar(20)," + // �д���
-				"updateTime varchar(14)" + // ����ʱ��10
-				")");
-		// ************************************************************�����ļ����ݿ�****************************************//
-		// �Ű�/�������ʵ�λ
-		arg0.execSQL("create table if not exists GroupCustomer("
-				+ "GROUP_NO varchar(20) primary key," + // ��λ��� 0
-				"GROUP_NAME varchar(120)," + // ��λ����1
-				"GROUP_DISTRICT varchar(30)," + // ��λ���ڵ���2
-				"ORG_CODE varchar(4)," + // �������3
-				"CREATE_TIME varchar(14)," + // ����ʱ��4
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// PLAN���̻���Ӧ��ϵ��
-		arg0.execSQL("create table if not exists PlanStore("
-				+ "PLAN_ID varchar(9) primary key, " + // PLAN_ID 0
-				"STORE_NUMBER varchar(9)," + // �̻���1
-				"CREATE_TIME varchar(14)," + // ����ʱ��2
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// plan���̻�����Ʒ��Ӧ��ϵ��
-		arg0.execSQL("create table if not exists PlanStoreGoods("
-				+ "PLAN_ID varchar(9), " + // PLAN_ID 0
-				"STORE_GOODS_ID varchar(10)," + // STORE_GOODS_ID1
-				"CREATE_TIME varchar(14)," + // ����ʱ��2
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// ��Ʒ��Ϣ��
-		arg0.execSQL("create table if not exists Goods("
-				+ "GOODS_ID varchar(9) primary key, " + // ��ƷID 0
-				"GOODS_CODE varchar(3)," + // ��Ʒ���1
-				"GOODS_NAME varchar(50)," + // ��Ʒ����2
-				"CATEGORY_ID varchar(4)," + // ���ID3
-				"CREATE_TIME varchar(14)," + // ����ʱ��4
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// ��Ʒ�����Ϣ��
-		arg0.execSQL("create table if not exists GoodsCategory("
-				+ "CATEGORY_ID varchar(4) primary key, " + // ��Ʒ���ID0
-				"CATEGORY_NAME varchar(60)," + // �������1
-				"CATEGORY_CODE varchar(32)," + // �����2
-				"CREATE_TIME varchar(14)," + // ����ʱ��3
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// �̻��û���Ӧ��ϵ��
-		arg0.execSQL("create table if not exists UmsUserStores("
-				+ "USER_ACCESS_ID varchar(25), " + // �û�ID0
-				"STORE_NUMBER varchar(9)," + // �̻���1
-				"CREATE_TIME varchar(14)," + // ����ʱ��2
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-		// �̻���Ϣ��
-		arg0.execSQL("create table if not exists Stores("
-				+ "STORE_NUMBER varchar(9) primary key, " + // �̻��� 0
-				"STORE_NAME varchar(40)," + // �̻�����1
-				"STORE_DISTRICT varchar(3)," + // �̻�����3
-				"STORES_UNION varchar(2)," + // ��������2
-				"CREATE_TIME varchar(14)," + // ����ʱ��4
-				"STOPE_CHAIN varchar(14)," + "updateTime varchar(14)" + // ����ʱ��
-				")");
-		// �̻�����Ʒ��Ӧ��ϵ��
-		arg0.execSQL("create table if not exists StoreGoods("
-				+ "STORE_GOODS_ID varchar(10) primary key, " + // ����ID0
-				"GOODS_ID varchar(9)," + // ��ƷID1
-				"STORE_NUMBER varchar(9)," + // �̻���2
-				"CREATE_TIME varchar(14)," + // ����ʱ��3
-				"updateTime varchar(14)" + // ����ʱ��
-				")");
-
-		// ����ƻ���Ϣ��
-		arg0.execSQL("create table if not exists Plan("
-				+ "PLAN_ID varchar(9) primary key, " + // ����PLAN_ID0
-				"PLAN_NUMBER varchar(5)," + // �ƻ����1
-				"PLAN_NAME varchar(50)," + // �ƻ�����2
-				"TERM_MIN varchar(5)," + // ������Сֵ3
-				"TERM_MAX varchar(5)," + // �������ֵ4
-				"CREATE_TIME varchar(14)," + // ����ʱ��5
-				"custClass varchar(14)," + // ����ʱ��6 �ͻ�Ⱥ 20140410
-				"updateTime varchar(14)" + // ����ʱ��
 
 				")");
 
-		// �ͻ�Ⱥ
-		arg0.execSQL("create table if not exists CustClass("
-				+ "KEY varchar(9), " + // ����PLAN_ID0
-				"custClassValue varchar(10)," + // �ƻ����1
-				"producType varchar(14)," + // ����ʱ��
-				"updateTime varchar(14)" + ")");
-
-		// ��Ʒ��Ϣ��
-		arg0.execSQL("create table if not exists Products("
-				+ "PRODUCT_ID varchar(9) primary key, " + // ����PRODUCT_ID0
-				"LOGO varchar(3)," + // ��ƷLOGO1
-				"PRODUCT_CODE varchar(4)," + // ��Ʒ���2
-				"PRODUCT_NAME varchar(40)," + // ��Ʒ����3
-				"PRODUCT_CATEGORY varchar(2)," + // ��Ʒ���4
-				"CREATE_TIME varchar(14)," + // ����ʱ��5
-				"updateTime varchar(14)" + // ����ʱ��
+		//发件箱表
+		arg0.execSQL("create table if not exists send(" +
+				"filename varchar(4) primary key, " +//发件文件名0
+				"beginnum varchar(40)," +//发送起始段数1
+				"totalnum varchar(19)" +//文件总段数2
 				")");
-		// ��Ʒ��Ϣ��
-		arg0.execSQL("create table if not exists ProductStores("
-				+ "PRODUCT_ID varchar(9) , " + // ��ƷID 0
-				"STORE_NUMBER varchar(9)," + // �̻����1
-				"CREATE_TIME varchar(14)," + // ����ʱ��2
-				"updateTime varchar(14)" + // ����ʱ��4
+//************************************************************批量文件数据库****************************************//
+
+		//优惠信息FavorableMessage
+		arg0.execSQL("create table if not exists FavorableMessage(" +
+				"favorablecode varchar(2) , " +//优惠信息代码 0
+				"favorablecontent varchar(30)," +//优惠信息显示 1
+				"updateTime varchar(14)," +//创建时间2
+				"org varchar(5),"+//
+				"type varchar(5)"+
 				")");
-		// ************************************************************�����ļ����ݿ�****************************************//
-		// ��������
-		arg0.execSQL("create table if not exists accessory_photo("
-				+ "stage varchar(1), " + // �׶�
-				"file_name varchar(20), " + // �ļ������ƣ����ڴ����Ƭ
-				"big_info varchar(100), " + // ������Ϣ
-				"small_info varchar(100)" + // С����Ϣ
+		//贷款用途
+		arg0.execSQL("create table if not exists PurchaseCode(" +
+				"purchasecode varchar(3) primary key, " +//贷款用途代码 0
+				"purchasecontent varchar(30)," +//贷款用途显示1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-
-		// Ǳ�͹���
-		arg0.execSQL("create table if not exists marketing_potential("
-				+ "name varchar(20) primary key," + // �ͻ�����
-				"phone varchar(20)," + // �ֻ�����
-				"time varchar(20)" + // ¼��ʱ��			
+		//行业信息
+		arg0.execSQL("create table if not exists CompanyMemo(" +
+				"companymemocode varchar(2) primary key, " +//行业信息代码 0
+				"companymemocontent varchar(30)," +//行业信息显示1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-
-		// ���Ź��������ֽ�ʺ�Լ�Ŀ��ر�
-		arg0.execSQL("create table if not exists sms_switch("
-				+ "contract_switch varchar(20)," + // ֽ�ʺ�Լ������ɨ��Ŀ���
-				"contract__time varchar(20)" + // ¼��ʱ��
+		//职位
+		arg0.execSQL("create table if not exists JobMemo(" +
+				"jobmemocode varchar(2) primary key, " +//职位代码 0
+				"jobmemocontent varchar(30)," +//职位显示1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-
-		// emm
-		arg0.execSQL("create table if not exists emm(" + "id varchar(20),"
-				+ "key varchar(20)," + //
-				"uuid varchar(20)," + //
-				"ISREGISTED varchar(20)" + ")");
-
-		// ͨ�ù���
-		arg0.execSQL("create table if not exists workOrder("
-				+ "id varchar(20)," + // �����ı�ʶ
-				"content varchar(20)," + // ����
-				"expiration varchar(20)," + // ����ʱ��
-				"number varchar(20)," + // ������id
-				"acquisitionTime varchar(20) ," + // ��ȡʱ��
-				"isfeedback  varchar(20)" + // �Ƿ��� 0Ϊδ������1Ϊ�ѷ���
+		//职位-教师级别
+		arg0.execSQL("create table if not exists JobTeacherLevel(" +
+				"jobteachercode varchar(2) primary key, " +//教师级别代码 0
+				"jobteachercontent varchar(30)," +//教师级别显示1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-
-		// �̻����ڵ�������
-		arg0.execSQL("create table if not exists StoreDistrict("
-				+ "areanum varchar(20)," + // �������
-				"areaname varchar(20)," + // ��������
-				"updateTime varchar(20)" + // ����ʱ��
+		//单位性质
+		arg0.execSQL("create table if not exists CompanyType(" +
+				"companytypecode varchar(2) primary key, " +//单位性质代码 0
+				"companytypecontent varchar(30)," +//单位性质显示1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-		// �̻�����
-		arg0.execSQL("create table if not exists StoreType("
-				+ "storenum varchar(20)," + //
-				"storename varchar(20)," + //
-				"updateTime varchar(20)" + // ����ʱ��
+		//职务
+		arg0.execSQL("create table if not exists JobLevel(" +
+				"joblevelcode varchar(2) primary key, " +//职务 0
+				"joblevelcontent varchar(30)," +//职务1
+				"updateTime varchar(14)" +//创建时间2
 				")");
-		// ************************************************************�����ļ����ݿ�****************************************//
-
-		arg0.execSQL("create table if not exists StoreM("
-				+ "id varchar(10) primary key, " + // 0
-
-				"storeName varchar(20)," + // �̻����� 1
-				"storeType varchar(20)," + // �̻����� 2
-				"address varchar(20)," + // �̻���ַ3
-				"phone varchar(20)," + // �绰4
-				"fax varchar(20)," + // ����5
-				"zipCode varchar(20)," + // �ʱ�7
-				"bizLicenseNo varchar(20)," + // Ӫҵִ�պ���8
-				"establishDate varchar(20)," + // ��������6
-				"industry varchar(20)," + // ������ҵ9
-				"companyType varchar(20)," + // ��˾����10
-				"employeeAmount varchar(20)," + // Ա������11
-				"salesStaffAmount varchar(20)," + // ������Ա��12
-				"storeAmount varchar(20)," + // �ŵ���13
-				"storeArea varchar(20)," + // �ŵ������14
-				"juridicalPersonName varchar(20)," + // ���˴�������15
-				"juridicalPersonId varchar(20)," + // ���˴������֤����16
-				"homeBranch varchar(20)," + // �����з�֧��17
-				"accountNumber varchar(20)," + // �˺�18
-				"isBonAcctFlag varchar(20)," + // �Ƿ������˺�19
-				"costLastYear varchar(20)," + // ȥ��ɱ�20
-				"profitLastYear varchar(20)," + // ȥ������21
-				"costThisYear varchar(20)," + // ����ɱ�Ԥ��22
-				"profitThisYear varchar(20)," + // ��������Ԥ��23
-				"annualSalesRevenue varchar(20)," + // ���������루������24
-				"annualSalesCount varchar(20)," + // ��������(����)25
-				"avgMonth varchar(20)," + // �¾����۶�26
-				"avgBankMonth varchar(20)," + // �¾����ڻ����������۶�27
-				"avgMonthCount varchar(20)," + // �¾�����������28
-				"avgMonthBankCount varchar(20)," + // �¾����ڻ�����������������29
-				"areaCode varchar(20)," + // �̻����ڳ��еı��30
-				"areaName varchar(20)," + // �̻����ڳ���31
-
-				"storeManagerInfoName varchar(20)," + // ����32
-				"storeManagerInfoIdCardNo varchar(20)," + // ���֤��33
-				"storeManagerInfoTitle varchar(20)," + // ְ��34
-				"seniority varchar(20)," + // ����35
-
-				"storeCopoBankInfo_name varchar(20)," + // ��������36
-				"storeCopoBankInfo_bankType varchar(20)," + // ������ʽ37
-				"storeCopoBankInfo_products varchar(20)," + // ���ڲ�Ʒ38
-				"storeCopoBankInfo_satisfaction varchar(20)," + // �����39
-
-				"storeBizMgrInfo_mgrName varchar(20)," + // ҵ��չ��������40
-				"storeBizMgrInfo_storeWebsite varchar(20)," + // �̻���վ��ַ41
-				"storeBizMgrInfo_merchantView varchar(20)," + // �̻�������Ը�������Լ��������Ŵ�����Ŀ���42
-				"storeBizMgrInfo_m1ApprovalDocsNum varchar(20)," + // ��һ���º�׼����������43
-				"storeBizMgrInfo_m2ApprovalDocsNum varchar(20)," + // �ڶ����º�׼����������44
-				"storeBizMgrInfo_m3ApprovalDocsNum varchar(20)," + // �������º�׼����������45
-				"storeBizMgrInfo_m1ApprovalDocsAmount varchar(20)," + // ��һ���º�׼���46
-				"storeBizMgrInfo_m2ApprovalDocsAmount varchar(20)," + // �ڶ����º�׼���47
-				"storeBizMgrInfo_m3ApprovalDocsAmount varchar(20)," + // �������º�׼���48
-				"storeBizMgrInfo_bizSope varchar(20)," + // �̻�ҵ��Χ49
-				"storeBizMgrInfo_customerLocate varchar(20)," + // �̻��Ŀͻ���λ50
-				"storeBizMgrInfo_gainCustomerChannel varchar(20)," + // �̻���ȡ�ͻ�����51
-				"storeBizMgrInfo_managerSug varchar(20)," + // ҵ��չ����������̻���ϵά���ƻ�52
-
-				"storeBizMgrInfo_dealRemark varchar(20)," + // �̻�����Э��53
-				"storeBizMgrInfo_accountRemark varchar(20)," + // ���������˻�֤��54
-				"storeBizMgrInfo_idCardRemark varchar(20)," + // ���˴������֤��ӡ��55
-				"storeBizMgrInfo_managerRemark varchar(20)," + // ��Ҫ���������֤��ӡ�������ò�ѯ��Ȩ56
-				"storeBizMgrInfo_bizLicenseRemark varchar(20)," + // ��˾Ӫҵִ�ա���֯��������֤��˰��Ǽ�֤��ӡ��57
-				"storeBizMgrInfo_financialRemark varchar(20)," + // ���ڲ��񱨱�58
-				"storeBizMgrInfo_loanCardRemark varchar(20)," + // ��˾������룬�Լ���ѯ��Ȩ��59
-				"storeBizMgrInfo_other varchar(20)," + // �������̻�����ͻ����ͬ�����ȵȣ�60
-
-				"storeCarsInfo_carModel varchar(20)," + // ���� 61
-				"storeCarsInfo_carPrice varchar(20)," + // �۸�62
-				"storeCarsInfo_salesStatus varchar(20)," + // ÿ���������63
-				"storeCarsInfo_stockStatus varchar(20)," + // ������64
-				"salesInfo varchar(20)," + // �����������65
-				"operateInfo varchar(20)," + // ��Ӫ�������66
-
-				"typeNum varchar(20), " + //
-				"viewper varchar(20), " + //
-				"viewper1 varchar(20), " + //
-				"viewper2 varchar(20), " + //
-				"viewper3 varchar(20), " + //
-				"filename varchar(20), " + // �ļ�������
-				"type varchar(20), " + // ҵ������
-				"applyfile_states varchar(2)," + // ���ı�ʾ 1Ϊ�ݸ��䡢2Ϊ������
-				"custName varchar(20), " + // ����
-				"applyTime varchar(10)," + // ��������11
-				"flipperActivity varchar(10), " + // �ݸ�������Ĺ���ģ����
-				"flipperLayoutnum varchar(2) " + // �ݸ��������Ӧ���ǵڼ��������ļ�
+		//婚姻状况
+		arg0.execSQL("create table if not exists MaritalStatus(" +
+				"maritalstatuscode varchar(1) primary key, " +//婚姻状况 0
+				"maritalstatuscontent varchar(10)," +//婚姻状况1
+				"updateTime varchar(14)" +//创建时间2
+				")");
+		//教育程度
+		arg0.execSQL("create table if not exists EducationLevel(" +
+				"educationlevelcode varchar(1) primary key, " +//教育程度 0
+				"educationlevelcontent varchar(16)," +//教育程度1
+				"updateTime varchar(14)" +//创建时间2
+				")");
+		//客户特殊码
+		arg0.execSQL("create table if not exists SpecialCost(" +
+				"specialcostcode varchar(3) primary key, " +//客户特殊码 0
+				"specialcostcontent varchar(30)," +//客户特殊码1
+				"updateTime varchar(14)" +//创建时间2
 				")");
 
-		// Cellid����
-		arg0.execSQL("create table if not exists CellId("
-				+ "isOpen varchar(2) primary key, " + //
-				// "isOpen varchar(2)," +//����ʱ��1
-				"updateTime varchar(14)" + // ����ʱ��1
+		//推荐与受理机构
+		arg0.execSQL("create table if not exists Banck(" +
+				"institutionCode varchar(4) primary key, " +//机构代码 0
+				"institutionName varchar(40)," +//机构名称1
+				"DB_ID varchar(19)," +//DB_ID2
+				"updateTime varchar(14)," +//创建时间4
+				"area varchar(14)," +//地区
+				"acceptable varchar(5)," +//是否加载为受理行
+				"reserver1 varchar(5)" +//预留字段
 				")");
 
-		// //StoreRecomm����
-		arg0.execSQL("create table if not exists StoreRecomm("
-				+ "calculate_month varchar(6), " + // �·�
-				"merchant_id varchar(10)," + // �̻���
-				"merchant_name varchar(6), " + // �̻�����
-				"recomm_staff_id varchar(6), " + // ҵ��Ա���
-				"recomm_staff_name varchar(6), " + // ҵ��Ա����
-				"funded_amt_total varchar(6), " + // ��Ͷ�Ŷ�
-				"funded_amt_year varchar(6), " + // ����Ͷ��
-				"funded_amt_quarter varchar(6), " + // ����Ͷ��
-				"funded_amt_month varchar(6), " + // ����Ͷ��
-				"current_bal varchar(6), " + // ��ǰ���
-				"quarter_beginning_bal varchar(6), " + // �������
-				"quarter_end_bal varchar(6), " + // ��ĩ���
-				"quarter_bal_average varchar(6), " + // �����վ�
-				"NPL_rate varchar(6), " + // ����
-				"funded_target varchar(6), " + // Ŀ��Ͷ��
-				"last_update_date varchar(6) " + // ��������
+		//推荐与受理支行
+		arg0.execSQL("create table if not exists SubBank(" +
+				"branchCode varchar(4) primary key, " +//支行代码 0
+				"branchName varchar(40)," +//支行名称1
+				"PAREND_DB_ID varchar(19)," +//PAREND_DB_ID通过支行下的PAREND_DB_ID字段值等于机构下DB_ID字段值,来进行机构与支行关联。2
+				"updateTime varchar(14)," +//创建时间3
+				"area varchar(14)," +//地区
+				"inputable varchar(5)," +//是否可以录入推荐或受理人
+				"reserver1 varchar(5)" +//是否加载为受理行
 				")");
-		//
-		// //Cellid����
-		arg0.execSQL("create table if not exists ApplyRecomm("
-				+ "calculate_month varchar(6), " + // �·�
-				"recomm_branch varchar(10)," + // �Ƽ���
-				"recomm_sub_branch varchar(6), " + // �Ƽ�����
-				"recomm_staff_id varchar(6), " + // ҵ��Ա���
-				"recomm_staff_name varchar(6), " + // ҵ��Ա����
-				"funded_amt_total varchar(6), " + // ��Ͷ�Ŷ�
-				"funded_amt_year varchar(6), " + // ����Ͷ��
-				"funded_amt_quarter varchar(6), " + // ����Ͷ��
-				"funded_amt_month varchar(6), " + // ����Ͷ��
-				"current_bal varchar(6), " + // ��ǰ���
-				"quarter_beginning_bal varchar(6), " + // �������
-				"quarter_end_bal varchar(6), " + // ��ĩ���
-				"quarter_bal_average varchar(6), " + // �����վ�
-				"NPL_rate varchar(6), " + // ����
-				"funded_target varchar(6), " + // Ŀ��Ͷ��
-				"last_update_date varchar(6) " + // ��������
+		//推荐人与受理人
+		arg0.execSQL("create table if not exists Sale(" +
+				"saleCode varchar(10) primary key, " +//推荐人/受理人代码 0
+				"saleName varchar(40)," +//推荐人/受理人名称1
+				"areaNumbers varchar(20)," +//地区编号2
+				"nodeType varchar(2)," +//网点类型3
+				"updateTime varchar(14)" +//创建时间4
+				")");
+//************************************************************批量文件数据库****************************************//
+		//Activity活动
+		arg0.execSQL("create table if not exists Activity(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"activityId varchar(20)," +//活动名称1
+				"activityName varchar(20)," +//活动名称1
+				"company varchar(18)," +//所属公司2
+				"cityCode varchar(3)," +//所在城市区号3
+				"role varchar(20)," +//角色4
+				"startTime varchar(10)," +//开始日期5
+				"endTime varchar(10)," +//结束日期6
+				"isTop varchar(1)," +//是否置顶7
+				"filePath varchar(64)," +//文件路径8
+				"filelength varchar(64)," +//文件长度10
+				"updateTime varchar(14)," +//更新时间9
+				"isdownload varchar(14)" +//是否已经下载  0没有下载1已经下载
+				")");
+		//Contract纸质合约启用参数
+		arg0.execSQL("create table if not exists Contract(" +
+				"isOpen varchar(2) primary key, " +//纸质合约启用 0
+				"updateTime varchar(14)" +//更新时间1
+				")");
+		//DraftTime草稿箱时长
+		arg0.execSQL("create table if not exists DraftTime(" +
+				"draftTime varchar(4) primary key, " +//草稿箱保存时长 0
+				"updateTime varchar(14)" +//更新时间1
+				")");
+		//Merchant商户营销支持
+		arg0.execSQL("create table if not exists Merchant(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"merchantId varchar(10), " +//ID1
+				"merchantInfor varchar(20)," +//商户支持信息1
+				"company varchar(18)," +//所属公司2
+				"cityCode varchar(3)," +//所在城市区号3
+				"role varchar(20)," +//角色4
+				"startTime varchar(10)," +//开始日期5
+				"endTime varchar(10)," +//结束日期6
+				"isTop varchar(1)," +//是否置顶7
+				"filePath varchar(64)," +//文件路径8
+				"filelength varchar(64)," +//文件长度10
+				"updateTime varchar(14)," +//更新时间11
+				"isdownload varchar(14)" +//是否已经下载  0没有下载1已经下载
+				")");
+		//Notice公告
+		arg0.execSQL("create table if not exists Notice(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"noticeId varchar(20)," +//公告主题1
+				"noticeTitle varchar(20)," +//公告主题1
+				"noticeContent varchar(20)," +//公告内容2
+				"company varchar(18)," +//公司3
+				"cityCode varchar(3)," +//所在城市区号4
+				"role varchar(20)," +//角色5
+				"startTime varchar(10)," +//开始日期6
+				"endTime varchar(10)," +//结束日期7
+				"isTop varchar(1)," +//是否置顶8
+				"updateTime varchar(14)" +//更新时间9
+				")");
+		//Pic附件拍摄
+		arg0.execSQL("create table if not exists Pic(" +
+				"id varchar(1), " +//阶段0
+				"stage varchar(1), " +//阶段0
+				"file_name varchar(20), " +//文件夹名称，用于存放照片1
+				"big_info varchar(100), " +//大类信息2
+				"small_info varchar(100)," +//小类信息3
+				"updateTime varchar(14)" +//更新时间4
+				")");
+		//PicSort附件大类参数
+		arg0.execSQL("create table if not exists PicSort(" +
+				"bigName varchar(1), " +//拍摄大类名称0
+				"fileName varchar(20), " +//文件夹命名1
+				"bigCode varchar(100), " +//大类编号2
+				"updateTime varchar(14)" +//更新时间3
+				")");
+		//Product产品
+		arg0.execSQL("create table if not exists Product(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"productId varchar(20)," +//产品名称1
+				"productName varchar(20)," +//产品名称1
+				"product varchar(20)," +//对应产品2
+				"company varchar(18)," +//公司3
+				"cityCode varchar(3)," +//所在城市区号4
+				"role varchar(20)," +//角色5
+				"startTime varchar(10)," +//开始日期6
+				"endTime varchar(10)," +//结束日期7
+				"isTop varchar(1)," +//是否置顶8
+				"filePath varchar(64)," +//文件路径9
+				"filelength varchar(64)," +//文件长度10
+				"updateTime varchar(14)," +//更新时间11
+				"isdownload varchar(14)" +//是否已经下载  0没有下载1已经下载
+				")");
+		//StandardTalk标准话术
+		arg0.execSQL("create table if not exists StandardTalk(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"standardId varchar(20)," +//标准话术名称1
+				"standardNamer varchar(20)," +//标准话术名称1
+				"company varchar(18)," +//所属公司2
+				"cityCode varchar(3)," +//所在城市区号3
+				"role varchar(20)," +//角色4
+				"startTime varchar(10)," +//开始日期5
+				"endTime varchar(10)," +//结束日期6
+				"isTop varchar(1)," +//是否置顶7
+				"filePath varchar(64)," +//文件路径8
+				"filelength varchar(64)," +//文件长度10
+				"updateTime varchar(14)," +//更新时间9
+				"isdownload varchar(14)" +//是否已经下载  0没有下载1已经下载
+				")");
+		//Training培训
+		arg0.execSQL("create table if not exists Training(" +
+				"Id varchar(10) primary key, " +//ID 0
+				"trainingId varchar(10), " +//ID 0
+				"trainingNamer varchar(20)," +//课程名称1
+				"company varchar(18)," +//所属公司2
+				"cityCode varchar(3)," +//所在城市区号3
+				"role varchar(20)," +//角色4
+				"startTime varchar(10)," +//开始日期5
+				"endTime varchar(10)," +//结束日期6
+				"seconds varchar(10)," +//读秒控制7
+				"isTop varchar(1)," +//是否置顶8
+				"filePath varchar(64)," +//文件路径9
+				"filelength varchar(64)," +//文件长度10
+				"updateTime varchar(14)," +//更新时间9
+				"isdownload varchar(2)," +//是否已经下载  0没有下载1已经下载
+				"isreply varchar(2)" +//是否已经回复  null没有回复 1已经回复
 				")");
 
-		arg0.execSQL("create table IF NOT EXISTS ElectronicData(" + // �������Ϲ����
-				"_id varchar2(20) primary key," + // ��������id�����½���������ʱ���Ϊid
-				"data_name varchar2(100)," + // ��������
-				"customer_idtype varchar2(20)," + // ֤������
-				"customer_idnum varchar2(100)," + // �ͻ�֤������
-				"customer_name varchar2(30)," + // �ͻ�����
-				"file_path varchar2(50)," + // ���ϱ���·���������ļ�������pad��sdcard·��
-				"create_time varchar2(10)," + // ����ʱ��
-				"expiration_time varchar2(10))");// ����ʱ��
+		//省
+		arg0.execSQL("create table if not exists Province(" +
+				"province_id varchar(10) primary key," +//省代码
+				"province varchar(20)," +//省名字
+				"updateTime varchar(14)" +//更新时间10
+				")");
+		//市
+		arg0.execSQL("create table if not exists City(" +
+				"city_id varchar(20) primary key," +//市代码
+				"city varchar(20)," +//市名字
+				"province_id varchar(20)," +//省代码
+				"updateTime varchar(14)" +//更新时间10
+				")");
+		//区
+		arg0.execSQL("create table if not exists District(" +
+				"area_id varchar(20) primary key," +//区代码
+				"area varchar(20)," +//区名字
+				"city_id varchar(20)," +//市代码
+				"updateTime varchar(14)" +//更新时间10
+				")");
+//************************************************************批量文件数据库****************************************//
+		//团办/代发工资单位
+		arg0.execSQL("create table if not exists GroupCustomer(" +
+				"GROUP_NO varchar(20) primary key," +// 单位编号 0
+				"GROUP_NAME varchar(120)," +//单位名称1
+				"GROUP_DISTRICT varchar(30)," +//单位所在地区2
+				"ORG_CODE varchar(4)," +//机构编号3
+				"CREATE_TIME varchar(14)," +//创建时间4
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//PLAN和商户对应关系表
+		arg0.execSQL("create table if not exists PlanStore(" +
+				"PLAN_ID varchar(9) primary key, " +//PLAN_ID 0
+				"STORE_NUMBER varchar(9)," +//商户号1
+				"CREATE_TIME varchar(14)," +//创建时间2
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//plan、商户及商品对应关系表
+		arg0.execSQL("create table if not exists PlanStoreGoods(" +
+				"PLAN_ID varchar(9), " +//PLAN_ID 0
+				"STORE_GOODS_ID varchar(10)," +//STORE_GOODS_ID1
+				"CREATE_TIME varchar(14)," +//创建时间2
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//商品信息表
+		arg0.execSQL("create table if not exists Goods(" +
+				"GOODS_ID varchar(9) primary key, " +// 商品ID 0
+				"GOODS_CODE varchar(3)," +//商品编号1
+				"GOODS_NAME varchar(50)," +//商品名称2
+				"CATEGORY_ID varchar(4)," +//类别ID3
+				"CREATE_TIME varchar(14)," +//创建时间4
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//商品类别信息表
+		arg0.execSQL("create table if not exists GoodsCategory(" +
+				"CATEGORY_ID varchar(4) primary key, " +//商品类别ID0
+				"CATEGORY_NAME varchar(60)," +//类别名称1
+				"CATEGORY_CODE varchar(32)," +//类别编号2
+				"CREATE_TIME varchar(14)," +//创建时间3
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//商户用户对应关系表
+		arg0.execSQL("create table if not exists UmsUserStores(" +
+				"USER_ACCESS_ID varchar(25), " +//用户ID0
+				"STORE_NUMBER varchar(9)," +//商户号1
+				"CREATE_TIME varchar(14)," +//创建时间2
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//商户信息表
+		arg0.execSQL("create table if not exists Stores(" +
+				"STORE_NUMBER varchar(9) primary key, " +//商户号 0
+				"STORE_NAME varchar(40)," +//商户名称1
+				"STORE_DISTRICT varchar(3)," +//商户地区3
+				"STORES_UNION varchar(2)," +//网点类型2
+				"CREATE_TIME varchar(14)," +//创建时间4
+				"STOPE_CHAIN varchar(14)," +
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//商户、商品对应关系表
+		arg0.execSQL("create table if not exists StoreGoods(" +
+				"STORE_GOODS_ID varchar(10) primary key, " +//主键ID0
+				"GOODS_ID varchar(9)," +//商品ID1
+				"STORE_NUMBER varchar(9)," +//商户号2
+				"CREATE_TIME varchar(14)," +//创建时间3
+				"updateTime varchar(14)" +//更新时间
+				")");
 
-		// ���޸����ݿ�Ĳ���
 
-		// if (!isColumnExists(arg0, "StoreM", "typeNum")) {
-		// arg0.execSQL("ALTER TABLE StoreM  ADD COLUMN typeNum varchar(1) ");
-		//
-		// }
-		// if (!isColumnExists(arg0, "Stores", "STOPE_CHAIN")) {
-		// arg0.execSQL("ALTER TABLE Stores  ADD COLUMN STOPE_CHAIN varchar(14) ");
-		//
-		// }
+		//还款计划信息表
+		arg0.execSQL("create table if not exists Plan(" +
+				"PLAN_ID varchar(9) primary key, " +//主键PLAN_ID0
+				"PLAN_NUMBER varchar(5)," +//计划编号1
+				"PLAN_NAME varchar(50)," +//计划名称2
+				"TERM_MIN varchar(5)," +//期数最小值3
+				"TERM_MAX varchar(5)," +//期数最大值4
+				"CREATE_TIME varchar(14)," +//创建时间5
+				"custClass varchar(14),"+//创建时间6 客户群 20140410
+				"updateTime varchar(14)" +//更新时间
+
+				")");
+
+		//客户群
+		arg0.execSQL("create table if not exists CustClass(" +
+				"KEY varchar(9), " +//主键PLAN_ID0
+				"custClassValue varchar(10)," +//计划编号1
+				"producType varchar(14)," +//更新时间
+				"updateTime varchar(14)" +
+				")");
+
+		//产品信息表
+		arg0.execSQL("create table if not exists Products(" +
+				"PRODUCT_ID varchar(9) primary key, " +//主键PRODUCT_ID0
+				"LOGO varchar(3)," +//产品LOGO1
+				"PRODUCT_CODE varchar(4)," +//产品编号2
+				"PRODUCT_NAME varchar(40)," +//产品名称3
+				"PRODUCT_CATEGORY varchar(2)," +//产品类别4
+				"CREATE_TIME varchar(14)," +//创建时间5
+				"updateTime varchar(14)" +//更新时间
+				")");
+		//产品信息表
+		arg0.execSQL("create table if not exists ProductStores(" +
+				"PRODUCT_ID varchar(9) , " +//产品ID 0
+				"STORE_NUMBER varchar(9)," +//商户编号1
+				"CREATE_TIME varchar(14)," +//创建时间2
+				"updateTime varchar(14)" +//更新时间4
+				")");
+		//************************************************************批量文件数据库****************************************//
+		//附件拍摄
+		arg0.execSQL("create table if not exists accessory_photo(" +
+				"stage varchar(1), " +//阶段
+				"file_name varchar(20), " +//文件夹名称，用于存放照片
+				"big_info varchar(100), " +//大类信息
+				"small_info varchar(100)" +//小类信息
+				")");
+
+
+
+		//潜客管理
+		arg0.execSQL("create table if not exists marketing_potential(" +
+				"name varchar(20) primary key," +//客户姓名
+				"phone varchar(20)," +//手机号码
+				"time varchar(20)" +//录入时间
+				")");
+
+		//短信过后，条码和纸质合约的开关表
+		arg0.execSQL("create table if not exists sms_switch(" +
+				"contract_switch varchar(20)," +//纸质合约和条码扫描的开关
+				"contract__time varchar(20)" +//录入时间
+				")");
+
+		//emm
+		arg0.execSQL("create table if not exists emm(" +
+				"id varchar(20)," +
+				"key varchar(20)," +//
+				"uuid varchar(20)," +//
+				"ISREGISTED varchar(20)" +
+				")");
+
+
+		//通用工单
+		arg0.execSQL("create table if not exists workOrder(" +
+				"id varchar(20)," +// 工单的标识
+				"content varchar(20)," +//内容
+				"expiration varchar(20)," +// 过期时间
+				"number varchar(20)," +// 工单的id
+				"acquisitionTime varchar(20) ," + // 获取时间
+				"isfeedback  varchar(20)" +// 是否反馈 0为未反馈，1为已反馈
+				")");
+
+		//商户所在地区城市
+		arg0.execSQL("create table if not exists StoreDistrict(" +
+				"areanum varchar(20)," +// 地区编号
+				"areaname varchar(20)," +//地区名称
+				"updateTime varchar(20)" +//更新时间
+				")");
+		//商户类型
+		arg0.execSQL("create table if not exists StoreType(" +
+				"storenum varchar(20)," +//
+				"storename varchar(20)," +//
+				"updateTime varchar(20)" +//更新时间
+				")");
+		//************************************************************批量文件数据库****************************************//
+
+
+		arg0.execSQL("create table if not exists StoreM(" +
+				"id varchar(10) primary key, " +//0
+
+				"storeName varchar(20)," +	//商户名称 1
+				"storeType varchar(20)," +	//商户类型 2
+				"address varchar(20)," +	//商户地址3
+				"phone varchar(20)," +	//电话4
+				"fax varchar(20)," +	//传真5
+				"zipCode varchar(20)," +	//邮编7
+				"bizLicenseNo varchar(20)," +	//营业执照号码8
+				"establishDate varchar(20)," +	//成立日期6
+				"industry varchar(20)," +	//所属行业9
+				"companyType varchar(20)," +	//公司类型10
+				"employeeAmount varchar(20)," +	//员工人数11
+				"salesStaffAmount varchar(20)," +	//销售人员数12
+				"storeAmount varchar(20)," +	//门店数13
+				"storeArea varchar(20)," +	//门店总面积14
+				"juridicalPersonName varchar(20)," +	//法人代表姓名15
+				"juridicalPersonId varchar(20)," +	//法人代表身份证号码16
+				"homeBranch varchar(20)," +	//开户行分支行17
+				"accountNumber varchar(20)," +	//账号18
+				"isBonAcctFlag varchar(20)," +	//是否我行账号19
+				"costLastYear varchar(20)," +	//去年成本20
+				"profitLastYear varchar(20)," +	//去年利润21
+				"costThisYear varchar(20)," +	//本年成本预估22
+				"profitThisYear varchar(20)," +	//本年利润预估23
+				"annualSalesRevenue varchar(20)," +	//年销售收入（汽车）24
+				"annualSalesCount varchar(20)," +	//年销售量(汽车)25
+				"avgMonth varchar(20)," +	//月均销售额26
+				"avgBankMonth varchar(20)," +	//月均金融机构贷款销售额27
+				"avgMonthCount varchar(20)," +	//月均销售总量数28
+				"avgMonthBankCount varchar(20)," +	//月均金融机构贷款销售总量数29
+				"areaCode varchar(20)," +	//商户所在城市的编号30
+				"areaName varchar(20)," +	//商户所在城市31
+
+
+				"storeManagerInfoName varchar(20)," +	//姓名32
+				"storeManagerInfoIdCardNo varchar(20)," +	//身份证号33
+				"storeManagerInfoTitle varchar(20)," +	//职称34
+				"seniority varchar(20)," +	//年资35
+
+
+				"storeCopoBankInfo_name varchar(20)," +	//银行名称36
+				"storeCopoBankInfo_bankType varchar(20)," +	//合作方式37
+				"storeCopoBankInfo_products varchar(20)," +	//金融产品38
+				"storeCopoBankInfo_satisfaction varchar(20)," +	//满意度39
+
+				"storeBizMgrInfo_mgrName varchar(20)," +	//业务发展经理姓名40
+				"storeBizMgrInfo_storeWebsite varchar(20)," +	//商户网站地址41
+				"storeBizMgrInfo_merchantView varchar(20)," +	//商户合作意愿和期望以及对我行信贷服务的看法42
+				"storeBizMgrInfo_m1ApprovalDocsNum varchar(20)," +	//第一个月核准件（个数）43
+				"storeBizMgrInfo_m2ApprovalDocsNum varchar(20)," +	//第二个月核准件（个数）44
+				"storeBizMgrInfo_m3ApprovalDocsNum varchar(20)," +	//第三个月核准件（个数）45
+				"storeBizMgrInfo_m1ApprovalDocsAmount varchar(20)," +	//第一个月核准金额46
+				"storeBizMgrInfo_m2ApprovalDocsAmount varchar(20)," +	//第二个月核准金额47
+				"storeBizMgrInfo_m3ApprovalDocsAmount varchar(20)," +	//第三个月核准金额48
+				"storeBizMgrInfo_bizSope varchar(20)," +	//商户业务范围49
+				"storeBizMgrInfo_customerLocate varchar(20)," +	//商户的客户定位50
+				"storeBizMgrInfo_gainCustomerChannel varchar(20)," +	//商户获取客户渠道51
+				"storeBizMgrInfo_managerSug varchar(20)," +	//业务发展经历意见和商户关系维护计划52
+
+				"storeBizMgrInfo_dealRemark varchar(20)," +	//商户合作协议53
+				"storeBizMgrInfo_accountRemark varchar(20)," +	//拨款银行账户证明54
+				"storeBizMgrInfo_idCardRemark varchar(20)," +	//法人代表身份证复印件55
+				"storeBizMgrInfo_managerRemark varchar(20)," +	//主要经理人身份证复印件和信用查询授权56
+				"storeBizMgrInfo_bizLicenseRemark varchar(20)," +	//公司营业执照、组织机构代码证和税务登记证复印件57
+				"storeBizMgrInfo_financialRemark varchar(20)," +	//近期财务报表58
+				"storeBizMgrInfo_loanCardRemark varchar(20)," +	//公司贷款卡编码，以及查询授权书59
+				"storeBizMgrInfo_other varchar(20)," +	//其他（商户与其客户额合同样本等等）60
+
+				"storeCarsInfo_carModel varchar(20)," +	//车型 61
+				"storeCarsInfo_carPrice varchar(20)," +	//价格62
+				"storeCarsInfo_salesStatus varchar(20)," +	//每月销售情况63
+				"storeCarsInfo_stockStatus varchar(20)," +	//库存情况64
+				"salesInfo varchar(20)," +	//销售情况介绍65
+				"operateInfo varchar(20)," + //经营情况介绍66
+
+
+				"typeNum varchar(20), " +//
+				"viewper varchar(20), " +//
+				"viewper1 varchar(20), " +//
+				"viewper2 varchar(20), " +//
+				"viewper3 varchar(20), " +//
+				"filename varchar(20), " +//文件夹名字
+				"type varchar(20), " +//业务类型
+				"applyfile_states varchar(2)," +//件的标示 1为草稿箱、2为发件箱
+				"custName varchar(20), " +//名字
+				"applyTime varchar(10)," +//申请日期11
+				"flipperActivity varchar(10), " +//草稿箱出来的功能模块名
+				"flipperLayoutnum varchar(2) " +//草稿箱出来对应的是第几个布局文件
+				")");
+
+
+		//Cellid开关
+		arg0.execSQL("create table if not exists CellId(" +
+				"isOpen varchar(2) primary key, " +//
+				//"isOpen varchar(2)," +//更新时间1
+				"updateTime varchar(14)" +//更新时间1
+				")");
+
+
+
+//				//StoreRecomm开关
+		arg0.execSQL("create table if not exists StoreRecomm(" +
+				"calculate_month varchar(6), " +//月份
+				"merchant_id varchar(10)," +//商户号
+				"merchant_name varchar(6), " +//商户名称
+				"recomm_staff_id varchar(6), " +//业务员编号
+				"recomm_staff_name varchar(6), " +//业务员姓名
+				"funded_amt_total varchar(6), " +//总投放额
+				"funded_amt_year varchar(6), " +//当年投放
+				"funded_amt_quarter varchar(6), " +//当季投放
+				"funded_amt_month varchar(6), " +//当月投放
+				"current_bal varchar(6), " +//当前余额
+				"quarter_beginning_bal varchar(6), " +//季初余额
+				"quarter_end_bal varchar(6), " +//季末余额
+				"quarter_bal_average varchar(6), " +//季度日均
+				"NPL_rate varchar(6), " +//不良
+				"funded_target varchar(6), " +//目标投放
+				"last_update_date varchar(6) " +//更新日期
+				")");
+//
+//				//Cellid开关
+		arg0.execSQL("create table if not exists ApplyRecomm(" +
+				"calculate_month varchar(6), " +//月份
+				"recomm_branch varchar(10)," +//推荐行
+				"recomm_sub_branch varchar(6), " +//推荐网点
+				"recomm_staff_id varchar(6), " +//业务员编号
+				"recomm_staff_name varchar(6), " +//业务员姓名
+				"funded_amt_total varchar(6), " +//总投放额
+				"funded_amt_year varchar(6), " +//当年投放
+				"funded_amt_quarter varchar(6), " +//当季投放
+				"funded_amt_month varchar(6), " +//当月投放
+				"current_bal varchar(6), " +//当前余额
+				"quarter_beginning_bal varchar(6), " +//季初余额
+				"quarter_end_bal varchar(6), " +//季末余额
+				"quarter_bal_average varchar(6), " +//季度日均
+				"NPL_rate varchar(6), " +//不良
+				"funded_target varchar(6), " +//目标投放
+				"last_update_date varchar(6) " +//更新日期
+				")");
+
+		arg0.execSQL("create table IF NOT EXISTS ElectronicData(" + // 电子资料管理表
+				"_id varchar2(20) primary key," + // 电子资料id，以新建电子资料时间戳为id
+				"data_name varchar2(100)," + // 资料名称
+				"customer_idtype varchar2(20)," + //证件类型
+				"customer_idnum varchar2(100)," + // 客户证件号码
+				"customer_name varchar2(30)," + // 客户姓名
+				"file_path varchar2(50)," + // 资料保存路径，资料文件保存在pad的sdcard路径
+				"create_time varchar2(10)," + //过期时间
+				"expiration_time varchar2(10))");// 创建时间
+
+		// 做修改数据库的操作
+
+//				if (!isColumnExists(arg0, "StoreM", "typeNum")) {
+//					arg0.execSQL("ALTER TABLE StoreM  ADD COLUMN typeNum varchar(1) ");
+//
+//				}
+//				if (!isColumnExists(arg0, "Stores", "STOPE_CHAIN")) {
+//					arg0.execSQL("ALTER TABLE Stores  ADD COLUMN STOPE_CHAIN varchar(14) ");
+//
+//				}
 
 		if (!IsTableExists(arg0, "CellId")) {
-			arg0.execSQL("create table if not exists CellId("
-					+ "isOpen varchar(2) primary key, " + // ֽ�ʺ�Լ���� 0
-					// "isOpen varchar(2)," +//����ʱ��1
-					"updateTime varchar(14)" + // ����ʱ��1
+			arg0.execSQL("create table if not exists CellId(" +
+					"isOpen varchar(2) primary key, " +//纸质合约启用 0
+//							"isOpen varchar(2)," +//更新时间1
+					"updateTime varchar(14)" +//更新时间1
 					")");
 		}
 
-		// �˵����͵�ַ
+		// 账单寄送地址
 		if (!IsTableExists(arg0, "BillAddress")) {
-			arg0.execSQL("create table if not exists BillAddress("
-					+ "KEY varchar(2), " + // �˵���������KEYֵ
-					"VALUE varchar(2)," + // �˵�����������ʾValueֵ
-					"updateTime varchar(14)" + // �ļ����ɵ�ʱ��
+			arg0.execSQL("create table if not exists BillAddress(" +
+					"KEY varchar(2), " +//账单寄送类型KEY值
+					"VALUE varchar(2)," +//账单寄送类型显示Value值
+					"updateTime varchar(14)" +//文件生成的时间
 					")");
 		}
-		// �޿�֧������
+		// 无卡支付期数
 		if (!IsTableExists(arg0, "PlanTerm")) {
-			arg0.execSQL("create table if not exists PlanTerm("
-					+ "KEY varchar(2), " + // ����KEYֵ
-					"VALUE varchar(2)," + // ������ʾValueֵ
-					"updateTime varchar(14)" + // �ļ����ɵ�ʱ��
+			arg0.execSQL("create table if not exists PlanTerm(" +
+					"KEY varchar(2), " +//类型KEY值
+					"VALUE varchar(2)," +//类型显示Value值
+					"updateTime varchar(14)" +//文件生成的时间
 					")");
 		}
+
 
 	}
-
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-		// TODO �޸����ݿ�
-		// arg0.execSQL("drop table Banck");
-		// arg0.execSQL("drop table SubBank");
+		// TODO 修改数据库
+		//arg0.execSQL("drop table Banck");
+		//arg0.execSQL("drop table SubBank");
 		arg0.execSQL("drop table cfccc_customervisit");
 
-		// ���
-		arg0.execSQL("create table if not exists cfccc_customervisit("
-				+ "id varchar(20) primary key, " + // ��Ȩ�� 0
-				"authNumber varchar(20), " + // ��Ȩ�� 01
-				"productCategory varchar(20), " + // ��Ʒ��� 1
-				"visitType varchar(1), " + // �������, ��λ�ã�C;�ҷ�:H 2
-				"custName varchar(15)," + // �ͻ�����3
-				"asCom varchar(1000), " + // ���Ա��ע4
-				"latitudeAndLongitude varchar(20), " + // ��γ��5
-				"exemptHomeVisit varchar(7), " + // ��ҷ�ѡ��,��ҷ�:Y;��Ҫ�ҷ�:Nornull 6
-				"homeVisitFinished varchar(3)," + // �ҷ�˳�����:OK;�ҷÿͻ������:TBS 7
-				"homeVisit3Rd varchar(2), " + // û�е�������������:OK;�е�������������:KO 8
-				"homeVisitLoanPurpose varchar(3)," + // ������;�����:OK;������;���:KO;������;���ɵ��޷���ȫȷ��:TBS
-														// 9
-				"homeVisitApplySelf varchar(3)," + // ȷ���׷���ǩ:OK;δ�׷���ǩ:TBS 10
-				"homeVisitRisk varchar(2), " + // δ���ֶġ����ȸ߷�������:OK;���ֶĲ��������ȸ߷�������:KO
-												// 11
-				// "homeVisitStatus varchar(1),"
-				// +//����Ƿ�ͨ��,���δ�����ش��ɵ�:2;��÷��ֿͻ��жġ������ش��ɵ�:4 12
-					
-				"exemptCompVisit varchar(6), " + // �ⵥλ��ѡ��,�ⵥλ��:Y;��Ҫ��λ��:Nornull
-													// 13
-				"compVisitFinished varchar(3)," + // ��λ��˳�����:OK;��λ�ÿͻ������:TBS 14
-				"compVisitIncome varchar(3)," + // ���������ʵһ��:OK;���������ʵ��һ��:TBS 15
-				"compVisitIncomeAmount varchar(10), " + // �׷�Աʵ�ʺ�ʵ������������16
-				"compVisitJob varchar(3)," + // ������Ϣ(��ҵ��ְ���)һ��:OK;������Ϣ(��ҵ��ְ���)��һ�£�TBS
-												// 17
-				"compVisit3Rd varchar(2)," + // û�е�������������:OK;�е�������������:KO 18
-				"compVisitLoanPurpose varchar(3)," + // ������;�����:OK;������;���:KO;������;���ɣ����޷���ȫȷ��:TBS
-														// 19
-				// "compVisitApplySelf varchar(3), " +//ȷ���׷���ǩ:OK;δ�׷���ǩ:TBS 20
-				// "compVisitRisk varchar(2),"
-				// +//δ���ֶĲ��������ȸ߷�������:OK;���ֶĲ��������ȸ߷�������:KO 21
-				"positionDate varchar(14), " + // 22
-				"memoVisit varchar(100)," + // �ύ���ܱ�ע
+		//外访
+		arg0.execSQL("create table if not exists cfccc_customervisit(" +
+				"id varchar(20) primary key, " +//授权号 0
+				"authNumber varchar(20), " +//授权号 01
+				"productCategory varchar(20), " +//产品编号 1
+				"visitType varchar(1), " +//外访类型, 单位访：C;家访:H 2
+				"custName varchar(15)," +//客户姓名3
+				"asCom varchar(100), " +//外访员备注4
+				"latitudeAndLongitude varchar(20), " +//经纬度5
+				"exemptHomeVisit varchar(7), " +//免家访选项,免家访:Y;需要家访:Nornull 6
+				"homeVisitFinished varchar(3)," +//家访顺利完成:OK;家访客户不配合:TBS 7
+				"homeVisit3Rd varchar(2), " +//没有第三方介入嫌疑:OK;有第三方介入嫌疑:KO 8
+				"homeVisitLoanPurpose varchar(3)," +//贷款用途无虚假:OK;贷款用途虚假:KO;贷款用途可疑但无法完全确认:TBS 9
+				"homeVisitApplySelf varchar(3)," +//确认亲访亲签:OK;未亲访亲签:TBS 10
+				"homeVisitRisk varchar(2), " +//未发现赌、毒等高风险特征:OK;发现赌博、吸毒等高风险特征:KO 11
+//				"homeVisitStatus varchar(1)," +//外访是否通过,外访未发现重大疑点:2;外访发现客户有赌、毒等重大疑点:4 12
 
-				"nameCust varchar(8)," + // ��
-				"customervisitDate varchar(8)," + // �������
-				"customervisitPhone varchar(11)," + // �ֻ�����
-				"flipperActivity varchar(10), " + // �ݸ�������Ĺ���ģ����
-				"flipperLayoutnum varchar(2), " + // �ݸ��������Ӧ���ǵڼ��������ļ�
-				"filename varchar(20), " + // �ļ�������
-				"bollen varchar(8)," + //
-				"newaddress varchar(1000), " + // ���Ա�µ�ַ 2018.04.13
-				"difficult varchar(1000), " + // ���Ա���ѹ�����ע2018.04.13
-				"applyfile_states varchar(2) ," + // ���ı�ʾ 1Ϊ�ݸ��䡢2Ϊ������
-				"futureField6 varchar(10)"+     //2018-06-12   �Ƿ�ֱ��ͨ����ʶ
+				"exemptCompVisit varchar(6), " +//免单位访选项,免单位访:Y;需要单位访:Nornull 13
+				"compVisitFinished varchar(3)," +//单位访顺利完成:OK;单位访客户不配合:TBS 14
+				"compVisitIncome varchar(3)," +//工作收入核实一致:OK;工作收入核实不一致:TBS 15
+				"compVisitIncomeAmount varchar(10), " +//亲访员实际核实到的月收入金额16
+				"compVisitJob varchar(3)," +//工作信息(行业、职务等)一致:OK;工作信息(行业、职务等)不一致：TBS 17
+				"compVisit3Rd varchar(2)," +//没有第三方介入嫌疑:OK;有第三方介入嫌疑:KO 18
+				"compVisitLoanPurpose varchar(3)," +//贷款用途无虚假:OK;贷款用途虚假:KO;贷款用途可疑，但无法完全确认:TBS 19
+				//"compVisitApplySelf varchar(3), " +//确认亲访亲签:OK;未亲访亲签:TBS 20
+				//"compVisitRisk varchar(2)," +//未发现赌博、吸毒等高风险特征:OK;发现赌博、吸毒等高风险特征:KO 21
+				"positionDate varchar(14), "+//22
+				"memoVisit varchar(100)," + 	 //提交主管备注
+
+				"nameCust varchar(8)," +//性
+				"customervisitDate varchar(8)," +//外访日期
+				"customervisitPhone varchar(11)," +//手机号码
+				"flipperActivity varchar(10), " +//草稿箱出来的功能模块名
+				"flipperLayoutnum varchar(2), " +//草稿箱出来对应的是第几个布局文件
+				"filename varchar(20), " +//文件夹名字
+				"bollen varchar(8)," +//
+				"applyfile_states varchar(2) " +//件的标示 1为草稿箱、2为发件箱
 				")");
 
-		// �Ƽ����������
-		/*
-		 * arg0.execSQL("create table if not exists Banck(" +
-		 * "institutionCode varchar(4) primary key, " +//�������� 0
-		 * "institutionName varchar(40)," +//��������1 "DB_ID varchar(19),"
-		 * +//DB_ID2 "updateTime varchar(14)," +//����ʱ��4 "area varchar(14),"
-		 * +//���� "acceptable varchar(5)," +//�Ƿ����Ϊ������ "reserver1 varchar(5)"
-		 * +//Ԥ���ֶ� ")");
-		 * 
-		 * //�Ƽ�������֧�� arg0.execSQL("create table if not exists SubBank(" +
-		 * "branchCode varchar(4) primary key, " +//֧�д��� 0
-		 * "branchName varchar(40)," +//֧������1 "PAREND_DB_ID varchar(19),"
-		 * +//PAREND_DB_IDͨ��֧���µ�PAREND_DB_ID�ֶ�ֵ���ڻ�����DB_ID�ֶ�ֵ,�����л�����֧�й�����2
-		 * "updateTime varchar(14)," +//����ʱ��3 "area varchar(14)," +//����
-		 * "inputable varchar(5)," +//�Ƿ����¼���Ƽ��������� "reserver1 varchar(5)"
-		 * +//�Ƿ����Ϊ������ ")");
-		 */
+		//推荐与受理机构
+		/*arg0.execSQL("create table if not exists Banck(" +
+				"institutionCode varchar(4) primary key, " +//机构代码 0
+				"institutionName varchar(40)," +//机构名称1
+				"DB_ID varchar(19)," +//DB_ID2
+				"updateTime varchar(14)," +//创建时间4
+				"area varchar(14)," +//地区
+				"acceptable varchar(5)," +//是否加载为受理行
+				"reserver1 varchar(5)" +//预留字段
+				")");
+
+		//推荐与受理支行
+		arg0.execSQL("create table if not exists SubBank(" +
+				"branchCode varchar(4) primary key, " +//支行代码 0
+				"branchName varchar(40)," +//支行名称1
+				"PAREND_DB_ID varchar(19)," +//PAREND_DB_ID通过支行下的PAREND_DB_ID字段值等于机构下DB_ID字段值,来进行机构与支行关联。2
+				"updateTime varchar(14)," +//创建时间3
+				"area varchar(14)," +//地区
+				"inputable varchar(5)," +//是否可以录入推荐或受理人
+				"reserver1 varchar(5)" +//是否加载为受理行
+				")");*/
+
+
 
 		/*
-		 * remove������ʱ�� ��������Ҫ��
+		 * remove掉更新时间
+		 * 参数表需要加
 		 */
-		// sp.removeParameters("Banck");
-		// sp.removeParameters("SubBank");
+		//sp.removeParameters("Banck");
+		//sp.removeParameters("SubBank");
 
-		arg0.execSQL("create table IF NOT EXISTS ElectronicData(" + // �������Ϲ����
-				"_id varchar2(20) primary key," + // ��������id�����½���������ʱ���Ϊid
-				"data_name varchar2(100)," + // ��������
-				"customer_idtype varchar2(20)," + // ֤������
-				"customer_idnum varchar2(100)," + // �ͻ�֤������
-				"customer_name varchar2(30)," + // �ͻ�����
-				"file_path varchar2(50)," + // ���ϱ���·���������ļ�������pad��sdcard·��
-				"create_time varchar2(10)," + // ����ʱ��
-				"expiration_time varchar2(10))");// ����ʱ��
 
-		System.out.println("�޸����ݿ�onUpdate()");
+		arg0.execSQL("create table IF NOT EXISTS ElectronicData(" + // 电子资料管理表
+				"_id varchar2(20) primary key," + // 电子资料id，以新建电子资料时间戳为id
+				"data_name varchar2(100)," + // 资料名称
+				"customer_idtype varchar2(20)," + //证件类型
+				"customer_idnum varchar2(100)," + // 客户证件号码
+				"customer_name varchar2(30)," + // 客户姓名
+				"file_path varchar2(50)," + // 资料保存路径，资料文件保存在pad的sdcard路径
+				"create_time varchar2(10)," + //过期时间
+				"expiration_time varchar2(10))");// 创建时间
+
+		System.out.println("修改数据库onUpdate()");
+
 
 	}
 
-	public boolean isColumnExists(SQLiteDatabase db, String tabName, String col) {
+
+
+	public boolean isColumnExists(SQLiteDatabase db, String tabName, String col){
 		boolean result = true;
 		Cursor cursor = null;
-		try {
-			cursor = db.rawQuery("select * from " + tabName, null);
-			if (cursor.getColumnIndex(col) == -1) {
+		try{
+			cursor = db.rawQuery("select * from "+tabName, null);
+			if(cursor.getColumnIndex(col) == -1){
 				result = false;
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception e){
 			result = false;
-		} finally {
-			if (cursor != null)
+		}
+		finally{
+			if(cursor!=null)
 				cursor.close();
 		}
 		return result;
 	}
 
-	public boolean IsTableExists(SQLiteDatabase db, String tabName) {
+	public boolean IsTableExists(SQLiteDatabase db, String tabName){
 		boolean result = false;
-		if (tabName == null) {
+		if(tabName == null){
 			return false;
 		}
 		Cursor cursor = null;
 		try {
-			String sql = "select count(*) as c from sqlite_master where type ='table' and name ='"
-					+ tabName.trim() + "' ";
+			String sql = "select count(*) as c from sqlite_master where type ='table' and name ='"+tabName.trim()+"' ";
 			cursor = db.rawQuery(sql, null);
-			if (cursor.moveToNext()) {
+			if(cursor.moveToNext()){
 				int count = cursor.getInt(0);
-				if (count > 0) {
+				if(count>0){
 					result = true;
 				}
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
-		} finally {
-			if (cursor != null)
+		}
+		finally{
+			if(cursor != null)
 				cursor.close();
 		}
 		return result;
 	}
 
-	public static int getDBVer() {
+
+	public static int getDBVer(){
 		return Constants.dbVer;
 	}
 
-	// ɾ�����ݿ�
-	public boolean deleteDataBase(Context context) {
+	//删除数据库
+	public boolean deleteDataBase(Context context){
 		return context.deleteDatabase(Constants.dbName);
 	}
 
-	public boolean deleteFriendDataBase(Context friendContext,
-			String databaseName) {
+	public boolean deleteFriendDataBase(Context friendContext, String databaseName){
 		return friendContext.deleteDatabase(databaseName);
 	}
 

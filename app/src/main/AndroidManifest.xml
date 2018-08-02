@@ -140,19 +140,25 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".demo.expandlistview.MedicalReportActivity" />
         <activity android:name=".demo.baiduMap.BaiduMapActivity" />
-        <activity android:name=".demo.MRecorder.MRecorderActivity"></activity>
-        <activity android:name=".demo.BreakPointrResume.HttpActivity">
+        <activity android:name=".demo.MRecorder.MRecorderActivity" />
+        <activity android:name=".demo.BreakPointrResume.HttpActivity"></activity>
+        <activity android:name=".demo.RvItemDecoration.RvItemDecorationActivity"></activity>
+        <activity android:name=".demo.BreakPointrResume.DownloadTest"></activity>
+        <activity android:name=".demo.head_line.HeadLineHomeActivity">
+
+        </activity>
+
+        <service android:name=".demo.download.DownLoadService" />
+        <service android:name=".demo.BreakPointrResume.HttpService" />
+        <activity android:name=".demo.customize.CustomizeActivity">
+
+        </activity>
+        <activity android:name=".demo.customize.GesturePassActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".demo.RvItemDecoration.RvItemDecorationActivity">
-        </activity>
-        <activity android:name=".demo.BreakPointrResume.DownloadTest">
-        </activity>
-        <service android:name=".demo.download.DownLoadService"/>
-        <service android:name=".demo.BreakPointrResume.HttpService"/>
     </application>
 
 </manifest>

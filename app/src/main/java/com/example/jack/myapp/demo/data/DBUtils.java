@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,20 +20,17 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.techown.cfccc.util.FileUtils;
-import com.techown.cfccc.util.Log;
 
 /**
- * ���ݿ������
- * 
+ * 数据库操作类
+ *
  * @author Administrator
- * 
+ *
  */
 public class DBUtils {
 	private MyDatabaseHelper dbHelper = null;
@@ -42,7 +38,7 @@ public class DBUtils {
 	public Context con;
 	DES des = new DES();
 
-	// ����share
+	// 新增share
 	SharedPrefs sharedPrefs;
 
 	public DBUtils(Context context) {
@@ -52,7 +48,7 @@ public class DBUtils {
 
 	public SQLiteDatabase getMyDataBase() {
 		if (db == null) {
-			dbHelper = new MyDatabaseHelper(con, Constants.dbName,
+			dbHelper = new MyDatabaseHelper(con,Constants.dbName,
 					Constants.dbVer);
 			db = dbHelper.getWritableDatabase();
 		}
@@ -67,56 +63,56 @@ public class DBUtils {
 	}
 
 	public boolean deleteDatabase() {
-		dbHelper = new MyDatabaseHelper(con, Constants.dbName, Constants.dbVer);
+		dbHelper = new MyDatabaseHelper(con,Constants.dbName,Constants.dbVer);
 		return dbHelper.deleteDataBase(con);
 	}
 
-	// ��������
+	// 插入数据
 	public void insert(String tablename, String[] clomname, String[] clomstr) {
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			ContentValues values = new ContentValues();
 			// db.beginTransaction();
 			for (int i = 0; i < clomname.length; i++) {
 				values.put(clomname[i], des.jiaMi(clomstr[i]));
 
 			}
-			db.insert(tablename, null, values); // ��������
+			db.insert(tablename, null, values); // 插入数据
 			// db.setTransactionSuccessful();
 			// db.endTransaction();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"DBUTIL.insert�쳣:" + tablename + e.getMessage());
+					"DBUTIL.insert异常:" + tablename + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
 
 	}
 
-	// ����һ�ж���ֶ�
+	// 更新一行多个字段
 	public long upload(String tablename, String[] clomname,
 
-	String[] clomstr, String id, String idstr) {
+					   String[] clomstr, String id, String idstr) {
 		long count = -1;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			ContentValues values = new ContentValues();
 			for (int i = 0; i < clomname.length; i++) {
 				values.put(clomname[i], des.jiaMi(clomstr[i]));
 			}
 			if (values.size() > 0) {
 				count = db.update(tablename, values, id + "=?",
-						new String[] { des.jiaMi(idstr) }); // ��������
+						new String[] { des.jiaMi(idstr) }); // 更新数据
 			}
 
 			// db.close();
 			if (count == -1) {
-				Log.getInstance().writeLog("DBUTIL.upload��������ʧ��");
+				Log.getInstance().writeLog("DBUTIL.upload更新数据失敗");
 			}
 
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.upload�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.upload异常:" + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
@@ -124,26 +120,26 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯ��RP�Ͽͻ��õ������ݸ������ݿ⣬ûֵ�����ݲ�����ӣ���ֵ�����
-	 * 
+	 * 查询的RP老客户得到的数据更新数据库，没值的数据不可添加，有值的添加
+	 *
 	 * @param tablename
-	 *            ����
+	 *            表名
 	 * @param clomname
-	 *            ������
+	 *            列数组
 	 * @param clomstr
-	 *            ֵ����
+	 *            值数组
 	 * @param id
-	 *            ��ѯ��id
+	 *            查询的id
 	 * @param idstr
-	 *            ��ѯ��idֵ
+	 *            查询的id值
 	 * @return
 	 */
 	public List<String> uploadRP(String tablename, String[] clomname,
-			String[] clomstr, String id, String idstr) {
+								 String[] clomstr, String id, String idstr) {
 		List<String> strUpload = new ArrayList<String>();
 		long count = -1;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			ContentValues values = new ContentValues();
 			for (int i = 0; i < clomname.length; i++) {
 				if (!(clomstr[i]).equals("")) {
@@ -151,34 +147,34 @@ public class DBUtils {
 					strUpload.add(clomname[i]);
 				}
 			}
-			System.out.println("���µ�Id��" + idstr + "�����ֵ�ø����Ǽ����� "
+			System.out.println("更新的Id：" + idstr + "保存的值得个数是几个： "
 					+ values.size());
 			if (values.size() > 0) {
 				count = db.update(tablename, values, id + "=?",
-						new String[] { des.jiaMi(idstr) }); // ��������
+						new String[] { des.jiaMi(idstr) }); // 更新数据
 			}
 
 			// db.close();
 			if (count == -1) {
-				Log.getInstance().writeLog("DBUTIL.uploadRP -- ��������ʧ��");
+				Log.getInstance().writeLog("DBUTIL.uploadRP -- 更新数据失敗");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.getInstance().writeLog("DBUTIL.uploadRP�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.uploadRP异常:" + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
 		return strUpload;
 	}
 
-	// ��ѯһ�ж���ֶ�
+	// 查询一行多个字段
 	public String[] Applyquery(String tablename, String[] clunname,
-			String where, String wherea, String wherestr, String wherestra) {
+							   String where, String wherea, String wherestr, String wherestra) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			cur = db.rawQuery("select " + clunname[0] + "," + clunname[1]
 					+ " from " + tablename + " where " + tablename + "."
@@ -202,7 +198,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"DBUTIL.query�쳣:" + e.getMessage() + "   +  ( ����Ϊ��"
+					"DBUTIL.query异常:" + e.getMessage() + "   +  ( 表名为："
 							+ tablename + ")");
 		} finally {
 			if (cur != null) {
@@ -213,13 +209,13 @@ public class DBUtils {
 		return str;
 	}
 
-	// ��ѯһ�ж���ֶ�
+	// 查询一行多个字段
 	public String[] query(String tablename, String[] clunname, String where,
-			String wherestr) {
+						  String wherestr) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			cur = db.query(tablename, clunname, where + "=?",
 					new String[] { des.jiaMi(wherestr) }, null, null, null);
@@ -240,7 +236,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"DBUTIL.query�쳣:" + e.getMessage() + "   +  ( ����Ϊ��"
+					"DBUTIL.query异常:" + e.getMessage() + "   +  ( 表名为："
 							+ tablename + ")");
 		} finally {
 			if (cur != null) {
@@ -251,13 +247,13 @@ public class DBUtils {
 		return str;
 	}
 
-	// ��ѯ���ڰ汾��
+	// 查询日期版本号
 	public String queryDate(String tablename, String colum) {
 		String str = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date(
 				System.currentTimeMillis()));
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			cur = db.query(tablename, new String[] { colum }, null, null, null,
 					null, null);
 			if (cur.getCount() != 0) {
@@ -273,7 +269,7 @@ public class DBUtils {
 			}
 
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.queryDate�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.queryDate异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -284,54 +280,52 @@ public class DBUtils {
 	}
 
 	/**
-	 * ԭ��ɾ��
-	 * 
-	 * @param tablename
-	 * @param where
+	 * 原生删除
+	 *
 	 * @param wherestr
 	 */
 	public void delete(String sql, String wherestr) {
 		try {
 			getMyDataBase();
 			db.rawQuery(sql, new String[] { des.jiaMi(wherestr) });
-			Log.getInstance().writeLog("ɾ�����ݿ���" + des.jiaMi(wherestr) + "���ݳɹ�");
+			Log.getInstance().writeLog("删除数据库下" + des.jiaMi(wherestr) + "数据成功");
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.delete�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.delete异常:" + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
 	}
 
-	// �h��һ������
+	// 刪除一行数据
 	public void delete(String tablename, String where, String wherestr) {
 		try {
 			getMyDataBase();
 			db.delete(tablename, where + "=?",
 					new String[] { des.jiaMi(wherestr) });
-			Log.getInstance().writeLog("ɾ�����ݿ���" + des.jiaMi(wherestr) + "���ݳɹ�");
+			Log.getInstance().writeLog("删除数据库下" + des.jiaMi(wherestr) + "数据成功");
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.delete�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.delete异常:" + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
 	}
 
-	// �h��һ������
+	// 刪除一行数据
 	public void deleteInvestigation(String tablename, String where,
-			String wherestr, String wherestra, String wherea) {
+									String wherestr, String wherestra, String wherea) {
 
 		Cursor cur = null;
 		try {
 			getMyDataBase();// "delete from cfccc_customervisit where 10790017 =
-							// authNumber and 10790017=C
+			// authNumber and 10790017=C
 			cur = db.rawQuery("delete from " + tablename + " where " + where
 					+ " = " + "'" + wherestr + "'" + " and " + wherea + "="
 					+ "'" + wherestra + "'", null);
 			// db.delete(tablename, where + "=?",
 			// new String[] { des.jiaMi(wherestr) });
-			Log.getInstance().writeLog("ɾ�����ݿ���" + des.jiaMi(wherestr) + "���ݳɹ�");
+			Log.getInstance().writeLog("删除数据库下" + des.jiaMi(wherestr) + "数据成功");
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.delete�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.delete异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -340,19 +334,19 @@ public class DBUtils {
 		}
 	}
 
-	// ɾ����������
+	// 删除所有数据
 	public void deleteall(String tablename) {
 		try {
 			getMyDataBase();
 			db.delete(tablename, null, null);
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.deleteall�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.deleteall异常:" + e.getMessage());
 		} finally {
 			closeDataBase();
 		}
 	}
 
-	// �õ�IDֵnum
+	// 得到ID值num
 	public String getApplyid() {// library routine called out of sequence
 		String num = null;
 		Cursor cur = null;
@@ -372,7 +366,7 @@ public class DBUtils {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			Log.getInstance().writeLog("DBUTIL.getApplyid�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.getApplyid异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -383,9 +377,9 @@ public class DBUtils {
 
 	}
 
-	// �õ�IDֵnum
+	// 得到ID值num
 	public String getInvestigationid() {// library routine called out of
-										// sequence
+		// sequence
 		String num = null;
 		Cursor cur = null;
 		try {
@@ -405,7 +399,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"DBUTIL.getInvestigationid�쳣:" + e.getMessage());
+					"DBUTIL.getInvestigationid异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -416,21 +410,7 @@ public class DBUtils {
 
 	}
 
-	// �õ��������id xinzheng
-	public String getInvestigationidFromSp() {// library routine called out of
-		// sequence
-		String visitId = sharedPrefs.getParameters("visitid");
-		if (visitId == null || "".equals(visitId)) {
-			visitId = "1";
-			sharedPrefs.saveParameters("visitid", visitId);
-		} else {
-			visitId = String.valueOf(Integer.parseInt(visitId) + 1);
-			sharedPrefs.saveParameters("visitid", visitId);
-		}
-		return visitId;
-	}
-
-	// �õ�Strongde��IDֵnum
+	// 得到Strongde的ID值num
 	public String getStoreApplyid() {// library routine called out of sequence
 		String num = null;
 		Cursor cur = null;
@@ -451,7 +431,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"DBUTIL.getStoreApplyid�쳣:" + e.getMessage());
+					"DBUTIL.getStoreApplyid异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -462,13 +442,27 @@ public class DBUtils {
 
 	}
 
-	// ��ѯ���ж���ֶ�
+	// 得到外访做件id xinzheng
+	public String getInvestigationidFromSp() {// library routine called out of
+		// sequence
+		String visitId = sharedPrefs.getParameters("visitid");
+		if (visitId == null || "".equals(visitId)) {
+			visitId = "1";
+			sharedPrefs.saveParameters("visitid", visitId);
+		} else {
+			visitId = String.valueOf(Integer.parseInt(visitId) + 1);
+			sharedPrefs.saveParameters("visitid", visitId);
+		}
+		return visitId;
+	}
+
+	// 查询多行多个字段
 	public List<String[]> queryApply(String tablename, String[] clunname,
-			String where, String wherestr) {
+									 String where, String wherestr) {
 		List<String[]> liststr = new ArrayList<String[]>();
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			if (where == null || wherestr == null) {
 				cur = db.query(tablename, clunname, null, null, null, null,
 						null);
@@ -495,7 +489,7 @@ public class DBUtils {
 		}
 
 		catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.queryApply�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.queryApply异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -505,94 +499,13 @@ public class DBUtils {
 		return liststr;
 	}
 
-	// ��ѯ��������
-	public List<String[]> querySendBox(String tablename, String[] clunname,
-			String where, String wherestr, DBUtils dbutils) {
-		DecimalFormat df = new DecimalFormat("0.00");// ��ʽ��С��
-		List<String[]> liststr = new ArrayList<String[]>();
-		Cursor cur = null;
-		try {
-			getMyDataBase();// ������ݿ����
-			if (where == null || wherestr == null) {
-				cur = db.query(tablename, clunname, null, null, null, null,
-						null);
-			} else {
-				cur = db.query(tablename, clunname, where + "=?",
-						new String[] { des.jiaMi(wherestr) }, null, null, null);
-			}
-
-			if (cur.getCount() != 0) {
-				for (cur.moveToFirst(); !(cur.isAfterLast()); cur.moveToNext()) {
-					String str[] = new String[clunname.length + 1];
-					String[] sendnum = new String[2];
-					for (int i = 0; i < clunname.length + 1; i++) {
-						if (i == clunname.length) {
-							str[clunname.length] = "20";
-							sendnum = dbutils.query("send", new String[] {
-									"beginnum", "totalnum" }, "filename", des
-									.jieMI(cur.getString(cur
-											.getColumnIndex(clunname[0]))));
-							if (sendnum[1].equals("0")) {
-								str[clunname.length] = "0";
-							} else {
-								if (((float) Integer.parseInt(sendnum[0]) / Integer
-										.parseInt(sendnum[1])) < 0.1) {
-									str[clunname.length] = df
-											.format((float) Integer
-													.parseInt(sendnum[0])
-													/ Integer
-															.parseInt(sendnum[1]))
-											.substring(3);// ���ص���String����
-								} else {
-									if (((float) Integer.parseInt(sendnum[0]) / Integer
-											.parseInt(sendnum[1])) == 1) {
-										str[clunname.length] = "100";
-									} else {
-										str[clunname.length] = df
-												.format((float) Integer
-														.parseInt(sendnum[0])
-														/ Integer
-																.parseInt(sendnum[1]))
-												.substring(2);
-									}
-								}
-
-							}
-
-							System.out.println("====>" + sendnum.toString());
-						} else {
-							if (cur.getString(cur.getColumnIndex(clunname[i])) == null) {
-								str[i] = "";
-							} else {
-								str[i] = des.jieMI(cur.getString(cur
-										.getColumnIndex(clunname[i])));
-							}
-						}
-					}
-					liststr.add(str);
-				}
-			}
-
-		}
-
-		catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.queryApply�쳣:" + e.getMessage());
-		} finally {
-			if (cur != null) {
-				cur.close();
-			}
-			closeDataBase();
-		}
-		return liststr;
-	}
-
-	// ģ����ѯ���ж���ֶ�
+	// 模糊查询多行多个字段
 	public List<String[]> queryLikeApply(String sql, String[] clunname,
-			String wherestr) {
+										 String wherestr) {
 		List<String[]> liststr = new ArrayList<String[]>();
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			cur = db.rawQuery(sql,
 					new String[] { des.jiaMi(wherestr), des.jiaMi(wherestr) });
 
@@ -614,7 +527,7 @@ public class DBUtils {
 		}
 
 		catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.queryApply�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.queryApply异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -624,19 +537,19 @@ public class DBUtils {
 		return liststr;
 	}
 
-	// ��ѯÿ����ļ�����
+	// 查询每个箱的件个数
 	public int numQuery(String tablename, String clunname, String clunstr) {
 		int numstr = 0;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			cur = db.query(tablename, null, clunname + "=?",
 					new String[] { des.jiaMi(clunstr) }, null, null, null);
 			numstr = cur.getCount();
 		}
 
 		catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.numQuery�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.numQuery异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -667,7 +580,7 @@ public class DBUtils {
 
 		} catch (FileNotFoundException e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.copyDBFileToSD�쳣:" + dbName + e.getMessage());
+					"DBUTIL.copyDBFileToSD异常:" + dbName + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			try {
@@ -728,7 +641,7 @@ public class DBUtils {
 			int tmp = fis.read(buf);
 			String verStr = new String(buf, 0, tmp);
 			ver = Integer.parseInt(verStr);
-			Log.getInstance().writeLog(fileName + "�еİ汾��: " + ver);
+			Log.getInstance().writeLog(fileName + "中的版本号: " + ver);
 		} catch (Exception e) {
 			Log.getInstance().writeLog(e.getMessage());
 		} finally {
@@ -745,9 +658,9 @@ public class DBUtils {
 	/**
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param tablename
-	 *            ��
+	 *            表
 	 * @return
 	 */
 	public String[] klQuery(final Context con, String clunname, String tablename) {
@@ -755,7 +668,7 @@ public class DBUtils {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			Set<String> set = new HashSet<String>();
 			cur = db.query(tablename, new String[] { clunname }, null, null,
@@ -770,9 +683,9 @@ public class DBUtils {
 			str = set.toArray(str);
 
 		} catch (Exception e) {
-			// techown.shanghu.https.Log.Instance().WriteLog("�Ŷӣ���ѯʡklQuery:"+e.getMessage());
+			// techown.shanghu.https.Log.Instance().WriteLog("团队：查询省klQuery:"+e.getMessage());
 			Log.getInstance().writeLog(
-					"DBUTIL.klQuery�쳣:" + tablename + e.getMessage());
+					"DBUTIL.klQuery异常:" + tablename + e.getMessage());
 			e.getMessage();
 		} finally {
 			if (cur != null) {
@@ -787,19 +700,19 @@ public class DBUtils {
 	/**
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param tablename
-	 *            ��
+	 *            表
 	 * @return
 	 */
 	public String[] loanReductionInitialklQuery(final Context con,
-			String clunname, String tablename, String selection,
-			String selectionArgs) {
+												String clunname, String tablename, String selection,
+												String selectionArgs) {
 
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			Set<String> set = new HashSet<String>();
 			cur = db.query(tablename, new String[] { clunname }, selection,
@@ -814,9 +727,9 @@ public class DBUtils {
 			str = set.toArray(str);
 
 		} catch (Exception e) {
-			// techown.shanghu.https.Log.Instance().WriteLog("�Ŷӣ���ѯʡklQuery:"+e.getMessage());
+			// techown.shanghu.https.Log.Instance().WriteLog("团队：查询省klQuery:"+e.getMessage());
 			Log.getInstance().writeLog(
-					"DBUTIL.klQuery�쳣:" + tablename + e.getMessage());
+					"DBUTIL.klQuery异常:" + tablename + e.getMessage());
 			e.getMessage();
 		} finally {
 			if (cur != null) {
@@ -851,25 +764,25 @@ public class DBUtils {
 	}
 
 	/**
-	 * ���ݶ�Ӧֵ��ѯ
-	 * 
+	 * 根据对应值查询
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param where
-	 *            ��ѯ����
+	 *            查询条件
 	 * @param wherestr
-	 *            ��������
+	 *            条件对象
 	 * @param tablename
-	 *            ��
+	 *            表
 	 * @return
 	 */
 	public String[] Query(final Context con, String clunname, String where,
-			String wherestr, String tablename) {
+						  String wherestr, String tablename) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			int i = 0;
 			cur = db.query(tablename, new String[] { clunname }, where + "=?",
@@ -885,9 +798,9 @@ public class DBUtils {
 			}
 
 		} catch (Exception e) {
-			// techown.shanghu.https.Log.Instance().WriteLog("�Ŷӣ���ѯ��cityQuery:"+e.getMessage());
+			// techown.shanghu.https.Log.Instance().WriteLog("团队：查询市cityQuery:"+e.getMessage());
 			Log.getInstance().writeLog(
-					"DBUTIL.Query�쳣:" + tablename + e.getMessage());
+					"DBUTIL.Query异常:" + tablename + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -898,26 +811,26 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯ�Ż���Ϣ��codeֵ
-	 * 
+	 * 查询优惠信息的code值
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param where
-	 *            ��ѯ����
+	 *            查询条件
 	 * @param wherestr
-	 *            ��������
+	 *            条件对象
 	 * @param tablename
-	 *            ��
+	 *            表
 	 * @return
 	 */
 	public String[] loanReductionInitialQuery(final Context con,
-			String clunname, String where, String wherestr, String where1,
-			String wherestr1, String tablename) {
+											  String clunname, String where, String wherestr, String where1,
+											  String wherestr1, String tablename) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			int i = 0;
 			// cur = db.query(tablename, new String[] { clunname }, where +
@@ -937,9 +850,9 @@ public class DBUtils {
 			}
 
 		} catch (Exception e) {
-			// techown.shanghu.https.Log.Instance().WriteLog("�Ŷӣ���ѯ��cityQuery:"+e.getMessage());
+			// techown.shanghu.https.Log.Instance().WriteLog("团队：查询市cityQuery:"+e.getMessage());
 			Log.getInstance().writeLog(
-					"DBUTIL.Query�쳣:" + tablename + e.getMessage());
+					"DBUTIL.Query异常:" + tablename + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -950,28 +863,28 @@ public class DBUtils {
 	}
 
 	/**
-	 * �޿�֧�� Store
-	 * 
+	 * 无卡支付 Store
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @return
 	 */
 	public String[] StoreWuKa(final Context con, String clunname,
-			String wherestrA, String wherestrB, String tablenameA,
-			String tablenameB) {
+							  String wherestrA, String wherestrB, String tablenameA,
+							  String tablenameB) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+" where "+wherestr+" in (select "+wherestr+" from "+tablenameB+" where "+wherestrC+" in (select "+wherestrC+" from "+tablenameC+"))",
@@ -983,11 +896,11 @@ public class DBUtils {
 			// store.number=productstore.storenumber and
 			// productstore.productid='0002'
 			cur = db.rawQuery("select " + clunname + " from " + tablenameA
-					+ "," + tablenameB + " where " + tablenameA + "."
-					+ wherestrA + "=" + tablenameB + "." + wherestrA + " and "
-					+ tablenameB + "." + wherestrB + " in ('0026','0027') and "
-					+ tablenameA
-					+ ".STOPE_CHAIN  in ('A','B') group by  Stores.STORE_NAME",
+							+ "," + tablenameB + " where " + tablenameA + "."
+							+ wherestrA + "=" + tablenameB + "." + wherestrA + " and "
+							+ tablenameB + "." + wherestrB + " in ('0026','0027') and "
+							+ tablenameA
+							+ ".STOPE_CHAIN  in ('A','B') group by  Stores.STORE_NAME",
 					null);
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+","+tablenameB+" where "+tablenameA+"."+wherestrA+"="+tablenameB+"."+wherestrA+"  and "+tablenameA+".STOPE_CHAIN  in ('A','B')",
@@ -1008,7 +921,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Store�쳣:" + tablenameA + tablenameB
+					"DBUTIL.Store异常:" + tablenameA + tablenameB
 							+ e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1020,27 +933,27 @@ public class DBUtils {
 	}
 
 	/**
-	 * ���״�Store
-	 * 
+	 * 购易贷Store
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @return
 	 */
 	public String[] Store(final Context con, String clunname, String wherestrA,
-			String wherestrB, String tablenameA, String tablenameB) {
+						  String wherestrB, String tablenameA, String tablenameB) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+" where "+wherestr+" in (select "+wherestr+" from "+tablenameB+" where "+wherestrC+" in (select "+wherestrC+" from "+tablenameC+"))",
@@ -1055,7 +968,7 @@ public class DBUtils {
 					+ "," + tablenameB + " where " + tablenameA + "."
 					+ wherestrA + "=" + tablenameB + "." + wherestrA + " and "
 					+ tablenameB + "." + wherestrB + "='0002'", null);
-			// System.out.println("��ѯ���е���䣺" +
+			// System.out.println("查询商行的语句：" +
 			// "select "+clunname+" from "+tablenameA+","+tablenameB+" where "+tablenameA+"."+wherestrA+"="+tablenameB+"."+wherestrA+" and "+tablenameB+"."+wherestrB+"='0002'"
 			// );
 
@@ -1071,7 +984,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Store�쳣:" + tablenameA + tablenameB
+					"DBUTIL.Store异常:" + tablenameA + tablenameB
 							+ e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1083,30 +996,30 @@ public class DBUtils {
 	}
 
 	/**
-	 * ���״�goods
-	 * 
+	 * 购易贷goods
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param wherestrC
-	 *            ��ѯ����C
+	 *            查询条件C
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @return
 	 */
 	public String[] Goods(final Context con, String clunname, String wherestrA,
-			String wherestrB, String tablenameA, String tablenameB,
-			String wherestrC) {
+						  String wherestrB, String tablenameA, String tablenameB,
+						  String wherestrC) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+" where "+wherestr+" in (select "+wherestr+" from "+tablenameB+" where "+wherestrC+" in (select "+wherestrC+" from "+tablenameC+"))",
@@ -1117,9 +1030,9 @@ public class DBUtils {
 			// Goods.GOODS_ID=StoreGoods.GOODS_ID and
 			// StoreGoods.STORE_NUMBER=3012G9001
 			cur = db.rawQuery("select " + clunname + " from " + tablenameA
-					+ "," + tablenameB + " where " + tablenameA + "."
-					+ wherestrA + "=" + tablenameB + "." + wherestrA + " and "
-					+ tablenameB + "." + wherestrB + "= '" + wherestrC + "'",
+							+ "," + tablenameB + " where " + tablenameA + "."
+							+ wherestrA + "=" + tablenameB + "." + wherestrA + " and "
+							+ tablenameB + "." + wherestrB + "= '" + wherestrC + "'",
 					null);
 
 			str = new String[cur.getCount()];
@@ -1134,7 +1047,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Goods�쳣:" + tablenameA + tablenameB
+					"DBUTIL.Goods异常:" + tablenameA + tablenameB
 							+ e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1146,34 +1059,34 @@ public class DBUtils {
 	}
 
 	/**
-	 * ���״�Plan
-	 * 
+	 * 购易贷Plan
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param wherestrC
-	 *            ��ѯ����C
+	 *            查询条件C
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @param tablenameC
-	 *            ��C
+	 *            表C
 	 * @param num
-	 *            ��ѯ����
+	 *            查询条件
 	 * @return
 	 */
 	public String[] Plan(final Context con, String clunname, String wherestrA,
-			String wherestrB, String wherestrC, String tablenameA,
-			String tablenameB, String tablenameC, String num) {
+						 String wherestrB, String wherestrC, String tablenameA,
+						 String tablenameB, String tablenameC, String num) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+" where "+wherestr+" in (select "+wherestr+" from "+tablenameB+" where "+wherestrC+" in (select "+wherestrC+" from "+tablenameC+"))",
@@ -1190,7 +1103,7 @@ public class DBUtils {
 					+ tablenameC + "." + wherestrB + " and " + tablenameC + "."
 					+ wherestrC + "='" + num + "'", null);
 
-			// System.out.println("���ʽ�Ĳ�ѯ��䣺" +
+			// System.out.println("还款方式的查询语句：" +
 			// "select "+clunname+" from "+tablenameA+","+tablenameB+","+tablenameC+" where "+tablenameA+"."+wherestrA+"="+tablenameB+"."+wherestrA+" and "+tablenameB+"."+wherestrB+"= "+tablenameC+"."+wherestrB+" and "+tablenameC+"."+wherestrC+"='"+num+"'");
 
 			str = new String[cur.getCount()];
@@ -1205,7 +1118,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Plan�쳣:" + tablenameA + tablenameB + tablenameC
+					"DBUTIL.Plan异常:" + tablenameA + tablenameB + tablenameC
 							+ e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1217,37 +1130,37 @@ public class DBUtils {
 	}
 
 	/**
-	 * ���״�Plan
-	 * 
+	 * 购易贷Plan
+	 *
 	 * @param con
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param wherestrC
-	 *            ��ѯ����C
+	 *            查询条件C
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @param tablenameC
-	 *            ��C
+	 *            表C
 	 * @param num
-	 *            ��ѯ����
+	 *            查询条件
 	 * @param wherestrD
-	 *            ��ѯ����D
+	 *            查询条件D
 	 * @return
 	 */
 	public String[] Plan(final Context con, String clunname, String wherestrA,
-			String wherestrB, String wherestrC, String tablenameA,
-			String tablenameB, String tablenameC, String num, String wherestrD,
-			String clas) {
+						 String wherestrB, String wherestrC, String tablenameA,
+						 String tablenameB, String tablenameC, String num, String wherestrD,
+						 String clas) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// cur =
 			// db.rawQuery("select "+clunname+" from "+tablenameA+" where "+wherestr+" in (select "+wherestr+" from "+tablenameB+" where "+wherestrC+" in (select "+wherestrC+" from "+tablenameC+"))",
@@ -1264,14 +1177,14 @@ public class DBUtils {
 					+ tablenameC + "." + wherestrB + " and " + tablenameC + "."
 					+ wherestrC + "='" + num + "'" + " and " + tablenameA + "."
 					+ wherestrD + "= '" + clas + "'", null);
-			System.out.println("���ʽ�Ĳ�ѯ��䣺" + "select " + clunname + " from "
+			System.out.println("还款方式的查询语句：" + "select " + clunname + " from "
 					+ tablenameA + "," + tablenameB + "," + tablenameC
 					+ " where " + tablenameA + "." + wherestrA + "="
 					+ tablenameB + "." + wherestrA + " and " + tablenameB + "."
 					+ wherestrB + "= " + tablenameC + "." + wherestrB + " and "
 					+ tablenameC + "." + wherestrC + "='" + num + "'" + " and "
 					+ tablenameA + "." + wherestrD + "= '" + clas + "'");
-			// System.out.println("���ʽ�Ĳ�ѯ��䣺" +
+			// System.out.println("还款方式的查询语句：" +
 			// "select "+clunname+" from "+tablenameA+","+tablenameB+","+tablenameC+" where "+tablenameA+"."+wherestrA+"="+tablenameB+"."+wherestrA+" and "+tablenameB+"."+wherestrB+"= "+tablenameC+"."+wherestrB+" and "+tablenameC+"."+wherestrC+"='"+num+"'");
 
 			str = new String[cur.getCount()];
@@ -1286,7 +1199,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Plan�쳣:" + tablenameA + tablenameB + tablenameC
+					"DBUTIL.Plan异常:" + tablenameA + tablenameB + tablenameC
 							+ e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1298,34 +1211,33 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯ���ݿ��е�һ������
-	 * 
-	 * @param context
+	 * 查询数据库中的一个数据
+	 *
 	 * @param clunname
-	 *            ��ѯ�ֶ���
+	 *            查询字段名
 	 * @param wherestrA
-	 *            ��ѯ����A
+	 *            查询条件A
 	 * @param wherestrB
-	 *            ��ѯ����B
+	 *            查询条件B
 	 * @param wherestrC
-	 *            ��ѯ����C
+	 *            查询条件C
 	 * @param tablenameA
-	 *            ��A
+	 *            表A
 	 * @param tablenameB
-	 *            ��B
+	 *            表B
 	 * @param tablenameC
-	 *            ��C
+	 *            表C
 	 * @param num
-	 *            ��ѯ����
-	 * @return ��ѯ����ֵ���
+	 *            查询条件
+	 * @return 查询的列值结果
 	 */
 	public String[] Plone_store(final Context con, String clunname,
-			String wherestrA, String wherestrB, String wherestrC,
-			String tablenameA, String tablenameB, String tablenameC, String num) {
+								String wherestrA, String wherestrB, String wherestrC,
+								String tablenameA, String tablenameB, String tablenameC, String num) {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 			// select STORE_NAME from Stores,ProductStores where
 			// Stores.STORE_NUMBER=ProductStores.STORE_NUMBER and
@@ -1351,7 +1263,7 @@ public class DBUtils {
 
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.Plone_store�쳣:" + tablenameA + tablenameB
+					"DBUTIL.Plone_store异常:" + tablenameA + tablenameB
 							+ tablenameC + e.getMessage());
 		} finally {
 			if (cur != null) {
@@ -1363,21 +1275,21 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯһ������
-	 * 
+	 * 查询一个数组
+	 *
 	 * @param context
 	 * @param tableName
-	 *            ����
+	 *            表名
 	 * @param strName
-	 *            ��ѯ���ֶ�����
+	 *            查询的字段数组
 	 * @param where
-	 *            ��ѯ����
+	 *            查询条件
 	 * @param whereValue
-	 *            ������Ӧ����
+	 *            条件相应数组
 	 * @return
 	 */
 	public String[][] queryStr(Context context, String tableName,
-			String[] strName, String where, String whereValue) {
+							   String[] strName, String where, String whereValue) {
 		String[][] str = new String[strName.length][];
 		Cursor cur = null;
 		getMyDataBase();
@@ -1404,7 +1316,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					tableName + "--DBUTIL.queryStr�쳣:" + e.getMessage());
+					tableName + "--DBUTIL.queryStr异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -1415,7 +1327,7 @@ public class DBUtils {
 	}
 
 	public String[][] queryNotice(String tableName, String[] strName,
-			String where, String whereValue, String orderby) {
+								  String where, String whereValue, String orderby) {
 		String[][] str = new String[strName.length][];
 		Cursor cur = null;
 		getMyDataBase();
@@ -1443,7 +1355,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					tableName + "--DBUTIL.queryStr�쳣:" + e.getMessage());
+					tableName + "--DBUTIL.queryStr异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -1454,21 +1366,21 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯ���ݿ��е�һ������
-	 * 
+	 * 查询数据库中的一个数据
+	 *
 	 * @param context
 	 * @param tableName
-	 *            ����
+	 *            表名
 	 * @param rowName
-	 *            Ҫ��ѯ������
+	 *            要查询的列名
 	 * @param queryRow
-	 *            ��ѯ��������
+	 *            查询的条件列
 	 * @param queryRowValue
-	 *            ��ѯ��������ֵ
-	 * @return ��ѯ����ֵ���
+	 *            查询的条件列值
+	 * @return 查询的列值结果
 	 */
 	public String queryArrayValue(Context context, String tableName,
-			String[] rowName, String queryRow, String queryRowValue) {
+								  String[] rowName, String queryRow, String queryRowValue) {
 		Cursor cursor = null;
 		getMyDataBase();
 		String strRowName = "";
@@ -1487,7 +1399,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					tableName + "--DBUTIL.queryArrayValue�쳣:" + e.getMessage());
+					tableName + "--DBUTIL.queryArrayValue异常:" + e.getMessage());
 		} finally {
 			if (cursor != null) {
 				cursor.close();
@@ -1498,15 +1410,15 @@ public class DBUtils {
 	}
 
 	/**
-	 * �������ص����ݴ������ݿ�
-	 * 
+	 * 解析返回的数据存入数据库
+	 *
 	 * @param context
 	 * @param requestData
-	 *            Ҫ���������
+	 *            要保存的数据
 	 * @param tableName
 	 */
 	public void requestDataDispose(Context context, String requestData,
-			String tableName) {
+								   String tableName) {
 
 		String[] strOtherKey = { "strErrorCode", "strErrorMessage",
 				"strSuccess", "strCustomerType" };
@@ -1521,14 +1433,14 @@ public class DBUtils {
 				strOtherKey[2] = jsonObject.optString("success");
 				strOtherKey[3] = jsonObject.optString("customerType");
 				jsonObject.optJSONObject("appInfoDto");
-				// ��appInfoDto�е����ݽ�������
+				// 将appInfoDto中的数据解析出来
 				JSONObject jsonObjectAppInfoDto = jsonObject
 						.optJSONObject("appInfoDto");
 
 				if (jsonObjectAppInfoDto != null) {
 					Iterator<?> iterator = jsonObjectAppInfoDto.keys();
-					String strdata[] = selectApply(context, Constants.applyid,
-							tableName);// ������ݵĵ������ֶε�����
+					String strdata[] = selectApply(context,Constants.applyid,
+							tableName);// 查出数据的的所有字段的名字
 					String[] strname = new String[jsonObjectAppInfoDto.length()];
 
 					int ii = 0;
@@ -1546,9 +1458,9 @@ public class DBUtils {
 						ii++;
 					}
 
-					String[] sameElement = getAllSameElement(strdata, strname);// ȡ��ͬ�������ֶ�
-					String[] strKey = new String[sameElement.length];// ���ֶε�����
-					String[] strValue = new String[sameElement.length];// ��ֵ������
+					String[] sameElement = getAllSameElement(strdata, strname);// 取相同的数据字段
+					String[] strKey = new String[sameElement.length];// 放字段的数组
+					String[] strValue = new String[sameElement.length];// 放值的数组
 					strKey = sameElement;
 					for (int i = 0; i < sameElement.length; i++) {
 						if (!jsonObjectAppInfoDto.getString(sameElement[i])
@@ -1570,7 +1482,7 @@ public class DBUtils {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Log.getInstance().writeLog(
-						tableName + "--DBUTIL.requestDataDispose�쳣:"
+						tableName + "--DBUTIL.requestDataDispose异常:"
 								+ e.getMessage());
 			}
 
@@ -1579,8 +1491,8 @@ public class DBUtils {
 	}
 
 	/**
-	 * �Ƚ������ַ����Ƿ�����ͬ��Ԫ��
-	 * 
+	 * 比较两个字符串是否有相同的元素
+	 *
 	 * @param strArr1
 	 * @param strArr2
 	 * @return
@@ -1619,11 +1531,11 @@ public class DBUtils {
 	}
 
 	/**
-	 * ҵ������ ��ѯ���ݿ� �����е��ֶ���
-	 * 
+	 * 业务申请 查询数据库 中所有的字段名
+	 *
 	 * @param id
 	 * @param table
-	 *            ����
+	 *            表名
 	 * @return
 	 */
 	public String[] selectApply(Context context, String id, String table) {
@@ -1643,7 +1555,7 @@ public class DBUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					table + "--DBUTIL.selectApply�쳣:" + e.getMessage());
+					table + "--DBUTIL.selectApply异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -1654,8 +1566,8 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯ�����������һ��idֵ
-	 * 
+	 * 查询出工单的最大一个id值
+	 *
 	 * @return
 	 */
 	public String selectWorkOrder() {
@@ -1676,7 +1588,7 @@ public class DBUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Log.getInstance().writeLog(
-					"--DBUTIL.selectWorkOrder�쳣:" + e.getMessage());
+					"--DBUTIL.selectWorkOrder异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -1691,7 +1603,7 @@ public class DBUtils {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			int i = 0;
 
 			cur = db.rawQuery("select custClassValue from CustClass "
@@ -1699,7 +1611,7 @@ public class DBUtils {
 
 			str = new String[cur.getCount()];
 			Log.getInstance().writeLog(
-					"QueryCustClassd��cur����:" + cur.getCount());
+					"QueryCustClassd的cur长度:" + cur.getCount());
 			if (cur.getCount() != 0) {
 				while (cur.moveToNext()) {
 					str[i] = des.jieMI(cur.getString(cur
@@ -1710,7 +1622,7 @@ public class DBUtils {
 			}
 
 		} catch (Exception e) {
-			Log.getInstance().writeLog("DBUTIL.CustClass�쳣:" + e.getMessage());
+			Log.getInstance().writeLog("DBUTIL.CustClass异常:" + e.getMessage());
 		} finally {
 			if (cur != null) {
 				cur.close();
@@ -1721,8 +1633,8 @@ public class DBUtils {
 	}
 
 	/**
-	 * ��ѯһ�ű��ȫ������
-	 * 
+	 * 查询一张表的全部数据
+	 *
 	 * @param clunname
 	 * @param tablename
 	 * @return
@@ -1732,13 +1644,13 @@ public class DBUtils {
 		String[] str = null;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 
 			List<String> list = new ArrayList<String>();
 			// cur = db.query(tablename, new String[] { clunname }, null,
 			// null, null, null, orderby);
 
-			// �˴�������û�ã���Ϊ���ݼ������޷������������
+			// 此处的排序没用，因为数据加密了无法进行排序操作
 			cur = db.rawQuery("SELECT " + clunname + " FROM " + tablename
 					+ " Order By " + clunname, null);
 			if (cur.getCount() != 0) {
@@ -1761,7 +1673,7 @@ public class DBUtils {
 				Collections.sort(list, new Comparator<String>() {
 					@Override
 					public int compare(String lhs, String rhs) {
-						if (lhs.equals("������ַ")) {
+						if (lhs.equals("其他地址")) {
 							return 1;
 						} else {
 							return -1;
@@ -1777,9 +1689,9 @@ public class DBUtils {
 			}
 
 		} catch (Exception e) {
-			// techown.shanghu.https.Log.Instance().WriteLog("�Ŷӣ���ѯʡklQuery:"+e.getMessage());
+			// techown.shanghu.https.Log.Instance().WriteLog("团队：查询省klQuery:"+e.getMessage());
 			Log.getInstance().writeLog(
-					"DBUTIL.QueryAllData�쳣:" + tablename + e.getMessage());
+					"DBUTIL.QueryAllData异常:" + tablename + e.getMessage());
 			e.getMessage();
 		} finally {
 			if (cur != null) {
@@ -1791,16 +1703,16 @@ public class DBUtils {
 	}
 
 	public Map<String, String> QueryAllData(String tablename, String key,
-			String value) {
+											String value) {
 
 		Map<String, String> custMap = new HashMap<String, String>();
 		;
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			List<String> listKey = new ArrayList<String>();
 			List<String> listValue = new ArrayList<String>();
-			// �˴�������û�ã���Ϊ���ݼ������޷������������
+			// 此处的排序没用，因为数据加密了无法进行排序操作
 			cur = db.rawQuery("SELECT * FROM " + tablename, null);
 			if (cur.getCount() != 0) {
 
@@ -1822,7 +1734,7 @@ public class DBUtils {
 				System.out.println("" + custMap.toString());
 		} catch (Exception e) {
 			Log.getInstance().writeLog(
-					"DBUTIL.QueryAllData�쳣:" + tablename + e.getMessage());
+					"DBUTIL.QueryAllData异常:" + tablename + e.getMessage());
 			e.getMessage();
 		} finally {
 			if (cur != null) {
@@ -1833,13 +1745,13 @@ public class DBUtils {
 		return custMap;
 	}
 
-	// ��ѯ������
+	// 查询整个表
 	public Map<String, String> QueryTable(final Context con, String[] clunname,
-			String tablename, String where, String wherename) {
+										  String tablename, String where, String wherename) {
 		Map<String, String> map = new HashMap<String, String>();
 		Cursor cur = null;
 		try {
-			getMyDataBase();// ������ݿ����
+			getMyDataBase();// 获得数据库对象
 			// cur=db.query(tablename,clunname,where,wherename,null,null,null);
 			cur = db.query(tablename, clunname, where + "=?",
 					new String[] { wherename }, null, null, null);

@@ -16,4 +16,7 @@
 
     <color name="color_normal">#b1b1b1</color>
     <color name="color_downloaded">#00FF00</color>
+    <color name="ff6666">#FF666666</color>
+    <color name="light_black">#11000000</color>
+    <color name="aafe0000">#aafe0000</color>
 </resources>
