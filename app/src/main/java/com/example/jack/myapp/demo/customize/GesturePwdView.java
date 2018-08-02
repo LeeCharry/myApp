@@ -98,7 +98,6 @@ public class GesturePwdView extends View {
                             paint.setStrokeWidth(3);
 //                            canvas.drawCircle(cx, cy, innerItemRadis, paint);
                         }
-
                         paint.setStrokeWidth(7);
                         if (j == selectedPointList.size() - 1) {
                             return;
