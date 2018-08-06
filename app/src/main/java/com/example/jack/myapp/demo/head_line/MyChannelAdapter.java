@@ -19,7 +19,6 @@ class MyChannelAdapter extends BaseQuickAdapter<ChannelBean,BaseViewHolder> {
     public MyChannelAdapter(@Nullable List<ChannelBean> data) {
         super(R.layout.item_my_channel, data);
     }
-
     @Override
     protected void convert(BaseViewHolder helper, final ChannelBean item) {
         helper.setText(R.id.item_tv,item.getTitle());
@@ -43,6 +42,7 @@ class MyChannelAdapter extends BaseQuickAdapter<ChannelBean,BaseViewHolder> {
             }
         });
     }
+
     private CallBack callBack;
 
     public void setCallBack(CallBack callBack) {
@@ -52,4 +52,5 @@ class MyChannelAdapter extends BaseQuickAdapter<ChannelBean,BaseViewHolder> {
     interface CallBack{
         void onDelete(int position);
     }
+
 }

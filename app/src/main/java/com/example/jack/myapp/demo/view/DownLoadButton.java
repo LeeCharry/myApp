@@ -208,7 +208,6 @@ public class DownLoadButton extends Button {
 
     public void setOnDownLoadButtonClickListener(OnDownLoadButtonClickListener onDownLoadButtonClickListener) {
         this.onDownLoadButtonClickListener = onDownLoadButtonClickListener;
-
     }
 
     public interface OnDownLoadButtonClickListener {

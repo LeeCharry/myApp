@@ -19,4 +19,5 @@
     <color name="ff6666">#FF666666</color>
     <color name="light_black">#11000000</color>
     <color name="aafe0000">#aafe0000</color>
+    <color name="ban_transparent">#10000000</color>
 </resources>

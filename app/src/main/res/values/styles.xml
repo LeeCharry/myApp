@@ -23,5 +23,27 @@
     <item name="android:textColor">@color/white</item>
     <item name="android:textSize">18sp</item>
 </style>
+<!--
+android:inputType="textPassword"
+                android:textColor="@color/black"
+                android:textSize="35sp"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="0.7dp"
+-->
+    <style name="pass_input_tv_style">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">35sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_marginLeft">0.7dp</item>
+    </style>
 
 </resources>
