@@ -43,6 +43,13 @@ public class HeadLineHomeActivity extends AppCompatActivity {
     private View ivCancel;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fragmentList.clear();
+        fragmentList = null;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_headline);
@@ -51,7 +58,6 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         headlineAdapter = new HeadlineAdapter(getSupportFragmentManager(), fragmentList);
         viewpager.setAdapter(headlineAdapter);
         indicator.setViewPager(viewpager);
-//      setTabPagerIndicator();
         setlistener();
     }
 
@@ -124,53 +130,36 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         myChannelAdapter.setCallBack(new MyChannelAdapter2.CallBack() {
             @Override
             public void onDelete(int position) {
+
                 recommendChannelList.add(0, myChannelList.get(position).getTitle());
                 recommendChannelAdapter.notifyDataSetChanged();
+
+                fragmentList.remove(position);
+                headlineAdapter.notifyDataSetChanged();
+                viewpager.setAdapter(headlineAdapter);
+                indicator.setViewPager(viewpager);
+
 
                 myChannelList.remove(position);
                 myChannelAdapter.notifyDataSetChanged();
 
-                fragmentList.remove(position);
-                headlineAdapter.notifyDataSetChanged();
-                indicator.setViewPager(viewpager);
+
+
+
             }
         });
-//        myChannelAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-//            @Override
-//            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-//                ,,
-//                if (view.getId() == R.id.iv_delete) {
-//                    recommendChannelList.add(0, myChannelList.get(position).getTitle());
-//                    recommendChannelAdapter.notifyDataSetChanged();
-//
-//                    myChannelList.remove(position);
-//                    myChannelAdapter.notifyDataSetChanged();
-//
-//                    fragmentList.remove(position);
-//                    headlineAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        });
 
         //点击
         gvMyChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                headlineAdapter.notifyDataSetChanged();
+                indicator.setViewPager(viewpager);
                 indicator.setCurrentTab(position);
+                bottomDialog.dismiss();
 
             }
         });
-
-//        myChannelAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                if (bottomDialog.isShowing()) {
-//                    bottomDialog.dismiss();
-//                }
-//                indicator.setViewPager(viewpager);
-//                indicator.setCurrentTab(position);
-//            }
-//        });
         //长按
         gvMyChannel.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -187,21 +176,6 @@ public class HeadLineHomeActivity extends AppCompatActivity {
             }
 
         });
-
-//        myChannelAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-//                if (!myChannelList.get(position).isToDelete()) {
-//                    showDelete(true);
-//                    tvEdit.setText("完成");
-//                    //振动加缩放,出现删除按钮
-//
-//                } else {
-//                    //只有振动加缩放
-//                }
-//                return true;
-//            }
-//        });
 
         //添加
         gvRecommendChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -222,26 +196,6 @@ public class HeadLineHomeActivity extends AppCompatActivity {
 
             }
         });
-
-//        recommendChannelAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                ,.,
-//                String title = recommendChannelList.get(position);
-//                if (tvEdit.getText().toString().equals("完成")) {
-//                    myChannelList.add(myChannelList.size(), new ChannelBean(title, true));
-//                } else {
-//                    myChannelList.add(myChannelList.size(), new ChannelBean(title, false));
-//                }
-//                myChannelAdapter.notifyItemInserted(myChannelList.size());
-//
-//                addFragment(title);
-//
-//                recommendChannelList.remove(position);
-//                recommendChannelAdapter.notifyItemRemoved(position);
-//
-//            }
-//        });
     }
 
     /**
@@ -254,6 +208,7 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         headlineFragment.setTitle(title);
         fragmentList.add(headlineFragment);
         headlineAdapter.notifyDataSetChanged();
+        viewpager.setAdapter(headlineAdapter);
         indicator.setViewPager(viewpager);
     }
 
@@ -277,15 +232,7 @@ public class HeadLineHomeActivity extends AppCompatActivity {
             fragmentList.add(fr);
             myChannelList.add(new ChannelBean(titles[i], false));
         }
-//        myChannelList.add("财经");
-//        myChannelList.add("军事");
-//        myChannelList.add("体育");
-//        myChannelList.add("国际");
-//        myChannelList.add("健康");
-//        myChannelList.add("特卖");
-//        myChannelList.add("房产");
-//        myChannelList.add("国风");
-//        myChannelList.add("新时代");
+
 
         recommendChannelList.add("精品课");
         recommendChannelList.add("历史");

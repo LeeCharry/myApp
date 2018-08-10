@@ -146,10 +146,13 @@
         </activity>
         <activity android:name=".demo.RvItemDecoration.RvItemDecorationActivity"></activity>
         <activity android:name=".demo.BreakPointrResume.DownloadTest"></activity>
+        <!--今日头条频道管理器-->
         <activity android:name=".demo.head_line.HeadLineHomeActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <service android:name=".demo.download.DownLoadService" />
         <service android:name=".demo.BreakPointrResume.HttpService" />
         <activity android:name=".demo.customize.CustomizeActivity">
@@ -160,11 +163,19 @@
 
         </activity>
         <activity android:name=".demo.customize.PasswordBoxActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
+        <!-- 在这里添加百度地图权限ak权限 start -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="rioB06uClmt2TdD52cEBjusl7tqxcvWf" >
+        </meta-data>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
     </application>
 
 </manifest>

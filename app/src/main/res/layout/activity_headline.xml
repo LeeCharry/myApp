@@ -30,9 +30,7 @@
             app:tl_textUnselectColor="@color/ff6666"
             app:tl_indicator_bounce_enable = "true"
             app:tl_indicator_anim_duration = "400"/>
-
     </RelativeLayout>
-
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"

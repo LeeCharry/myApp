@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.jack.myapp.AppConstant;
 import com.example.jack.myapp.R;
 
 /**
@@ -26,6 +25,9 @@ public class HeadlineFragment extends Fragment {
 
     public void setTitle(String title) {
         this.title = title;
+        if (null != tvContent) {
+            tvContent.setText(this.title);
+        }
     }
 
     @Nullable
@@ -35,6 +37,5 @@ public class HeadlineFragment extends Fragment {
         tvContent = view.findViewById(R.id.tv_content);
         tvContent.setText(getTitle());
         return view;
-
     }
 }

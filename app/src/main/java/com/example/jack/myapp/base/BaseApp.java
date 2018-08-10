@@ -7,17 +7,18 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
 import com.example.jack.myapp.http.Api;
 import com.example.jack.myapp.http.XXApi;
 import com.example.jack.myapp.widget.CrashHandler;
+import com.example.tulib.util.cookie.PersistentCookieStore;
 import com.example.tulib.util.http.NetError;
 import com.example.tulib.util.http.NetProvider;
 import com.example.tulib.util.http.RequestHandler;
 import com.example.tulib.util.utils.DataHelper;
-import com.example.tulib.util.cookie.PersistentCookieStore;
 
 import java.io.File;
 import java.util.HashMap;
@@ -32,11 +33,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okio.Buffer;
-import okio.BufferedSink;
-import okio.ByteString;
-import okio.Source;
-import okio.Timeout;
 
 /**
  * Created by lcy on 2018/4/8.
@@ -60,6 +56,8 @@ public class BaseApp extends Application {
 //            initCcrash();
         CrashHandler.getInstance().init(this);
 //
+        //百度地图初始化
+//        SDKInitializer.initialize(getApplicationContext());
 //        x.Ext.init(this);
 //        x.Ext.setDebug(BuildConfig.DEBUG); // 是否输出debug日志, 开启debug会影响性能.
         persistentCookieStore = new PersistentCookieStore(this);

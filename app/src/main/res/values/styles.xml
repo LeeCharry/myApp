@@ -23,17 +23,6 @@
     <item name="android:textColor">@color/white</item>
     <item name="android:textSize">18sp</item>
 </style>
-<!--
-android:inputType="textPassword"
-                android:textColor="@color/black"
-                android:textSize="35sp"
-                android:gravity="center"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:layout_marginLeft="0.7dp"
--->
     <style name="pass_input_tv_style">
         <item name="android:inputType">textPassword</item>
         <item name="android:textColor">@color/black</item>
@@ -45,5 +34,21 @@ android:inputType="textPassword"
         <item name="android:background">@color/white</item>
         <item name="android:layout_marginLeft">0.7dp</item>
     </style>
+    <style name="pass_input_dialog_style" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowIsFloating">true</item><!--悬浮-->
+        <item name="android:windowFrame">@null</item><!--无边框-->
+        <item name="android:windowNoTitle">true</item><!--没有title-->
+        <item name="android:windowIsTranslucent">false</item><!--半透明-->
+        <item name="android:windowEnterAnimation">@anim/anim_box_enter</item>
+        <item name="android:windowExitAnimation">@anim/anim_box_exit</item>
+        <item name="android:windowBackground">@color/white</item>
+        <!--<item name="android:windowFrame">@null</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:windowIsFloating">true</item>-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+        <!--<item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>-->
+        <!--<item name="android:backgroundDimEnabled">true</item>-->
 
+    </style>
 </resources>
