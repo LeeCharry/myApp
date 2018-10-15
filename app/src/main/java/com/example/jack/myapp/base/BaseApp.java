@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.blankj.utilcode.util.CrashUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
@@ -19,6 +20,10 @@ import com.example.tulib.util.http.NetError;
 import com.example.tulib.util.http.NetProvider;
 import com.example.tulib.util.http.RequestHandler;
 import com.example.tulib.util.utils.DataHelper;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
 
 import java.io.File;
 import java.util.HashMap;
@@ -42,6 +47,8 @@ public class BaseApp extends Application {
     private static BaseApp instance;
     final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
     private PersistentCookieStore persistentCookieStore;
+    public static IWXAPI mWxApi;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -57,13 +64,24 @@ public class BaseApp extends Application {
         CrashHandler.getInstance().init(this);
 //
         //百度地图初始化
-//        SDKInitializer.initialize(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
+
 //        x.Ext.init(this);
 //        x.Ext.setDebug(BuildConfig.DEBUG); // 是否输出debug日志, 开启debug会影响性能.
         persistentCookieStore = new PersistentCookieStore(this);
 
-//};
+        //友盟初始化（微信授权登录）
+//        UMShareAPI.get(this);//初始化sdk
+//        UMConfigure.init(this,"5ba355a0b465f5d7c000001e"
+        UMConfigure.init(this,"561cae6ae0f55abd990035bf"
+                ,"umeng",UMConfigure.DEVICE_TYPE_PHONE,"");//58edcfeb310c93091c000be2 5965ee00734be40b580001a0
+////        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        PlatformConfig.setSinaWeibo("3921700954", "04b48b094faeb16683c32669824ebdad","http://sns.whalecloud.com/sina2/callback");
 
+
+//};
+        registToWX();
         XXApi.registerProvider(new NetProvider() {
             @Override
             public String configBaseUrl() {
@@ -139,6 +157,12 @@ public class BaseApp extends Application {
                 return DataHelper.getCacheFile(BaseApp.this);
             }
         });
+    }
+    private void registToWX() {
+        //AppConst.WEIXIN.APP_ID是指你应用在微信开放平台上的AppID，记得替换。
+        mWxApi = WXAPIFactory.createWXAPI(this,"3baf1193c85774b3fd9d18447d76cab0", false);
+        // 将该app注册到微信
+        mWxApi.registerApp("3baf1193c85774b3fd9d18447d76cab0");
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

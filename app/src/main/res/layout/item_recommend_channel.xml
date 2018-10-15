@@ -4,12 +4,10 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bg_item_my_channel"
     android:gravity="center"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
-
+    android:layout_margin="8dp">
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="36dp"
         android:gravity="center"
         android:src="@mipmap/ic_jia"
         android:text="+"
@@ -18,8 +16,8 @@
     <TextView
         android:id="@+id/item_tv"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:textColor="@color/bar_grey_90" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/bar_grey_90"/>
 </LinearLayout>

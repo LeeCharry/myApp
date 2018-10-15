@@ -16,7 +16,6 @@ public class ArticalBean implements Serializable, IModel {
      * errorCode : 0
      * errorMsg :
      */
-
     private DataBean data;
     private int errorCode;
     private String errorMsg;

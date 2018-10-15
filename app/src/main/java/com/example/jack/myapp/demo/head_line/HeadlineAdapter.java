@@ -1,5 +1,6 @@
 package com.example.jack.myapp.demo.head_line;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -33,6 +34,10 @@ public class HeadlineAdapter extends FragmentStatePagerAdapter {
         return fragmentList.size();
     }
 
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return super.getItemPosition(object);
+    }
 
     @Nullable
     @Override

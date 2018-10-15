@@ -1,19 +1,22 @@
 package com.example.jack.myapp.demo.head_line;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.jack.myapp.R;
+import com.example.jack.myapp.demo.head_line.helper.ItemDragHelperCallback;
 import com.flyco.tablayout.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -30,23 +33,20 @@ public class HeadLineHomeActivity extends AppCompatActivity {
     private String[] titles = {"关注", "推荐", "热点", "上海", "视频", "图片", "问答", "娱乐", "科技", "懂车帝", "财经", "军事", "体育", "国际"};
     private ImageView ivMore;
     private TextView tvEdit;
-//    private RecyclerView rvMyChannel;
-//    private RecyclerView rvRecommendChannel;
-    private GridView gvMyChannel;
-    private GridView gvRecommendChannel;
     private List<ChannelBean> myChannelList = new ArrayList<>();
-    private List<String> recommendChannelList = new ArrayList<>();
-    private MyChannelAdapter2 myChannelAdapter;
-    private RecommendChannelAdapter2 recommendChannelAdapter;
+    private List<ChannelBean> recommendChannelList = new ArrayList<>();
     private BottomSheetDialog bottomDialog;
     private HeadlineAdapter headlineAdapter;
     private View ivCancel;
+    private RecyclerView rvChannel;
+    private UitlmateChannelAdapter uitlmateChannelAdapter;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         fragmentList.clear();
         fragmentList = null;
+
     }
 
     @Override
@@ -55,9 +55,9 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_headline);
         initView();
         initData();
-        headlineAdapter = new HeadlineAdapter(getSupportFragmentManager(), fragmentList);
-        viewpager.setAdapter(headlineAdapter);
-        indicator.setViewPager(viewpager);
+//        headlineAdapter = new HeadlineAdapter(getSupportFragmentManager(), fragmentList);
+//        viewpager.setAdapter(headlineAdapter);
+//        indicator.setViewPager(viewpager);
         setlistener();
     }
 
@@ -66,43 +66,48 @@ public class HeadLineHomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showBottomSheet();
+                //发送广播到另一个应用
             }
         });
     }
-
     private void showBottomSheet() {
         if (bottomDialog == null) {
             bottomDialog = new BottomSheetDialog(this, 0);
             bottomDialog.setCanceledOnTouchOutside(true);
             View view = LayoutInflater.from(this).inflate(R.layout.bottom_dialog_more, null);
             initDialogView(view);
+
             bottomDialog.setContentView(view);
+            //将bottomSheetDialog设置全屏
+//            View designBottomSheet = bottomDialog.getWindow().findViewById(android.support.design.R.id.design_bottom_sheet);
+//            BottomSheetBehavior.from(designBottomSheet).setPeekHeight(getWindow().getDecorView().getHeight());
             bottomDialog.setCancelable(true);
         }
-            bottomDialog.show();
+        bottomDialog.show();
     }
 
     private void initDialogView(View view) {
         tvEdit = view.findViewById(R.id.tv_edit);
-//        rvMyChannel = view.findViewById(R.id.rv_my_channel);
-        gvMyChannel = view.findViewById(R.id.gv_my_channel);
-//        rvRecommendChannel = view.findViewById(R.id.rv_recommend_channel);
-        gvRecommendChannel = view.findViewById(R.id.gv_recommend_channel);
+        rvChannel = view.findViewById(R.id.rv);
         ivCancel = view.findViewById(R.id.iv_cancel);
-        myChannelAdapter = new MyChannelAdapter2(myChannelList);
-//        rvMyChannel.addItemDecoration(new GridSpacingItemDecoration(4,30,false));
-//        rvMyChannel.setLayoutManager(new GridLayoutManager(this, 4));
-//        rvMyChannel.setItemAnimator(new DefaultItemAnimator());
-//        rvMyChannel.setAdapter(myChannelAdapter);
-        gvMyChannel.setAdapter(myChannelAdapter);
 
-        recommendChannelAdapter = new RecommendChannelAdapter2(recommendChannelList);
-//        rvRecommendChannel.addItemDecoration(new GridSpacingItemDecoration(4,30,false));
-//        rvRecommendChannel.setLayoutManager(new GridLayoutManager(this, 4));
-//        rvRecommendChannel.setItemAnimator(new DefaultItemAnimator());
-//        rvRecommendChannel.setAdapter(recommendChannelAdapter);
-        gvRecommendChannel.setAdapter(recommendChannelAdapter);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
+        rvChannel.setLayoutManager(layoutManager);
+        uitlmateChannelAdapter = new UitlmateChannelAdapter(myChannelList, recommendChannelList, this);
 
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int itemViewType = uitlmateChannelAdapter.getItemViewType(position);
+                return itemViewType == UitlmateChannelAdapter.MY_CHANNEL_TYPE || itemViewType == UitlmateChannelAdapter.OTHER_CHANNEL_TYPE ? 1 : 4;
+            }
+        });
+
+        ItemDragHelperCallback callback = new ItemDragHelperCallback();
+        final ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(rvChannel);
+
+        rvChannel.setAdapter(uitlmateChannelAdapter);
         initClickListener();
     }
 
@@ -114,88 +119,158 @@ public class HeadLineHomeActivity extends AppCompatActivity {
             }
         });
         //编辑
-        tvEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvEdit.getText().toString().equals("编辑")) {
-                    tvEdit.setText("完成");
-                    showDelete(true);
-                } else {
-                    tvEdit.setText("编辑");
-                    showDelete(false);
-                }
-            }
-        });
-        //删除mychannel
-        myChannelAdapter.setCallBack(new MyChannelAdapter2.CallBack() {
-            @Override
-            public void onDelete(int position) {
+//        tvEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (tvEdit.getText().toString().equals("编辑")) {
+//                    tvEdit.setText("完成");
+//                    showDelete(true);
+//                } else {
+//                    tvEdit.setText("编辑");
+//                    showDelete(false);
+//                }
+//            }
+//        });
+//        //删除mychannel
+//        myChannelAdapter.setCallBack(new MyChannelAdapter2.CallBack() {
+//            @Override
+//            public void onDelete(View view,int position) {
+//                float x = view.getX();
+//                float y = view.getY();
+//                int[] xy = new int[2];
+//                view.getLocationInWindow(xy);
+//
+//                recommendChannelList.add(0, myChannelList.get(position).getTitle());
+//                recommendChannelAdapter.notifyDataSetChanged();
+//
+//                fragmentList.remove(position);
+////                try {
+//                //报错 fagment is active,,所以注释，原因还不明，待究
+////                    headlineAdapter.notifyDataSetChanged();
+////                }catch (Exception e){
+////                    LogUtils.a(AppConstant.TAG,e.getMessage().toString());
+////                }
+//                viewpager.setAdapter(headlineAdapter);
+//                indicator.setViewPager(viewpager);
+//
+//                myChannelList.remove(position);
+//                //设置显示删除移动动画标识
+//                myChannelAdapter.deleteFlag = true;
+//                myChannelAdapter.removeIndex = position;
+//                myChannelAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
+//
+//        //点击
+//        gvMyChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                headlineAdapter.notifyDataSetChanged();
+//                indicator.setViewPager(viewpager);
+//                indicator.setCurrentTab(position);
+//                bottomDialog.dismiss();
+//
+//            }
+//        });
+//        //长按
+//        gvMyChannel.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (!myChannelList.get(position).isToDelete()) {
+//                    showDelete(true);
+//                    tvEdit.setText("完成");
+//                    //振动加缩放,出现删除按钮
+//
+//                } else {
+//                    //只有振动加缩放
+//                }
+//                return true;
+//            }
+//        });
+//
+//        //添加
+//        gvRecommendChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+////                String title = recommendChannelList.get(position);
+////                int[] xy = new int[2];
+////                view.getLocationInWindow(xy);
+//
+////                view.setDrawingCacheEnabled(true);
+////                Bitmap drawingCache = view.getDrawingCache();
+//
+////                ImageView imageView = new ImageView(HeadLineHomeActivity.this);
+////                imageView.setImageBitmap(drawingCache);
+//
+//                final ImageView moveImageView = getView(view);
+//                if (moveImageView != null) {
+//                    TextView newTextView = (TextView) view.findViewById(R.id.item_tv);
+//                    final int[] startLocation = new int[2];
+//                    newTextView.getLocationInWindow(startLocation);
+////                    final String channel = recommendChannelList.get(position);
+//                    myChannelAdapter.setVisible(false);
+//                    //添加到最后一个
+//                    myChannelAdapter.addItem(channel);
+//                    new Handler().postDelayed(new Runnable() {
+//                        public void run() {
+//                            try {
+//                                int[] endLocation = new int[2];
+//                                //获取终点的坐标
+//                                gvMyChannel.getChildAt(gvMyChannel.getLastVisiblePosition()).getLocationInWindow(endLocation);
+//                                MoveAnim(moveImageView, startLocation, endLocation, channel, gvRecommendChannel, false);
+//                                recommendChannelAdapter.setRemove(position);
+//                            } catch (Exception localException) {
+//                            }
+//                        }
+//                    }, 50L);
+//                }
+//
+//                if (tvEdit.getText().toString().equals("完成")) {
+//                    myChannelList.add(myChannelList.size(), new ChannelBean(title, true));
+//                } else {
+//                    myChannelList.add(myChannelList.size(), new ChannelBean(title, false));
+//                }
+//                //添加到我的频道的动画
+//
+////                myChannelAdapter.addFlag = true;
+////                myChannelAdapter.tempX = xy[0];
+////                myChannelAdapter.tempY = xy[1];
+////                myChannelAdapter.tempBitmap = drawingCache;
+//
+//
+//                myChannelAdapter.notifyDataSetChanged();
+////                //adapter刷新完成后再设置为false
+////                view.setDrawingCacheEnabled(false);
+//
+//                addFragment(title);
+//
+//                recommendChannelList.remove(position);
+//                //设置显示删除移动动画标识
+//                recommendChannelAdapter.deleteFlag = true;
+//                recommendChannelAdapter.removeIndex = position;
+//                recommendChannelAdapter.notifyDataSetChanged();
+//            }
+//        });
+    }
 
-                recommendChannelList.add(0, myChannelList.get(position).getTitle());
-                recommendChannelAdapter.notifyDataSetChanged();
-
-                fragmentList.remove(position);
-                headlineAdapter.notifyDataSetChanged();
-                viewpager.setAdapter(headlineAdapter);
-                indicator.setViewPager(viewpager);
 
 
-                myChannelList.remove(position);
-                myChannelAdapter.notifyDataSetChanged();
-
-
-
-
-            }
-        });
-
-        //点击
-        gvMyChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                headlineAdapter.notifyDataSetChanged();
-                indicator.setViewPager(viewpager);
-                indicator.setCurrentTab(position);
-                bottomDialog.dismiss();
-
-            }
-        });
-        //长按
-        gvMyChannel.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!myChannelList.get(position).isToDelete()) {
-                    showDelete(true);
-                    tvEdit.setText("完成");
-                    //振动加缩放,出现删除按钮
-
-                } else {
-                    //只有振动加缩放
-                }
-                return true;
-            }
-
-        });
-
-        //添加
-        gvRecommendChannel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String title = recommendChannelList.get(position);
-                if (tvEdit.getText().toString().equals("完成")) {
-                    myChannelList.add(myChannelList.size(), new ChannelBean(title, true));
-                } else {
-                    myChannelList.add(myChannelList.size(), new ChannelBean(title, false));
-                }
-                myChannelAdapter.notifyDataSetChanged();
-
-                addFragment(title);
-
-                recommendChannelList.remove(position);
-                recommendChannelAdapter.notifyDataSetChanged();
-
-            }
-        });
+    /**
+     * 获取点击的Item的对应View，
+     * 因为点击的Item已经有了自己归属的父容器MyGridView，所有我们要是有一个ImageView来代替Item移动
+     *
+     * @param view
+     * @return
+     */
+    private ImageView getView(View view) {
+        view.destroyDrawingCache();
+        view.setDrawingCacheEnabled(true);
+        Bitmap cache = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        ImageView iv = new ImageView(this);
+        iv.setImageBitmap(cache);
+        return iv;
     }
 
     /**
@@ -212,18 +287,7 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         indicator.setViewPager(viewpager);
     }
 
-    /**
-     * 是否显示删除按钮
-     *
-     * @param isTodelete
-     */
-    private void showDelete(boolean isTodelete) {
-        for (ChannelBean bean : myChannelList
-                ) {
-            bean.setToDelete(isTodelete);
-        }
-        myChannelAdapter.notifyDataSetChanged();
-    }
+
 
     private void initData() {
         for (int i = 0; i < titles.length; i++) {
@@ -234,27 +298,46 @@ public class HeadLineHomeActivity extends AppCompatActivity {
         }
 
 
-        recommendChannelList.add("精品课");
-        recommendChannelList.add("历史");
-        recommendChannelList.add("搞笑");
-        recommendChannelList.add("音频");
-        recommendChannelList.add("数码");
-        recommendChannelList.add("美食");
-        recommendChannelList.add("小视屏");
-        recommendChannelList.add("时尚");
-        recommendChannelList.add("育儿");
-        recommendChannelList.add("养生");
-        recommendChannelList.add("电影");
-        recommendChannelList.add("手机");
-        recommendChannelList.add("宠物");
+        recommendChannelList.add(new ChannelBean("精品课", false));
+        recommendChannelList.add(new ChannelBean("历史", false));
+        recommendChannelList.add(new ChannelBean("搞笑", false));
+        recommendChannelList.add(new ChannelBean("音频", false));
+        recommendChannelList.add(new ChannelBean("数码", false));
+        recommendChannelList.add(new ChannelBean("美食", false));
+        recommendChannelList.add(new ChannelBean("小视频", false));
+        recommendChannelList.add(new ChannelBean("时尚", false));
+        recommendChannelList.add(new ChannelBean("育儿", false));
+        recommendChannelList.add(new ChannelBean("养生", false));
+        recommendChannelList.add(new ChannelBean("电影", false));
+        recommendChannelList.add(new ChannelBean("手机", false));
+        recommendChannelList.add(new ChannelBean("宠物", false));
     }
 
     private void initView() {
         indicator = findViewById(R.id.indicator);
         viewpager = findViewById(R.id.viewpager);
         ivMore = findViewById(R.id.iv_more);
-    }
 
+        rvChannel = findViewById(R.id.rv);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
+        rvChannel.setLayoutManager(layoutManager);
+        uitlmateChannelAdapter = new UitlmateChannelAdapter(myChannelList, recommendChannelList, this);
+
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int itemViewType = uitlmateChannelAdapter.getItemViewType(position);
+                return itemViewType == UitlmateChannelAdapter.MY_CHANNEL_TYPE || itemViewType == UitlmateChannelAdapter.OTHER_CHANNEL_TYPE ? 1 : 4;
+            }
+        });
+
+        ItemDragHelperCallback callback = new ItemDragHelperCallback();
+        final ItemTouchHelper helper = new ItemTouchHelper(callback);
+        helper.attachToRecyclerView(rvChannel);
+
+        rvChannel.setAdapter(uitlmateChannelAdapter);
+    }
     private void setTabPagerIndicator() {
 //        indicator.setIndicatorMode(TabPageIndicator.IndicatorMode.MODE_NOWEIGHT_NOEXPAND_SAME);// 设置模式，一定要先设置模式
 //        indicator.setDividerColor(Color.parseColor("#00bbcf"));// 设置分割线的颜色

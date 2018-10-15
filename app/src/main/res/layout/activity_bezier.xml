@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.example.jack.myapp.demo.BezierDemo.SecondBezier
+    android:layout_width="match_parent"
+    android:background="@color/ban_transparent"
+    android:layout_height="200dp"
+    android:layout_gravity="center"/>
+    <com.example.jack.myapp.demo.BezierDemo.ThirdBezier
+        android:layout_width="match_parent"
+        android:background="@color/ban_transparent"
+        android:layout_height="300dp"
+        android:id="@+id/thidBezier"
+        android:layout_gravity="center"/>
+    <RadioGroup
+        android:id="@+id/rg_mode"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="控制点1"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_control1"/>
+        <RadioButton
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="控制点2"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_control2"/>
+    </RadioGroup>
+</LinearLayout>
